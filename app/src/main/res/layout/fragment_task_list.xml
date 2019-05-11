@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/main_toolbar"/>
+<!--Edit搜索会使键盘自动弹出，且不知怎么让它出现在UI上-->
+    <!--https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard?rq=1-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="@dimen/item_horizontal_margin"-->
+        <!--android:layout_marginEnd="@dimen/item_horizontal_margin"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<androidx.appcompat.widget.AppCompatEditText-->
+            <!--android:id="@+id/tasks_search_box"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:hint="@string/search_tasks_hint"/>-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/tasks_search_btn"-->
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:contentDescription="@string/cd_search_tasks"-->
+            <!--app:srcCompat="@drawable/ic_search_000_24dp"/>-->
+
+    <!--</LinearLayout>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/task_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        app:layout_behavior=" @string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_add_fff_24dp"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

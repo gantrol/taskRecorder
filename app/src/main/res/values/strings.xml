@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">场调记录</string>
+    <!--登录注册-->
+    <string name="email">邮  箱</string>
+    <string name="passwd">密  码</string>
+    <string name="remember_password">记住密码</string>
+    <string name="auto_login">自动登录</string>
+    <string name="have_account">已有账号？点击登录</string>
+    <string name="login">登   录</string>
+    <string name="username">姓名</string>
+    <string name="nickname">昵称</string>
+    <string name="no_account">没有账号？点击注册</string>
+    <string name="valid_name">用户名长度要大于三</string>
+    <string name="valid_password">密码的长度要在6与15之间</string>
+    <string name="valid_string_long">长度要大于三</string>
+    <string name="valid_select_user">请选择用户</string>
+    <string name="signup">注   册</string>
+    <string name="logout">退出登录</string>
+
+    <!--任务列表-->
+    <string name="action_settings">设置状态</string>
+    <string name="action_edited">修改</string>
+    <string name="search_tasks_hint">搜索任务</string>
+    <string name="cd_search_tasks">搜索任务</string>
+    <!--任务详情-->
+    <string name="none">暂无</string>
+    <string name="unknown">未知</string>
+    <string name="task_title_label">任务标题</string>
+    <string name="task_id_label">任务id</string>
+    <string name="task_create_label">创建日期</string>
+    <string name="task_update_label">更改日期</string>
+    <string name="task_finish_label">结束日期</string>
+    <string name="task_assigner_label">管理部门</string>
+    <string name="task_creator_label">创建者</string>
+    <string name="task_assignee_label">执行公司</string>
+    <string name="task_choose_assignee_label">指定公司</string>
+    <string name="task_execute_label">执行员工</string>
+    <string name="task_type_label">任务类型</string>
+    <string name="change_task_type">更改类型</string>
+    <string name="task_status_label">任务状态</string>
+    <string name="task_detail_label">任务详情</string>
+    <string name="task_create">创 建</string>
+    <string name="task_cancel">取 消</string>
+
+    <string name="bottom_navigation_task">任务</string>
+    <string name="bottom_navigation_company">公司</string>
+    <string name="bottom_navigation_me">我</string>
+    <!--确认-->
+    <string name="OK">上传</string>
+    <string name="cancel">取消</string>
+    <string name="write">记录</string>
+    <string name="stop">终止</string>
+    <!--ME-->
+    <string name="avatar">头像</string>
+    <string name="company">组织</string>
+    <string name="type">账号类型</string>
+    <string name="default_type">普通账号</string>
+    <string name="userId">ID</string>
+
+    <string name="add_photo">添加图片</string>
+</resources>

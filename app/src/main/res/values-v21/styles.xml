@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+
+    <!--<style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <style name="LoginMoreTheme" parent="LoginTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
+</resources>

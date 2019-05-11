@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_list"
+        android:icon="@drawable/ic_list_70_24dp"
+        android:title="@string/bottom_navigation_task"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_group"
+        android:icon="@drawable/ic_group_70_24dp"
+        android:title="@string/bottom_navigation_company"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/nav_me"
+        android:icon="@drawable/ic_person_outline_70_24dp"
+        android:title="@string/bottom_navigation_me"
+        app:showAsAction="always" />
+</menu>

@@ -1,0 +1,67 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/secondary_lighter</item>
+        <item name="colorPrimaryDark">@color/icon777</item>
+        <item name="colorAccent">@color/secondary</item>
+        <item name="android:windowBackground">@color/secondary_light</item>
+        <item name="colorButtonNormal">@color/primary_light</item>
+
+    </style>
+
+    <!--<style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/secondary_light</item>
+        <item name="colorAccent">@color/secondary</item>
+        <item name="android:windowBackground">@color/secondary_light</item>
+        <item name="colorButtonNormal">@color/greenA700</item>
+
+    </style>
+
+    <style name="LoginMoreTheme" parent="LoginTheme">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="MenuLabelsStyle">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="MenuButtonsStyle">
+        <item name="fab_size">mini</item>
+        <item name="fab_showAnimation">@anim/jump_from_down</item>
+        <item name="fab_hideAnimation">@anim/jump_to_down</item>
+        <item name="fab_shadowColor">@color/fab_shadow</item>
+        <item name="fab_colorNormal">@color/secondary</item>
+        <item name="fab_colorPressed">@color/secondary</item>
+        <item name="fab_colorRipple">@color/secondary_shadow</item>
+    </style>
+
+
+    <!--<style name="ToolBarStyle.Event" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--<list_item_user name="titleTextAppearance">@style/TextAppearance.Widget.Event.Toolbar.Title</list_item_user>-->
+    <!--</style>-->
+
+    <!--<style name="TextAppearance.Widget.Event.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
+        <!--&lt;!&ndash;Any text styling can be done here&ndash;&gt;-->
+        <!--<list_item_user name="android:textStyle">normal</list_item_user>-->
+        <!--<list_item_user name="android:textAlignment">center</list_item_user>-->
+        <!--<list_item_user name="android:textColor">@color/icon777</list_item_user>-->
+
+    <!--</style>-->
+
+
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/iron</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
+</resources>

@@ -1,0 +1,104 @@
+{
+  "code": 0,
+  "message": null,
+  "result": {
+    "count": 18,
+    "data": [
+      {
+        "uid": 1,
+        "name": "管理员",
+        "mail": "admin@bigkeer.cn",
+        "type": 0,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 2,
+        "name": "普通用户",
+        "mail": "user@bigkeer.cn",
+        "type": 1,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 3,
+        "name": "测试公司",
+        "mail": "company@bigkeer.cn",
+        "type": 2,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 4,
+        "name": "测试管理部门",
+        "mail": "manager@bigkeer.cn",
+        "type": 3,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 5,
+        "name": "Test",
+        "mail": "test@qq.com",
+        "type": 1,
+        "status": 0,
+        "group": {
+          "name": "测试公司",
+          "mail": "company@bigkeer.cn",
+          "uid": 3,
+          "users": null
+        }
+      },
+      {
+        "uid": 6,
+        "name": "qwr",
+        "mail": "fsadf@aa.com",
+        "type": 1,
+        "status": 0,
+        "group": {
+          "name": "测试公司",
+          "mail": "company@bigkeer.cn",
+          "uid": 3,
+          "users": null
+        }
+      },
+      {
+        "uid": 7,
+        "name": "Nick",
+        "mail": "nick@a.a",
+        "type": 1,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 8,
+        "name": "小明公司",
+        "mail": "xiangming_c@163.com",
+        "type": 2,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 9,
+        "name": "大江公司",
+        "mail": "dajiang_c@163.com",
+        "type": 2,
+        "status": 0,
+        "group": null
+      },
+      {
+        "uid": 10,
+        "name": "小张",
+        "mail": "xiaozhang@163.com",
+        "type": 1,
+        "status": 0,
+        "group": {
+          "name": "小明公司",
+          "mail": "xiangming_c@163.com",
+          "uid": 8,
+          "users": null
+        }
+      }
+    ]
+  }
+}
