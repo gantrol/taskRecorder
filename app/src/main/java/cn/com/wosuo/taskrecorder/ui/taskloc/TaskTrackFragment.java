@@ -1,7 +1,6 @@
 package cn.com.wosuo.taskrecorder.ui.taskloc;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -30,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.wosuo.taskrecorder.R;
+import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.vo.TrackData;
@@ -106,7 +106,7 @@ public class TaskTrackFragment extends TaskLocFragment {
         if (sTrackData.isEmpty()){
             Toast.makeText(getContext(), "还没有数据", Toast.LENGTH_SHORT).show();
         } else {
-            String trackData = generateTrackJson(sTrackData);
+            String trackData = generateTrackJson(sTrackData, sCoorType.indexOf(mCurrentCoorType));
             viewModel.addTaskTrack(trackData, taskId, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -128,9 +128,9 @@ public class TaskTrackFragment extends TaskLocFragment {
     }
 
     void addTrackData(BDLocation location){
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         TrackData newData =  new TrackData(
-                location.getLongitude(), location.getLatitude(), userId, timestamp.getTime());
+                location.getLongitude(), location.getLatitude(), userId,
+                DateUtil.getUnixTimestamp());
         sTrackData.add(newData);
     }
 

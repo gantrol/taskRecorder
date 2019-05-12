@@ -77,7 +77,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskHolder> {
             mTask = task;
             mTaskNameTV.setText(mTask.getTitle());
             mTaskUpdateTV.setText(DateUtil
-                    .intTimestampToChinaMiddleDateString(mTask.getUpdateAt()));
+                    .unixTimestampToChinaMiddleDateString(mTask.getUpdateAt()));
         }
     }
 

@@ -1,15 +1,10 @@
 package cn.com.wosuo.taskrecorder.ui.taskread;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,18 +21,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
-
-import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +45,6 @@ import cn.com.wosuo.taskrecorder.ui.taskloc.TaskTrackActivity;
 import cn.com.wosuo.taskrecorder.ui.taskphoto.TaskPhotoActivity;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
-import cn.com.wosuo.taskrecorder.util.Glide4Engine;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
@@ -66,7 +53,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static android.app.Activity.RESULT_OK;
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
@@ -201,9 +187,9 @@ public class TaskReadFragment extends Fragment {
     private void updateUI(Task task) {
         mIdTextView.setText(Integer.toString(task.getTaskID()));
         mTitleTextView.setText(task.getTitle());
-        mCreateDateTextView.setText(DateUtil.intTimestampToFullDateString(task.getCreateAt()));
-        mUpdateDateTextView.setText(DateUtil.intTimestampToFullDateString(task.getUpdateAt()));
-        mFinishDateTextView.setText(DateUtil.intTimestampToFullDateString(task.getFinishAt()));
+        mCreateDateTextView.setText(DateUtil.unixTimestampToFullDateString(task.getCreateAt()));
+        mUpdateDateTextView.setText(DateUtil.unixTimestampToFullDateString(task.getUpdateAt()));
+        mFinishDateTextView.setText(DateUtil.unixTimestampToFullDateString(task.getFinishAt()));
         mTypeTextView.setText(FinalMap.getTaskTypeList().get(task.getType()));
         mStatusTextView.setText(FinalMap.getTaskStatusList()[task.getStatus()]);
         mDetailTextView.setText(task.getDescription());

@@ -89,6 +89,8 @@ public class TaskPhotoFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
             mSelected = Matisse.obtainResult(data);
+//            TODO: RecyclerView
+//            https://stackoverflow.com/questions/37096547/how-to-get-data-from-edit-text-in-a-recyclerview
             Log.d("Matisse", "mSelected: " + mSelected);
         }
     }
@@ -113,6 +115,21 @@ public class TaskPhotoFragment extends Fragment {
         else {
             requestImage();
         }
+    }
+
+    @OnClick(R.id.toolbar_OK_btn)
+    public void uploadPhotos(){
+        if (mSelected == null){
+            Toast.makeText(getContext(), "请点击右下角添加图片", Toast.LENGTH_SHORT).show();
+        } else {
+//            TODO: upload with refroid2 from view model..
+            Toast.makeText(getContext(), "Going on", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.toolbar_cancel_btn)
+    public void photoCancel(){
+        requireActivity().finish();
     }
 
     @Override

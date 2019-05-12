@@ -8,10 +8,9 @@ import java.util.Locale;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.UPDATE_LASTLY;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.WITHOUT_NOW;
 
-@Deprecated
 public class DateUtil {
 //    TODO: 4Move to DateConverter？
-    public static Date intTimestampToDate(int intTimestamp){
+    public static Date unixTimestampToDate(int intTimestamp){
 //        Timestamp timestamp = new Timestamp(intTimestamp * 1000L);
 //        return new Date(timestamp.getTime());
         Date date = null;
@@ -28,23 +27,27 @@ public class DateUtil {
         return df.format(date);
     }
 
-    public static String intTimestampToFullDateString(int intTimestamp){
+    public static String unixTimestampToFullDateString(int intTimestamp){
         String result = WITHOUT_NOW;
         if (intTimestamp != 0){
             result = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(
-                    intTimestampToDate(intTimestamp));
+                    unixTimestampToDate(intTimestamp));
         }
         return result;
     }
 
-    public static String intTimestampToChinaMiddleDateString(int intTimestamp){
+    public static String unixTimestampToChinaMiddleDateString(int intTimestamp){
         String result = WITHOUT_NOW;
         if (intTimestamp != 0){
             String dateString = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(
-                    intTimestampToDate(intTimestamp));
+                    unixTimestampToDate(intTimestamp));
             result = UPDATE_LASTLY + dateString;
 
         }
         return result;
+    }
+
+    public static long getUnixTimestamp(){
+        return System.currentTimeMillis() / 1000L;
     }
 }

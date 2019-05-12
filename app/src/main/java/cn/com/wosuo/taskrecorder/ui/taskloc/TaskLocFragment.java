@@ -63,7 +63,7 @@ public abstract class TaskLocFragment extends Fragment {
     MyLocationData locData;
     double mCurrentLatitude;
     double mCurrentLongitude;
-    String mCurrentCoorType = "bd09ll";
+    String mCurrentCoorType = sCoorType.get(2);
     float mCurrentAccracy;
     int mXDirection = 0;
     float mCurrentZoom = 40f;

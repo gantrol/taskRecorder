@@ -71,10 +71,10 @@ public class JsonParser {
         return statusCode;
     }
 
-    public static String generateTrackJson(List<TrackData> sTrackData){
+    public static String generateTrackJson(List<TrackData> sTrackData, int coordinate){
         Gson gson = getGson();
 //        TypeToken<List<TrackData>> token = new TypeToken<List<TrackData>>() {};
-        Track track = new Track(0, sTrackData);
+        Track track = new Track(coordinate, sTrackData);
         String trackData = gson.toJson(track);
         return trackData;
     }

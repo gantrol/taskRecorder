@@ -1,7 +1,7 @@
 package cn.com.wosuo.taskrecorder.vo;
 
 
-public class Photo {
+public class PhotoResult {
     private int photoID;
     private User author;
     private String path;

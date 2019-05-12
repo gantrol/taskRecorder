@@ -24,7 +24,7 @@ public class TaskResult {
     @Ignore
     private List<Tracks> trasksList;
     @Ignore
-    private List<Photo> photos;
+    private List<PhotoResult> mPhotoResults;
 
     public int getTaskID() {
         return taskID;
@@ -66,11 +66,11 @@ public class TaskResult {
         this.trasksList = trasksList;
     }
 
-    public List<Photo> getPhotos() {
-        return photos;
+    public List<PhotoResult> getPhotoResults() {
+        return mPhotoResults;
     }
 
-    public void setPhotos(List<Photo> photos) {
-        this.photos = photos;
+    public void setPhotoResults(List<PhotoResult> photoResults) {
+        this.mPhotoResults = photoResults;
     }
 }
