@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.api.ApiResponse;
@@ -20,14 +23,10 @@ import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
 import cn.com.wosuo.taskrecorder.vo.GroupInfoResult;
 import cn.com.wosuo.taskrecorder.vo.User;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LOGIN;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_ME;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_NOTHING;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.WITHOUT_NOW;
 
 /**
  * Repository handling the work with users.

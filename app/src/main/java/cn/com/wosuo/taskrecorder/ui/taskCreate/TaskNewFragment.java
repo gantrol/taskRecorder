@@ -100,14 +100,14 @@ public class TaskNewFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_new_task, container, false);
         unbinder = ButterKnife.bind(this, v);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        ((AppCompatActivity)requireActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mToolbarTitleTextView.setText("新建任务");
-        ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, sTaskType);
+        ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(requireActivity(),android.R.layout.simple_list_item_1, sTaskType);
         mTypeSpinner.setAdapter(typeArrayAdapter);
 //        https://stackoverflow.com/questions/12103953/how-to-pass-result-from-second-fragment-to-first-fragment
 //        https://github.com/bignerdranch/recyclerview-multiselect
@@ -154,7 +154,7 @@ public class TaskNewFragment extends Fragment {
                         -> onCreateTaskMessage(message)
                 );
 //                TODO: 1插入数据库
-                getActivity().finish();
+                requireActivity().finish();
             }
         });
     }
@@ -173,15 +173,15 @@ public class TaskNewFragment extends Fragment {
     private boolean validate(String title, int assignee, int type, String detail) {
         boolean valid = true;
         if (title.isEmpty() || title.length() < 3){
-            mTitleEditText.setError(getActivity().getResources().getString(R.string.valid_string_long));
+            mTitleEditText.setError(requireActivity().getResources().getString(R.string.valid_string_long));
             valid = false;
         }
         if (assignee < 0){
-            mAssigneeEditText.setError(getActivity().getResources().getString(R.string.valid_select_user));
+            mAssigneeEditText.setError(requireActivity().getResources().getString(R.string.valid_select_user));
             valid = false;
         }
         if (detail.isEmpty() || detail.length() < 3){
-            mDetailEditText.setError(getActivity().getResources().getString(R.string.valid_string_long));
+            mDetailEditText.setError(requireActivity().getResources().getString(R.string.valid_string_long));
             valid = false;
         }
         return valid;
@@ -191,8 +191,8 @@ public class TaskNewFragment extends Fragment {
     @OnClick(R.id.cancel_btn)
     void cancel(){
         //TODO:2 alert window to check again for it
-        getActivity().onBackPressed();
-//        getActivity().getFragmentManager().popBackStack();
+        requireActivity().onBackPressed();
+//        requireActivity().getFragmentManager().popBackStack();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package cn.com.wosuo.taskrecorder.ui.tasklist;
+package cn.com.wosuo.taskrecorder.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

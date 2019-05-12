@@ -4,12 +4,16 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import java.net.URI;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,23 +26,30 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.collect.Lists;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.wosuo.taskrecorder.R;
+import cn.com.wosuo.taskrecorder.ui.adapter.PhotoAdapter;
 import cn.com.wosuo.taskrecorder.util.Glide4Engine;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
+import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
+import io.reactivex.internal.functions.Functions;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -57,13 +68,15 @@ public class TaskPhotoFragment extends Fragment {
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
     @BindView(R.id.add_photo_fab) FloatingActionButton mFloatingActionButton;
 
+
     static final String ARG_Task_ID = "task_id";
     private static final String TAG = "上传照片";
     private static final int REQUEST_IMAGE = 1;
-    List<Uri> mSelected;
+    List<URI> mSelected;
     private int taskId;
     private Unbinder unbinder;
     private TaskViewModel viewModel;
+    private PhotoAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +94,9 @@ public class TaskPhotoFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText(TAG);
+        mPhotoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new PhotoAdapter(getContext(), new ArrayList<>());
+        mPhotoRecyclerView.setAdapter(mAdapter);
         return view;
     }
 
@@ -88,10 +104,8 @@ public class TaskPhotoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
-            mSelected = Matisse.obtainResult(data);
-//            TODO: RecyclerView
-//            https://stackoverflow.com/questions/37096547/how-to-get-data-from-edit-text-in-a-recyclerview
-            Log.d("Matisse", "mSelected: " + mSelected);
+            List<String> paths = Matisse.obtainPathResult(data);
+            mAdapter.addPaths(paths);
         }
     }
 
@@ -122,7 +136,7 @@ public class TaskPhotoFragment extends Fragment {
         if (mSelected == null){
             Toast.makeText(getContext(), "请点击右下角添加图片", Toast.LENGTH_SHORT).show();
         } else {
-//            TODO: upload with refroid2 from view model..
+//            TODO: upload with retrofit2 from view model..
             Toast.makeText(getContext(), "Going on", Toast.LENGTH_SHORT).show();
         }
     }
@@ -169,7 +183,7 @@ public class TaskPhotoFragment extends Fragment {
                 .imageEngine(new Glide4Engine())
                 .capture(true)
                 .captureStrategy(new CaptureStrategy(true,
-                        "cn.com.wosuo.taskrecorder.fileprovider", "test"))
+                        "cn.com.wosuo.taskrecorder.fileprovider", "taskrecorder"))
                 .forResult(REQUEST_IMAGE);
     }
 

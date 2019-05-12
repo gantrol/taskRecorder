@@ -58,4 +58,6 @@
     <string name="userId">ID</string>
 
     <string name="add_photo">添加图片</string>
+    <string name="photo_detail">简要介绍</string>
+    <string name="photo_type_label">任务类型</string>
 </resources>

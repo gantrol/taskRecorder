@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
+import cn.com.wosuo.taskrecorder.ui.adapter.TaskAdapter;
 import cn.com.wosuo.taskrecorder.ui.taskCreate.TaskNewActivity;
 import cn.com.wosuo.taskrecorder.ui.taskread.TaskReadActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;

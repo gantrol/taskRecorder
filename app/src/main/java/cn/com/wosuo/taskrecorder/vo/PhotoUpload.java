@@ -9,6 +9,8 @@ public class PhotoUpload {
     File file;
     String description;
 
+
+
     public int getTaskID() {
         return taskID;
     }
