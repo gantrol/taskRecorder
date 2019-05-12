@@ -114,10 +114,10 @@ public class MediaStoreCompat {
         File storageDir;
         if (mCaptureStrategy.isPublic) {
             storageDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
+                    Environment.DIRECTORY_DCIM);
             if (!storageDir.exists()) storageDir.mkdirs();
         } else {
-            storageDir = mContext.get().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            storageDir = mContext.get().getExternalFilesDir(Environment.DIRECTORY_DCIM);
         }
         if (mCaptureStrategy.directory != null) {
             storageDir = new File(storageDir, mCaptureStrategy.directory);

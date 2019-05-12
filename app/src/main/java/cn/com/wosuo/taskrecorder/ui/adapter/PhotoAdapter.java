@@ -44,7 +44,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
     @Override
     public void onBindViewHolder(@NonNull PhotoHolder holder, int position) {
-        Picasso.get().load("file://" + initPaths.get(position)).into(holder.mImageView);
+         Picasso.get().load("file://" + initPaths.get(position)).into(holder.mImageView);
     }
 
     @Override

@@ -241,10 +241,10 @@ public class MatisseActivity extends AppCompatActivity implements
             File storageDir;
             if (mSpec.captureStrategy.isPublic) {
                 storageDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
+                        Environment.DIRECTORY_DCIM);
                 if (!storageDir.exists()) storageDir.mkdirs();
             } else {
-                storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                storageDir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
             }
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri storageUri = Uri.fromFile(storageDir);
