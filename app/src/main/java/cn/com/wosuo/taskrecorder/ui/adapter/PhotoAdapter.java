@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -16,9 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.wosuo.taskrecorder.R;
+import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
+    private String[] sPhotoType = FinalMap.getPhotoTypeList();
     private List<PhotoUpload> sPhotoUpload;
     private LayoutInflater layoutInflater;
     private List<String> initPaths;
@@ -44,7 +47,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
     @Override
     public void onBindViewHolder(@NonNull PhotoHolder holder, int position) {
-         Picasso.get().load("file://" + initPaths.get(position)).into(holder.mImageView);
+        holder.bind(initPaths.get(position));
     }
 
     @Override
@@ -63,11 +66,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
         public PhotoHolder(@NonNull View itemView) {
             super(itemView);
             mPhotoTypeSpinner = itemView.findViewById(R.id.photo_type_spinner);
+            mPhotoTypeSpinner.setAdapter(
+                    new ArrayAdapter<>(itemView.getContext(),
+                            android.R.layout.simple_list_item_1, sPhotoType
+                    ));
             mImageView = itemView.findViewById(R.id.local_image);
         }
 
         void bind(String path){
-            Picasso.get().load("file://" + path).into(mImageView);
+            Picasso.get().load("file://" + path).fit().into(mImageView);
         }
     }
 

@@ -54,13 +54,7 @@ public class UserGroupFragment extends Fragment {
 
         UserViewModel userViewModel =
                 ViewModelProviders.of(this).get(UserViewModel.class);
-        userViewModel.getAllUsers().observe(this, new Observer<Resource<List<User>>>() {
-            @Override
-            public void onChanged(Resource<List<User>> usersResource) {
-                // onChanged method triggered every time LiveData changes. so do not need to call notifyDataSetChanged methods.
-                adapter.submitList(usersResource.data);
-            }
-        });
+        userViewModel.getAllUsers().observe(this, usersResource -> adapter.submitList(usersResource.data));
         return view;
     }
 

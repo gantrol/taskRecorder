@@ -2,8 +2,14 @@
 
 TODO: Assign company
 TODO: Assign excutor
-TODO: user upload.
 TODO: 上传图片
+    exif
+    compress
+
+TODO: 任务列表页根据状态设右边drawable
+TODO: 登出时将“计时器”归零
+.
+.
 https://stackoverflow.com/questions/39953457/how-to-upload-image-file-in-retrofit-2
 
 > Of course we usually use Picasso to load image, but sometimes we really need use Retrofit to load a special image (like fetch a captcha image)

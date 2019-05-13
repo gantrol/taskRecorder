@@ -4,16 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import java.net.URI;
-
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,15 +24,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.collect.Lists;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
-import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +40,6 @@ import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.ui.adapter.PhotoAdapter;
 import cn.com.wosuo.taskrecorder.util.Glide4Engine;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
-import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
-import io.reactivex.internal.functions.Functions;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -67,7 +57,6 @@ public class TaskPhotoFragment extends Fragment {
     @BindView(R.id.photo_recycler_view) RecyclerView mPhotoRecyclerView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
     @BindView(R.id.add_photo_fab) FloatingActionButton mFloatingActionButton;
-
 
     static final String ARG_Task_ID = "task_id";
     private static final String TAG = "上传照片";
@@ -183,7 +172,7 @@ public class TaskPhotoFragment extends Fragment {
                 .imageEngine(new Glide4Engine())
                 .capture(true)
                 .captureStrategy(new CaptureStrategy(true,
-                        "cn.com.wosuo.taskrecorder.fileprovider", "taskrecorder"))
+                        "cn.com.wosuo.taskrecorder.fileprovider", "场调记录"))
                 .forResult(REQUEST_IMAGE);
     }
 

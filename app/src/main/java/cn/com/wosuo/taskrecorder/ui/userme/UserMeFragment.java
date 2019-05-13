@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,7 @@ public class UserMeFragment extends Fragment {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
+    @BindView(R.id.my_avatar) ImageView myAvatarImageView;
     @BindView(R.id.logout_btn) Button mLogoutButton;
     @BindView(R.id.big_my_name) TextView mBigMyNameTextView;
     @BindView(R.id.my_group) TextView mMyGroupTextView;
@@ -45,8 +49,6 @@ public class UserMeFragment extends Fragment {
     @BindView(R.id.my_email) TextView mMyEmailTextView;
     @BindView(R.id.my_type) TextView mMyTypeTextView;
     @BindView(R.id.my_id) TextView mMyIdTextView;
-
-
 
     @Nullable
     @Override
@@ -57,7 +59,7 @@ public class UserMeFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText(TAG);
-
+        Picasso.get().load(R.drawable.nav_icon).into(myAvatarImageView);
         mLogoutButton.setOnClickListener(v -> logout());
         User me = AppPreferencesHelper.getCurrentUser();
 //        UserViewModel userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);

@@ -75,7 +75,11 @@ public final class FinalStrings {
         public static final String TASK_TEST = "测试中";
         public static final String TASK_DONE = "已完成";
         public static final String TASK_NONE = "取消";
-
+    public static final String PHOTO_TYPE = "subID";
+        public static final String INTERVIEWEE = "访谈人";
+        public static final String MEETING = "座谈会议";// 访谈人、座谈会议、敏感对象、地块现场
+        public static final String SENSITIVE_OBJECT = "敏感对象";
+        public static final String SITE_SCENE = "地块现场";
 
 
 //    Status Code

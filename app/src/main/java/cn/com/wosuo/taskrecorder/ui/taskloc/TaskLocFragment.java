@@ -101,7 +101,7 @@ public abstract class TaskLocFragment extends Fragment {
         return v;
     }
 
-    private BaiduMap.OnMapStatusChangeListener mapStatusListener =
+    BaiduMap.OnMapStatusChangeListener mapStatusListener =
             new BaiduMap.OnMapStatusChangeListener() {
                 @Override
                 public void onMapStatusChangeStart(MapStatus arg0) {
@@ -139,7 +139,7 @@ public abstract class TaskLocFragment extends Fragment {
 
     private void initLocation(){
         LocationClientOption locationOption = new LocationClientOption();
-        locationOption.setScanSpan(3000);
+        locationOption.setScanSpan(800);
         locationOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         locationOption.setIsNeedAddress(true);
         locationOption.setIsNeedLocationDescribe(true);

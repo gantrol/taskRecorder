@@ -9,7 +9,11 @@ import java.util.Map;
 
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.INTERVIEWEE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.MEETING;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.SENSITIVE_OBJECT;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.SITE_SCENE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_CREATE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_DONE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_EXPLORE;
@@ -62,13 +66,6 @@ public final class FinalMap {
     }
 
 
-    private static final Map<String, Integer> TaskTypeNumMap = ImmutableMap.of(
-            TASK_EXPLORE, 0,
-            TASK_PLOT, 1,
-            TASK_SAMPLING, 2
-    );
-
-
     /**
      * getTaskStatusList()
      * 0 = Created
@@ -82,28 +79,12 @@ public final class FinalMap {
         return sTaskStatus;
     }
 
-    /**
-     * getTaskStatusList()
-     * 0 = Created
-     * 1 = InProgress
-     * 2 = ReadyForTest
-     * 3 = Done
-     * @return SparseArray
-     */
-    public static Map<String, Integer> getTaskStatusNumMap() {
-        return TaskStatusNumMap;
+    public static String[] getPhotoTypeList() {
+        String[] sPhotoType = {INTERVIEWEE, MEETING, SENSITIVE_OBJECT, SITE_SCENE};
+        // 0-3分别代表四种照片：访谈人、座谈会议、敏感对象、地块现场
+        return sPhotoType;
     }
 
-
-    @Deprecated
-    private static final Map<String, Integer> TaskStatusNumMap = ImmutableMap.of(
-            TASK_CREATE, 0,
-            TASK_PROGRESS, 1,
-            TASK_TEST, 2,
-            TASK_DONE, 3
-            );
-
-    public final Integer TaskFinishStatusNumber = TaskStatusNumMap.get(TASK_DONE);
 
     public static Map<Integer, String> getStatusCodeMap(){
         return ImmutableMap.<Integer, String>builder()
