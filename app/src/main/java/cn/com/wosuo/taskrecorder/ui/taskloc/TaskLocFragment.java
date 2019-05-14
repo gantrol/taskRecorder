@@ -36,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.wosuo.taskrecorder.AppExecutors;
+import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
@@ -81,7 +82,7 @@ public abstract class TaskLocFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(setLayout(), container, false);
         unbinder = ButterKnife.bind(this, v);
-        mLocationClient = new LocationClient(getActivity());
+        mLocationClient = BasicApp.getLocationClient(getActivity());
         mLocationClient.registerLocationListener(myLocationListener);
 
         mBaiduMap = mMapView.getMap();

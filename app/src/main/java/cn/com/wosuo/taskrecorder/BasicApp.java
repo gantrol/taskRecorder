@@ -16,9 +16,11 @@
 
 package cn.com.wosuo.taskrecorder;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+import com.baidu.location.LocationClient;
 import com.baidu.mapapi.SDKInitializer;
 
 import cn.com.wosuo.taskrecorder.api.BigkeerSerivice;
@@ -62,6 +64,10 @@ public class BasicApp extends Application {
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build()
                 .create(BigkeerSerivice.class);
+    }
+
+    public static LocationClient getLocationClient(Activity activity){
+        return new LocationClient(activity);
     }
 
     @Deprecated

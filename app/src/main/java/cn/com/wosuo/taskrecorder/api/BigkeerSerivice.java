@@ -3,26 +3,39 @@ package cn.com.wosuo.taskrecorder.api;
 import androidx.lifecycle.LiveData;
 
 
+import java.io.File;
+
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
 import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
 import cn.com.wosuo.taskrecorder.vo.GroupInfoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_USERS_BY_GROUP;
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_ID_IN_TASK;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_COMPANY_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_MANAGER_TASKS;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_DESC;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_FILE;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_LOCATION;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_SUBID;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_TASKID;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_TIME;
 import static cn.com.wosuo.taskrecorder.api.Urls.USER_GET_USERS_BY_GROUP;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_USER_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.MANAGER_ID_IN_TASK;
@@ -121,5 +134,12 @@ public interface BigkeerSerivice {
     @DELETE("Track/{trackID}")
     Call<ResponseBody> deleteTrack(@Path("trackID") int trackID);
 
-
+    @Multipart
+    @POST("Photo")
+    Call<ResponseBody> postImage(@Part MultipartBody.Part file,
+                                 @Part(PHOTO_TASKID) RequestBody taskID,
+                                 @Part(PHOTO_SUBID) RequestBody type,
+                                 @Part(PHOTO_TIME) RequestBody time,
+                                 @Part(PHOTO_LOCATION) RequestBody location,
+                                 @Part(PHOTO_DESC) RequestBody description);
 }

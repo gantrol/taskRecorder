@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,8 +27,14 @@ import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_FILE;
+import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_SUBID;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_COOR;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_ID;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_STATUS;
@@ -234,6 +241,21 @@ public class TaskRepository {
 //        }
 //        ).getAsLiveData();
 //    }
+
+    public Call<ResponseBody> postPhoto(File photo, int type, long time,
+                                        String locationStr, String desciption, int taskID){
+//        @Field("subID") int type,
+//        @Field("time") long time, @Field("locationStr") String location,
+//        @Field("description") String description
+        RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), photo);
+        MultipartBody.Part fpart = MultipartBody.Part.createFormData(PHOTO_FILE, photo.getName(), fbody);
+        RequestBody typeBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(type));
+        RequestBody timeBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(time));
+        RequestBody taskBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(taskID));
+        RequestBody locBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(locationStr));
+        RequestBody descBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(desciption));
+        return mBigkeerSerivice.postImage(fpart, taskBody, typeBody, timeBody, locBody, descBody);
+    }
 
     public void postTaskTrack(String trackData, int taskID, Callback callback){
         RequestBody requestBody = new FormBody.Builder()

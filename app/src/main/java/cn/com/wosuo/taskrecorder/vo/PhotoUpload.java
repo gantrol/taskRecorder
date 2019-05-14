@@ -1,13 +1,13 @@
 package cn.com.wosuo.taskrecorder.vo;
 
-import java.io.File;
 
 public class PhotoUpload {
-    int taskID;
-    int subID; // 0-3分别代表四种照片：访谈人、座谈会议、敏感对象、地块现场
-    long time;
-    File file;
-    String description;
+    private int taskID;
+    private int subID; // 0-3分别代表四种照片：访谈人、座谈会议、敏感对象、地块现场
+    private long time;
+    private String path;
+    private String locationStr;
+    private String description;
 
 
 
@@ -35,12 +35,20 @@ public class PhotoUpload {
         this.time = time;
     }
 
-    public File getFile() {
-        return file;
+    public String getPath() {
+        return path;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getLocationStr() {
+        return locationStr;
+    }
+
+    public void setLocationStr(String locationStr) {
+        this.locationStr = locationStr;
     }
 
     public String getDescription() {
