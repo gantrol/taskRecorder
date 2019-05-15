@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
@@ -18,325 +19,312 @@
                 android:id="@+id/task_toobar"
                 layout="@layout/main_toolbar"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/id_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/task_toobar">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_id_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_id"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/id_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_title_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_title"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/create_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/title_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_create_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_create"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/update_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/create_layout">
-
+                >
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_update_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_update"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
+            </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/finish_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/update_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_finish_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_finish"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
+            </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/assigner_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/finish_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_assigner_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_assigner"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/assignee_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/assigner_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_assignee_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_assignee"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/executor_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/assignee_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_execute_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_executor"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/task_type_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/executor_layout">
+                android:background="@color/white">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_type_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_type"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/task_status_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0.5dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/task_type_layout">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:text="@string/task_status_label"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/task_status"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="@string/none"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:text="@string/none" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/task_detail_layout"
@@ -345,10 +333,13 @@
                 android:layout_marginTop="7dp"
                 android:background="@color/white"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/task_status_layout">
+                >
                 <TextView
                     android:text="@string/task_detail_label"
                     android:textStyle="bold"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
@@ -356,7 +347,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/photo_read_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/loc_mv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/track_mv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <com.github.clans.fab.FloatingActionMenu

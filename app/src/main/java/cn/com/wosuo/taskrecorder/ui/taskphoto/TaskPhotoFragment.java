@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,7 +163,6 @@ public class TaskPhotoFragment extends Fragment {
         if (photoUploads == null || photoUploads.isEmpty()){
             Toast.makeText(getContext(), "请点击右下角添加图片", Toast.LENGTH_SHORT).show();
         } else {
-//            TODO: upload with retrofit2 from view model..
             Toast.makeText(getContext(), "Going on", Toast.LENGTH_SHORT).show();
 
             for (PhotoUpload photoUpload: photoUploads) {
@@ -174,6 +174,7 @@ public class TaskPhotoFragment extends Fragment {
                             String responseData = "";
                             if (response.body() != null) responseData = response.body().toString();
                             Log.d(TAG, responseData);
+//                            TODO: 成功时的刷新？
                         }
 
                         @Override
@@ -238,7 +239,7 @@ public class TaskPhotoFragment extends Fragment {
 
     private void requestImage() {
         Matisse.from(this)
-                .choose(MimeType.ofImage())
+                .choose(MimeType.of(MimeType.JPEG))
                 .countable(true)
                 .maxSelectable(9)
                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))

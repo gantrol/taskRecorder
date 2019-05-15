@@ -66,7 +66,7 @@ public class TaskNewFragment extends Fragment {
     private int assigneeID = -1;
     private final static ArrayList<String> sTaskType = FinalMap.getTaskTypeList();
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
-//    private final static ArrayList<String> sTaskStatus = FinalMap.getTaskStatusList();
+    //    private final static ArrayList<String> sTaskStatus = FinalMap.getTaskStatusList();
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
 
@@ -74,7 +74,7 @@ public class TaskNewFragment extends Fragment {
     @BindView(R.id.input_assignee) EditText mAssigneeEditText;
     @BindView(R.id.assigner_content) TextView mAssignerTextView;
     @BindView(R.id.task_type_spinner) Spinner mTypeSpinner;
-//    @BindView(R.id.task_status_spinner) Spinner mStatusSpinner;
+    //    @BindView(R.id.task_status_spinner) Spinner mStatusSpinner;
     @BindView(R.id.input_detail) EditText mDetailEditText;
     @BindView(R.id.create_btn) Button mCreateButtom;
     @BindView(R.id.cancel_btn) Button mCancelButtom;
@@ -100,12 +100,9 @@ public class TaskNewFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_new_task, container, false);
         unbinder = ButterKnife.bind(this, v);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)requireActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText("新建任务");
         ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(requireActivity(),android.R.layout.simple_list_item_1, sTaskType);
         mTypeSpinner.setAdapter(typeArrayAdapter);

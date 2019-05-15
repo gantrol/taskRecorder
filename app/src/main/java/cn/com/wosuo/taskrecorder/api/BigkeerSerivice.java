@@ -136,6 +136,7 @@ public interface BigkeerSerivice {
 
     @Multipart
     @POST("Photo")
+//    how to upload a file: https://github.com/square/retrofit/issues/1063
     Call<ResponseBody> postImage(@Part MultipartBody.Part file,
                                  @Part(PHOTO_TASKID) RequestBody taskID,
                                  @Part(PHOTO_SUBID) RequestBody type,

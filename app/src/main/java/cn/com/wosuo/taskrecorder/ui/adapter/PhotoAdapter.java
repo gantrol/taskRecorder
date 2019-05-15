@@ -1,7 +1,6 @@
 package cn.com.wosuo.taskrecorder.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -9,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
-import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -38,11 +35,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
         layoutInflater = LayoutInflater.from(context);
         sPhotoUpload = new ArrayList<>(initPaths.size());
         this.taskID = taskID;
-//        this.initPaths = initPaths;
     }
 
     public void addPaths(List<String> addPaths){
-//        initPaths.addAll(addPaths);
         for (String path: addPaths){
             PhotoUpload photoUpload = new PhotoUpload();
             photoUpload.setPath(path);
@@ -61,7 +56,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
     @Override
     public void onBindViewHolder(@NonNull PhotoHolder holder, int position) {
-        holder.bind(sPhotoUpload.get(position), position);
+        holder.bind(sPhotoUpload.get(position));
     }
 
     @Override
@@ -86,9 +81,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
             mPhotoDetailInput = itemView.findViewById(R.id.photo_detail_input);
         }
 
-        void bind(PhotoUpload photoUpload, int positionParent){
+        void bind(PhotoUpload photoUpload){
 //            TODO: 利用Picasso的缓存？避免浪费？
+//  Picasso.with(this).load().placeholder(R.drawable.placeholder).error(R.drawable.error).noFade().into(imageView);
             Picasso.get().load("file://" + photoUpload.getPath()).fit().into(mImageView);
+//            Picasso.get().load("file://" + photoUpload.getPath()).into(mImageView);
             mPhotoDetailInput.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

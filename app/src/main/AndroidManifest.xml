@@ -82,6 +82,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.taskphoto.TaskPhotoActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
 
         <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">

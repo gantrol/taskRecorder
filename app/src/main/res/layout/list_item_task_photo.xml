@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
-
-    <ImageView
-        android:id="@+id/local_image"
-        android:contentDescription="一张新照片"
-        android:layout_width="100dp"
-        android:layout_height="150dp" />
-
+    android:layout_margin="@dimen/list_margin_between">
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+        android:layout_height="wrap_content"
+        >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/photo_detail_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="@string/photo_detail" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:id="@+id/local_image"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="一张新照片"
+            android:layout_width="100dp"
+            android:layout_height="150dp" />
 
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/list_subitem_top"
+                android:layout_marginBottom="@dimen/list_subitem_bottom">
 
-            <TextView
-                android:id="@+id/photo_type_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:hint="@string/photo_type_label"
-                android:textSize="@dimen/normal_text_size" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/photo_detail_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/photo_detail" />
 
-            <Spinner
-                android:id="@+id/photo_type_spinner"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/list_subitem_top"
+                android:layout_marginBottom="@dimen/list_subitem_top"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/photo_type_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:hint="@string/photo_type_label"
+                    android:textSize="@dimen/normal_text_size" />
+
+                <Spinner
+                    android:id="@+id/photo_type_spinner"
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,4 +1,4 @@
-package cn.com.wosuo.taskrecorder.ui.taskAssign;
+package cn.com.wosuo.taskrecorder.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +11,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.vo.User;
 
 public class ChooseUserAdapter extends ListAdapter<User, ChooseUserAdapter.UserHolder> {
-    public static final int MULTI_SELECTION = 2;
-    public static final int SINGLE_SELECTION = 1;
+    private static final int MULTI_SELECTION = 2;
+    private static final int SINGLE_SELECTION = 1;
     private OnItemClickListener clickListener;
     private boolean isMultiSelectionEnabled = false;
 
@@ -51,21 +48,21 @@ public class ChooseUserAdapter extends ListAdapter<User, ChooseUserAdapter.UserH
     @Override
     public void onBindViewHolder(@NonNull UserHolder userHolder, int position) {
         User user = getItem(position);
-        userHolder.bind(user, position);
+        userHolder.bind(user);
     }
 
     public void clickListener(OnItemClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
-    public class UserHolder extends RecyclerView.ViewHolder{
+    class UserHolder extends RecyclerView.ViewHolder{
 
         private User mUser;
         TextView mUserNameTV;
         TextView mUserMailTV;
         CheckBox mCheckBox;
 
-        public UserHolder(View view) {
+        UserHolder(View view) {
             super(view);
             mUserNameTV = view.findViewById(R.id.username_tv);
             mUserMailTV = view.findViewById(R.id.usermail_tv);
@@ -76,12 +73,12 @@ public class ChooseUserAdapter extends ListAdapter<User, ChooseUserAdapter.UserH
             });
         }
 
-        public void setChecked(boolean value) {
+        void setChecked(boolean value) {
             mCheckBox.setChecked(value);
             mUser.setSelected(value);
         }
 
-        void bind(User user, Integer position){
+        void bind(User user){
             mUser = user;
             mUserNameTV.setText(mUser.getName());
             mUserMailTV.setText(mUser.getMail());

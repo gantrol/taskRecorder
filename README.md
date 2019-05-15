@@ -2,9 +2,6 @@
 
 TODO: Assign company
 TODO: Assign excutor
-TODO: 上传图片
-    exif
-    compress
 
 TODO: 任务列表页根据状态设右边drawable
 TODO: 登出时将“计时器”归零

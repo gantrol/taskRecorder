@@ -6,15 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include android:id="@+id/photo_toolbar"
-        layout="@layout/btn_toolbar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/photo_recycler_view"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/photo_toolbar"
-        app:layout_behavior=" @string/appbar_scrolling_view_behavior" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include android:id="@+id/photo_toolbar"
+                layout="@layout/btn_toolbar" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/photo_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior=" @string/appbar_scrolling_view_behavior" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_photo_fab"

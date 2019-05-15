@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +21,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,7 +80,7 @@ public class TaskReadFragment extends Fragment {
     @BindView(R.id.task_assignee) TextView mAssigneeTextView;
     @BindView(R.id.task_assigner) TextView mAssignerTextView;
     @BindView(R.id.task_executor) TextView mExecutorTextView;
-    @BindView(R.id.executor_layout) ConstraintLayout mExecutorConstraintLayout;
+    @BindView(R.id.executor_layout) LinearLayout mExecutorLinearLayout;
     @BindView(R.id.task_type) TextView mTypeTextView;
     @BindView(R.id.task_status) TextView mStatusTextView;
     @BindView(R.id.task_detail_text) TextView mDetailTextView;
@@ -91,6 +94,7 @@ public class TaskReadFragment extends Fragment {
     private CharSequence[] sTaskStatus = FinalMap.getTaskStatusList();
     private ArrayList<String> sCanChooseTaskStatus = new ArrayList<>();
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
+    BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
     private static final String DIALOG_TASK_TYPE = "DialogType";
     private AppExecutors mAppExecutors = new AppExecutors();
     private int taskId;
@@ -111,7 +115,7 @@ public class TaskReadFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         userType = AppPreferencesHelper.getCurrentUserLoginState();
         super.onCreate(savedInstanceState);
-        taskId = getArguments().getInt(ARG_Task_ID);
+        taskId = getArguments() != null ? getArguments().getInt(ARG_Task_ID) : 0;
         viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         viewModel.getTasksById(taskId).observe(this, taskResource -> {
             mTask = taskResource;
@@ -120,13 +124,14 @@ public class TaskReadFragment extends Fragment {
                 if (mTask.getAssignee_id() > 0)
                     viewModel.getUser(mTask.getAssignee_id()).observe(this, aeeResource -> {
                         User mAssignee = aeeResource.data;
-                            if (mAssignee != null) mAssigneeTextView.setText(mAssignee.getName());
+                        if (mAssignee != null) mAssigneeTextView.setText(mAssignee.getName());
                     });
                 if (mTask.getAssigner_id() > 0)
                     viewModel.getUser(mTask.getAssigner_id()).observe(this, aerResource -> {
                         User mAssigner = aerResource.data;
                         if (mAssigner != null) mAssignerTextView.setText(mAssigner.getName());
                     });
+//                TODO: get more result...
             }
         });
     }
@@ -138,12 +143,13 @@ public class TaskReadFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_task, container, false);
         unbinder = ButterKnife.bind(this, v);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)requireActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        mToolbarTitleTextView.setText("任务详情");
         int myType = AppPreferencesHelper.getCurrentUserLoginState();
         List<String> sUserType= FinalMap.getUserTypeList();
         if(myType == sUserType.indexOf(USER_GROUP)){
@@ -162,7 +168,7 @@ public class TaskReadFragment extends Fragment {
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    String responseBody = response.body().string();
+                    String responseBody = response.body() != null ? response.body().string() : null;
                     List<User> users = JsonParser.parseGetExecutorJson(responseBody);
                     StringBuilder usersSb = new StringBuilder();
                     for (User user : users) {
@@ -171,21 +177,20 @@ public class TaskReadFragment extends Fragment {
                     }
 
                     Handler mHandler = new Handler(Looper.getMainLooper());
-                    mHandler.postDelayed(() -> getActivity().runOnUiThread(() -> {
-                        mExecutorTextView.setText(usersSb);
-                    }), 100);
-
+                    mHandler.postDelayed(()
+                            -> Objects.requireNonNull(getActivity()).runOnUiThread(()
+                            -> mExecutorTextView.setText(usersSb)), 100);
                 }
             });
         }
         else {
-            mExecutorConstraintLayout.setVisibility(View.GONE);
+            mExecutorLinearLayout.setVisibility(View.GONE);
         }
         return v;
     }
 
     private void updateUI(Task task) {
-        mIdTextView.setText(Integer.toString(task.getTaskID()));
+        mIdTextView.setText(String.valueOf(task.getTaskID()));
         mTitleTextView.setText(task.getTitle());
         mCreateDateTextView.setText(DateUtil.unixTimestampToFullDateString(task.getCreateAt()));
         mUpdateDateTextView.setText(DateUtil.unixTimestampToFullDateString(task.getUpdateAt()));
@@ -266,7 +271,7 @@ public class TaskReadFragment extends Fragment {
 
     private void createStatusDialog() {
         int item = (mTask == null) ? 0 : mTask.getType();
-        new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.change_task_type)
                 .setSingleChoiceItems(
                         sCanChooseTaskStatus.toArray(new CharSequence[sCanChooseTaskStatus.size()]),
@@ -290,7 +295,7 @@ public class TaskReadFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response)
                     throws IOException {
-                String responseData = response.body().string();
+                String responseData = response.body() != null ? response.body().string() : null;
                 int statusCode = JsonParser.
                         parseChangeTaskStatusJson(responseData);
                 String message = statusCodeMap.get(statusCode);
