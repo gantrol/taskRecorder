@@ -40,7 +40,7 @@ import static cn.com.wosuo.taskrecorder.api.Urls.USER_GET_USERS_BY_GROUP;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_USER_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.MANAGER_ID_IN_TASK;
 
-public interface BigkeerSerivice {
+public interface BigkeerService {
     @GET("Session")
     Call<ResponseBody> getSession();
 

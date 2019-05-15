@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.api.ApiResponse;
-import cn.com.wosuo.taskrecorder.api.BigkeerSerivice;
+import cn.com.wosuo.taskrecorder.api.BigkeerService;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
 import cn.com.wosuo.taskrecorder.db.TaskDao;
@@ -34,7 +34,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_FILE;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_SUBID;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_COOR;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_ID;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_STATUS;
@@ -54,7 +53,7 @@ public class TaskRepository {
 //    TODO: 3RateLimit need to be smart set.
 
     private static TaskRepository sInstance;
-    private BigkeerSerivice mBigkeerSerivice;
+    private BigkeerService mBigkeerService;
     private AppDatabase mDatabase;
     private TaskDao mTaskDao;
     private AppExecutors mAppExecutors;
@@ -68,7 +67,7 @@ public class TaskRepository {
         mAppExecutors = new AppExecutors();
         mDatabase = database;
         mTaskDao = database.taskDao();
-        mBigkeerSerivice = BasicApp.getBigkeerService();
+        mBigkeerService = BasicApp.getBigkeerService();
     }
 
     public static TaskRepository getInstance(final AppDatabase database) {
@@ -105,7 +104,7 @@ public class TaskRepository {
 
             @Override
             public LiveData<ApiResponse<BigkeerResponse<ArrayResult<Task>>>> createCall() {
-                return mBigkeerSerivice.getAllTasks();
+                return mBigkeerService.getAllTasks();
             }
 
             @Override
@@ -135,7 +134,7 @@ public class TaskRepository {
 
             @Override
             public LiveData<ApiResponse<BigkeerResponse<ArrayResult<Task>>>> createCall() {
-                return mBigkeerSerivice.getCompanyTasks(id);
+                return mBigkeerService.getCompanyTasks(id);
             }
 
             @Override
@@ -166,7 +165,7 @@ public class TaskRepository {
 
             @Override
             public LiveData<ApiResponse<BigkeerResponse<ArrayResult<Task>>>> createCall() {
-                return mBigkeerSerivice.getManagerTasks(id);
+                return mBigkeerService.getManagerTasks(id);
             }
 
             @Override
@@ -201,7 +200,7 @@ public class TaskRepository {
 
             @Override
             public LiveData<ApiResponse<BigkeerResponse<ArrayResult<Task>>>> createCall() {
-                return mBigkeerSerivice.getUserTasks();
+                return mBigkeerService.getUserTasks();
             }
 
             @Override
@@ -254,7 +253,7 @@ public class TaskRepository {
         RequestBody taskBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(taskID));
         RequestBody locBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(locationStr));
         RequestBody descBody = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(desciption));
-        return mBigkeerSerivice.postImage(fpart, taskBody, typeBody, timeBody, locBody, descBody);
+        return mBigkeerService.postImage(fpart, taskBody, typeBody, timeBody, locBody, descBody);
     }
 
     public void postTaskTrack(String trackData, int taskID, Callback callback){

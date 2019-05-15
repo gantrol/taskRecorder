@@ -23,7 +23,7 @@ import android.content.Context;
 import com.baidu.location.LocationClient;
 import com.baidu.mapapi.SDKInitializer;
 
-import cn.com.wosuo.taskrecorder.api.BigkeerSerivice;
+import cn.com.wosuo.taskrecorder.api.BigkeerService;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
 import cn.com.wosuo.taskrecorder.db.TaskDao;
@@ -31,7 +31,6 @@ import cn.com.wosuo.taskrecorder.db.UserDao;
 import cn.com.wosuo.taskrecorder.repository.TaskRepository;
 import cn.com.wosuo.taskrecorder.repository.UserRepository;
 import cn.com.wosuo.taskrecorder.util.LiveDataCallAdapterFactory;
-import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -55,15 +54,18 @@ public class BasicApp extends Application {
     @Deprecated
     private static Context context;
 
+    public static BigkeerService getBigkeerService(){
+        return BigkeerServiceHolder.sInstance;
+    }
 
-    public static BigkeerSerivice getBigkeerService(){
-        return new Retrofit.Builder()
+    private static class BigkeerServiceHolder {
+        private static final BigkeerService sInstance = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(HttpUtil.getHTTPClient())
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build()
-                .create(BigkeerSerivice.class);
+                .create(BigkeerService.class);
     }
 
     public static LocationClient getLocationClient(Activity activity){

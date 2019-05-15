@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.api.ApiResponse;
-import cn.com.wosuo.taskrecorder.api.BigkeerSerivice;
+import cn.com.wosuo.taskrecorder.api.BigkeerService;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
 import cn.com.wosuo.taskrecorder.db.UserDao;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
@@ -34,7 +34,7 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_NOTHING;
 public class UserRepository {
 //  TODO: 3翻页。。
     private static UserRepository sInstance;
-    private BigkeerSerivice mBigkeerSerivice;
+    private BigkeerService mBigkeerService;
     private AppDatabase mDatabase;
     private UserDao mUserDao;
     private AppExecutors mAppExecutors;
@@ -46,7 +46,7 @@ public class UserRepository {
     private final static List<String> sUserType = FinalMap.getUserTypeList();
 
     private UserRepository(final AppDatabase database) {
-        mBigkeerSerivice = BasicApp.getBigkeerService();
+        mBigkeerService = BasicApp.getBigkeerService();
         mAppExecutors = new AppExecutors();
         mDatabase = database;
         mUserDao = database.userDao();
@@ -85,7 +85,7 @@ public class UserRepository {
 
             @NonNull
             public LiveData<ApiResponse<BigkeerResponse<ArrayResult<User>>>> createCall() {
-                return mBigkeerSerivice.getAllUsers();
+                return mBigkeerService.getAllUsers();
             }
 
             @Override
@@ -122,8 +122,8 @@ public class UserRepository {
             @NonNull
             public LiveData<ApiResponse<BigkeerResponse<GroupInfoResult>>> createCall() {
                 if (type == sUserType.indexOf(GROUP_GROUP))
-                    return mBigkeerSerivice.companyGetUsersInGroup();
-                else return mBigkeerSerivice.userGetUsersInGroup();
+                    return mBigkeerService.companyGetUsersInGroup();
+                else return mBigkeerService.userGetUsersInGroup();
             }
 
             @Override
@@ -152,7 +152,7 @@ public class UserRepository {
 
             @NonNull
             public LiveData<ApiResponse<BigkeerResponse<ArrayResult<User>>>> createCall() {
-                return mBigkeerSerivice.getAllUsers();
+                return mBigkeerService.getAllUsers();
             }
 
             @Override
@@ -183,7 +183,7 @@ public class UserRepository {
 
             @NonNull
             public LiveData<ApiResponse<BigkeerResponse<User>>> createCall() {
-                return mBigkeerSerivice.getUserById(id);
+                return mBigkeerService.getUserById(id);
             }
 
             @Override
