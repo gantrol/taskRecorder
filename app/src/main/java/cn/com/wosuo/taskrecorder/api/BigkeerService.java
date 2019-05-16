@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData;
 
 
 import java.io.File;
+import java.util.List;
 
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
 import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
 import cn.com.wosuo.taskrecorder.vo.GroupInfoResult;
+import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
@@ -133,6 +135,11 @@ public interface BigkeerService {
 
     @DELETE("Track/{trackID}")
     Call<ResponseBody> deleteTrack(@Path("trackID") int trackID);
+
+
+    @GET("Photo/task/{taskID}")
+    LiveData<ApiResponse<BigkeerResponse<List<PhotoResult>>>>
+    getPhotoResultsByTaskID(@Path("taskID") int taskID);
 
     @Multipart
     @POST("Photo")

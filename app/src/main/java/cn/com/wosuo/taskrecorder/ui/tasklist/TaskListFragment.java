@@ -37,12 +37,6 @@ import cn.com.wosuo.taskrecorder.vo.Task;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
 
 public class TaskListFragment extends Fragment {
-
-
-    // TODO: 1 The element on the list
-    //      a. 日期排版
-    //      b. 根据任务状态调整符号
-    //      c. 更换更高效的layout，避免“Skipped 43 frames!  The application may be doing too much work on its main thread.”
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.task_recycler_view)RecyclerView mTaskRecyclerView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;

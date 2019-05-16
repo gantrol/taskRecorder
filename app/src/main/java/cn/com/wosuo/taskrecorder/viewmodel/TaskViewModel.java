@@ -30,6 +30,7 @@ import cn.com.wosuo.taskrecorder.repository.UserRepository;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.Resource;
+import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.repository.TaskRepository;
@@ -71,7 +72,7 @@ public class TaskViewModel extends AndroidViewModel {
     /**
      * All the activities has to reference to ViewModel, not the mTaskRepository. {@link TaskRepository}
      * So we must create methods for ViewModel that match the mTaskRepository methods
-     * @param Task
+     * @param Task 任务类{@link Task}
      */
     public void insert(Task Task) {
         mTaskRepository.insert(Task);
@@ -98,18 +99,18 @@ public class TaskViewModel extends AndroidViewModel {
         LiveData<Resource<List<Task>>> result;
         User me = AppPreferencesHelper.getCurrentUser();
         if (me == null) {
-            result = new MediatorLiveData<>();  // TODO: 3为UI设立空白页面
+            result = new MediatorLiveData<>();
         } else {
             int userType = me.getType();
             int currentUserId = me.getUid();
             if (userType == user){
-                result = mTaskRepository.getUserTasks(me);
+                result = mTaskRepository.getUserTasks(currentUserId);
             } else if (userType == group){
                 result = mTaskRepository.getCompanyTasks(currentUserId);
             } else if (userType == manage) {
                 result = mTaskRepository.getManagerTasks(currentUserId);
             } else if (userType == admin) {
-                result = mTaskRepository.getAllTasks();
+                result = mTaskRepository.getAllTasks(currentUserId);
             } else {
                 result = new MediatorLiveData<>();
             }
@@ -170,6 +171,10 @@ public class TaskViewModel extends AndroidViewModel {
 //        MultipartBody.Part photoPart = MultipartBody.Part.
 //                createFormData("file", photo.getName(), fileReqBody);
         return mTaskRepository.postPhoto(photo, type, time, locationStr, desciption, taskID);
+    }
+
+    public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID){
+        return mTaskRepository.getPhotoResultsByTaskID(taskID);
     }
 
     public LiveData<Resource<User>> getUser(int id){

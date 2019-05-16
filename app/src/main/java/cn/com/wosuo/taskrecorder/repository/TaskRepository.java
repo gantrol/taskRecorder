@@ -17,12 +17,14 @@ import cn.com.wosuo.taskrecorder.api.ApiResponse;
 import cn.com.wosuo.taskrecorder.api.BigkeerService;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
+import cn.com.wosuo.taskrecorder.db.PhotoDao;
 import cn.com.wosuo.taskrecorder.db.TaskDao;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.RateLimiter;
 import cn.com.wosuo.taskrecorder.util.Resource;
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
 import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
+import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
@@ -44,9 +46,6 @@ import static cn.com.wosuo.taskrecorder.api.Urls.TASK_Y;
 import static cn.com.wosuo.taskrecorder.ui.UiString.TASK_LIST;
 
 /**
- * Repository handling the work with tasks and comments.
- */
-/**
  * Repository handling the work with tasks.
  */
 public class TaskRepository {
@@ -56,8 +55,10 @@ public class TaskRepository {
     private BigkeerService mBigkeerService;
     private AppDatabase mDatabase;
     private TaskDao mTaskDao;
+    private PhotoDao mPhotoDao;
     private AppExecutors mAppExecutors;
-    private RateLimiter<String> taskListRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
+    private RateLimiter<Integer> taskListRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
+    private RateLimiter<Integer> photoResultRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
 
     private RateLimiter<LiveData<Task>> taskRateLimit = new RateLimiter<>(30, TimeUnit.SECONDS);
     private final static List<String> sTaskType = FinalMap.getTaskTypeList();
@@ -67,6 +68,7 @@ public class TaskRepository {
         mAppExecutors = new AppExecutors();
         mDatabase = database;
         mTaskDao = database.taskDao();
+        mPhotoDao = database.photoDao();
         mBigkeerService = BasicApp.getBigkeerService();
     }
 
@@ -84,7 +86,7 @@ public class TaskRepository {
     /**
      * Get the list of tasks from the database and get notified when the data changes.
      */
-    public LiveData<Resource<List<Task>>> getAllTasks() {
+    public LiveData<Resource<List<Task>>> getAllTasks(int currentUserId) {
         return (new NetworkBoundResource<List<Task>, BigkeerResponse<ArrayResult<Task>>>(mAppExecutors) {
             @Override
             protected void saveCallResult(@NonNull BigkeerResponse<ArrayResult<Task>> item) {
@@ -93,7 +95,7 @@ public class TaskRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Task> data) {
-                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(TASK_LIST);
+                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(currentUserId);
             }
 
             @NonNull
@@ -123,7 +125,7 @@ public class TaskRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Task> data) {
-                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(TASK_LIST);
+                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(id);
             }
 
             @NonNull
@@ -154,7 +156,7 @@ public class TaskRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Task> data) {
-                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(TASK_LIST);
+                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(id);
             }
 
             @NonNull
@@ -176,26 +178,26 @@ public class TaskRepository {
         }).getAsLiveData();
     }
 
-    public LiveData<Resource<List<Task>>> getUserTasks(User user) {
+    public LiveData<Resource<List<Task>>> getUserTasks(int currentUserId) {
         return (new NetworkBoundResource<List<Task>, BigkeerResponse<ArrayResult<Task>>>(mAppExecutors) {
             @Override
             protected void saveCallResult(@NonNull BigkeerResponse<ArrayResult<Task>> item) {
                 List<Task> tasks = item.getResult().getData();
                 for (Task task : tasks) {
-                    task.setExecutor(user.getUid());
+                    task.setExecutor(currentUserId);
                     saveTaskUsersInDaoWithUid(task);
                 }
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<Task> data) {
-                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(TASK_LIST);
+                return data == null || data.isEmpty() || taskListRateLimit.shouldFetch(currentUserId);
             }
 
             @NonNull
             @Override
             protected LiveData<List<Task>> loadFromDb() {
-                return mTaskDao.getUserTasks(user.getUid());
+                return mTaskDao.getUserTasks(currentUserId);
             }
 
             @Override
@@ -241,6 +243,37 @@ public class TaskRepository {
 //        ).getAsLiveData();
 //    }
 
+    public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID){
+        return (new NetworkBoundResource<List<PhotoResult>, BigkeerResponse<List<PhotoResult>>>(mAppExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull BigkeerResponse<List<PhotoResult>> item) {
+                List<PhotoResult> photoResults = item.getResult();
+                mPhotoDao.insertAll(photoResults);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<PhotoResult> data) {
+                return data == null || data.isEmpty() || photoResultRateLimit.shouldFetch(taskID);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<PhotoResult>> loadFromDb() {
+                return mPhotoDao.getPhotoResultByTaskID(taskID);
+            }
+
+            @Override
+            public LiveData<ApiResponse<BigkeerResponse<List<PhotoResult>>>> createCall() {
+                return mBigkeerService.getPhotoResultsByTaskID(taskID);
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                taskListRateLimit.reset(TASK_LIST);
+            }
+        }).getAsLiveData();
+    }
+
     public Call<ResponseBody> postPhoto(File photo, int type, long time,
                                         String locationStr, String desciption, int taskID){
 //        @Field("subID") int type,
@@ -274,11 +307,11 @@ public class TaskRepository {
 
     /**
      *
-     * @param taskID
-     * @param x 坐标系，
-     * @param y
+     * @param taskID 任务编号
+     * @param x 经度，
+     * @param y 纬度,
      * @param coordinate 默认为2，百度坐标系
-     * @param callback
+     * @param callback 回调
      */
     public void putCenterPointCoordinate(int taskID, double x, double y, int coordinate, Callback callback){
         //        TODO: Update database in successful callback

@@ -1,0 +1,34 @@
+{
+  "code": 0,
+  "message": "string",
+  "result": [
+    {
+      "photoID": 0,
+      "author": {
+        "uid": 0,
+        "name": "string",
+        "mail": "string",
+        "type": 0,
+        "status": 0,
+        "group": {
+          "name": "string",
+          "mail": "string",
+          "uid": 0,
+          "users": [
+            null
+          ]
+        }
+      },
+      "path": "string",
+      "description": "string",
+      "location": {
+        "positionX": 0,
+        "positionY": 0,
+        "coordinate": 0
+      },
+      "photoTime": 0,
+      "taskID": 0,
+      "subID": 0
+    }
+  ]
+}

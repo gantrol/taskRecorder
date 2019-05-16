@@ -16,11 +16,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.util.DatabaseUtils;
+import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.TaskFtsEntity;
 import cn.com.wosuo.taskrecorder.vo.User;
 
-@Database(entities = {User.class, Task.class, TaskFtsEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Task.class, TaskFtsEntity.class, PhotoResult.class}, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -33,6 +34,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
 
     public abstract TaskDao taskDao();
+
+    public abstract PhotoDao photoDao();
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 

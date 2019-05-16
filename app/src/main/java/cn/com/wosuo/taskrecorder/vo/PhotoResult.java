@@ -1,10 +1,25 @@
 package cn.com.wosuo.taskrecorder.vo;
 
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import cn.com.wosuo.taskrecorder.db.UserConverter;
+import cn.com.wosuo.taskrecorder.db.UserLocConverter;
+
+@Entity
+@TypeConverters({UserConverter.class, UserLocConverter.class})
 public class PhotoResult {
+    @PrimaryKey
     private int photoID;
     private User author;
     private String path;
+    private String description;
+    private UserLocation location;
+    private int photoTime;  // 需要*1000再转时间戳
+    private int taskID;
+    private int subID;  // 本组序号
 
     public int getPhotoID() {
         return photoID;
@@ -69,10 +84,4 @@ public class PhotoResult {
     public void setSubID(int subID) {
         this.subID = subID;
     }
-
-    private String description;
-    private UserLocation location;
-    private int photoTime;  // 需要*1000再转时间戳
-    private int taskID;
-    private int subID;  // 本组序号
 }

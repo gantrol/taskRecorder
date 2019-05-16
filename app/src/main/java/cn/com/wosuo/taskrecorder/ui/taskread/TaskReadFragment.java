@@ -50,6 +50,7 @@ import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
+import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Call;
@@ -121,17 +122,24 @@ public class TaskReadFragment extends Fragment {
             mTask = taskResource;
             if (mTask != null) {
                 TaskReadFragment.this.updateUI(mTask);
-                if (mTask.getAssignee_id() > 0)
+                if (mTask.getAssignee_id() > 0) {
                     viewModel.getUser(mTask.getAssignee_id()).observe(this, aeeResource -> {
                         User mAssignee = aeeResource.data;
                         if (mAssignee != null) mAssigneeTextView.setText(mAssignee.getName());
                     });
-                if (mTask.getAssigner_id() > 0)
+//                    有assignee的时候，才有结果
+//                    1.照片
+                    viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
+                        List<PhotoResult> photoResults = photoResource.data;
+//                        TODO: create recyclerView and set list to adapter.
+                    });
+                }
+                if (mTask.getAssigner_id() > 0) {
                     viewModel.getUser(mTask.getAssigner_id()).observe(this, aerResource -> {
                         User mAssigner = aerResource.data;
                         if (mAssigner != null) mAssignerTextView.setText(mAssigner.getName());
                     });
-//                TODO: get more result...
+                }
             }
         });
     }
@@ -150,15 +158,14 @@ public class TaskReadFragment extends Fragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mToolbarTitleTextView.setText("任务详情");
+        mFloatingActionMenu.hideMenuButton(true);
         int myType = AppPreferencesHelper.getCurrentUserLoginState();
         List<String> sUserType= FinalMap.getUserTypeList();
         if(myType == sUserType.indexOf(USER_GROUP)){
+            mFloatingActionMenu.hideMenuButton(false);
             fabRoute.setOnClickListener(clickListener);
             fabPhoto.setOnClickListener(clickListener);
             fabExplore.setOnClickListener(clickListener);
-        }
-        else {
-            mFloatingActionMenu.hideMenuButton(true);
         }
         if (myType == sUserType.indexOf(GROUP_GROUP)){
             HttpUtil.GET(COMPANY_GET_EXECUTOR + taskId, new Callback() {
