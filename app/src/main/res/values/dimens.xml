@@ -1,11 +1,13 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="small_text">12sp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="list_item_top_bottom">12dp</dimen>
     <dimen name="list_item_start_end">24dp</dimen>
-    <dimen name="list_subitem_top">5dp</dimen>
-    <dimen name="list_subitem_bottom">5dp</dimen>
+    <dimen name="list_subitem_top">8dp</dimen>
+    <dimen name="list_subitem_bottom">15dp</dimen>
+    <dimen name="list_subitem_begin">5dp</dimen>
     <dimen name="list_margin_between">0.1dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sub_fab_wide">45dp</dimen>
@@ -22,4 +24,8 @@
     <dimen name="media_grid_size">48dp</dimen>
     <dimen name="media_grid_spacing">4dp</dimen>
     <dimen name="album_item_height">72dp</dimen>
+    <dimen name="image_34_width">120dp</dimen>
+    <dimen name="image_34_height">160dp</dimen>
+    <dimen name="image_rectangle">120dp</dimen>
+    <dimen name="image_list_item">140dp</dimen>
 </resources>

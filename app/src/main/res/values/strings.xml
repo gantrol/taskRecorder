@@ -58,6 +58,10 @@
     <string name="userId">ID</string>
 
     <string name="add_photo">添加图片</string>
-    <string name="photo_detail">简要介绍</string>
+    <string name="remote_photo">远端图片</string>
+    <string name="local_photo">本地图片</string>
+    <string name="photo_detail">简介</string>
+    <string name="photo_date">上传日期</string>
     <string name="photo_type_label">类型</string>
+    <string name="photo_author">摄影者</string>
 </resources>

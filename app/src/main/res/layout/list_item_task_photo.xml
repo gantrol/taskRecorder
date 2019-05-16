@@ -13,9 +13,9 @@
         <ImageView
             android:id="@+id/local_image"
             android:layout_gravity="center_vertical"
-            android:contentDescription="一张新照片"
-            android:layout_width="100dp"
-            android:layout_height="150dp" />
+            android:contentDescription="@string/local_photo"
+            android:layout_width="@dimen/image_34_width"
+            android:layout_height="@dimen/image_34_height" />
 
         <LinearLayout
             android:orientation="vertical"

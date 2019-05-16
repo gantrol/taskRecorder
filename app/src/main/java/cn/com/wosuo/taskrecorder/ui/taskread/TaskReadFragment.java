@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -43,6 +45,7 @@ import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
+import cn.com.wosuo.taskrecorder.ui.adapter.PhotoReadAdapter;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskCenterPointActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskTrackActivity;
 import cn.com.wosuo.taskrecorder.ui.taskphoto.TaskPhotoActivity;
@@ -73,6 +76,8 @@ public class TaskReadFragment extends Fragment {
     void onTextChanged(CharSequence text){
         mTask.setTitle(text.toString());
     }
+    @BindView(R.id.photo_read_recycler_view)
+    RecyclerView mPhotoReadRecyclerView;
     @BindView(R.id.task_id) TextView mIdTextView;
     @BindView(R.id.task_title) TextView mTitleTextView;
     @BindView(R.id.task_create) TextView mCreateDateTextView;
@@ -117,31 +122,7 @@ public class TaskReadFragment extends Fragment {
         userType = AppPreferencesHelper.getCurrentUserLoginState();
         super.onCreate(savedInstanceState);
         taskId = getArguments() != null ? getArguments().getInt(ARG_Task_ID) : 0;
-        viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
-        viewModel.getTasksById(taskId).observe(this, taskResource -> {
-            mTask = taskResource;
-            if (mTask != null) {
-                TaskReadFragment.this.updateUI(mTask);
-                if (mTask.getAssignee_id() > 0) {
-                    viewModel.getUser(mTask.getAssignee_id()).observe(this, aeeResource -> {
-                        User mAssignee = aeeResource.data;
-                        if (mAssignee != null) mAssigneeTextView.setText(mAssignee.getName());
-                    });
-//                    有assignee的时候，才有结果
-//                    1.照片
-                    viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
-                        List<PhotoResult> photoResults = photoResource.data;
-//                        TODO: create recyclerView and set list to adapter.
-                    });
-                }
-                if (mTask.getAssigner_id() > 0) {
-                    viewModel.getUser(mTask.getAssigner_id()).observe(this, aerResource -> {
-                        User mAssigner = aerResource.data;
-                        if (mAssigner != null) mAssignerTextView.setText(mAssigner.getName());
-                    });
-                }
-            }
-        });
+
     }
 
     @Nullable
@@ -159,6 +140,37 @@ public class TaskReadFragment extends Fragment {
         }
         mToolbarTitleTextView.setText("任务详情");
         mFloatingActionMenu.hideMenuButton(true);
+
+        mPhotoReadRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        final PhotoReadAdapter adapter = new PhotoReadAdapter();
+        mPhotoReadRecyclerView.setAdapter(adapter);
+
+        viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+        viewModel.getTasksById(taskId).observe(this, taskResource -> {
+            mTask = taskResource;
+            if (mTask != null) {
+                TaskReadFragment.this.updateUI(mTask);
+                if (mTask.getAssignee_id() > 0) {
+                    viewModel.getUser(mTask.getAssignee_id()).observe(this, aeeResource -> {
+                        User mAssignee = aeeResource.data;
+                        if (mAssignee != null) mAssigneeTextView.setText(mAssignee.getName());
+                    });
+//                    有assignee的时候，才有结果
+//                    1.照片
+                    viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
+                        if (photoResource != null)
+                            adapter.submitList(photoResource.data);
+                    });
+                }
+                if (mTask.getAssigner_id() > 0) {
+                    viewModel.getUser(mTask.getAssigner_id()).observe(this, aerResource -> {
+                        User mAssigner = aerResource.data;
+                        if (mAssigner != null) mAssignerTextView.setText(mAssigner.getName());
+                    });
+                }
+            }
+        });
+
         int myType = AppPreferencesHelper.getCurrentUserLoginState();
         List<String> sUserType= FinalMap.getUserTypeList();
         if(myType == sUserType.indexOf(USER_GROUP)){

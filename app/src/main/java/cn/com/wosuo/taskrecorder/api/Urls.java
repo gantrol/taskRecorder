@@ -2,6 +2,7 @@ package cn.com.wosuo.taskrecorder.api;
 
 public final class Urls {
     public static final String BASE_URL = "https://land.bigkeer.cn/api/";
+    public static final String BASE_URL_minus = "https://land.bigkeer.cn";
     public static final String LOGIN = "Session";
 
     public static final String GET_USER_ME = "User/me";

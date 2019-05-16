@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/list_margin_between">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_height="@dimen/image_list_item">
+
+        <ImageView
+            android:id="@+id/remote_image"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/remote_photo"
+            android:layout_width="@dimen/image_rectangle"
+            android:layout_height="@dimen/image_rectangle" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/item_horizontal_margin"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/photo_tag_label"
+                    android:hint="@string/photo_type_label"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView
+                    android:id="@+id/photo_tag_tv"
+                    android:layout_marginStart="@dimen/list_subitem_begin"
+                    android:hint="@string/photo_type_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/list_subitem_top"
+                android:layout_marginBottom="@dimen/list_subitem_bottom"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/photo_detail_label"
+                    android:hint="@string/photo_detail"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/photo_detail_tv"
+                    android:layout_marginStart="@dimen/list_subitem_begin"
+                    android:hint="@string/photo_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/photo_author_tv"
+                    android:hint="@string/photo_author"
+                    android:textSize="@dimen/small_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/photo_date_tv"
+                    android:hint="@string/photo_date"
+                    android:textSize="@dimen/small_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
