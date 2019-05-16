@@ -70,6 +70,7 @@
 
         <activity
             android:name=".ui.taskread.TaskReadActivity"
+            android:hardwareAccelerated="true"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.taskAssign.TaskAssignActivity"

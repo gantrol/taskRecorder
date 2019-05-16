@@ -17,6 +17,7 @@ import cn.com.wosuo.taskrecorder.api.ApiResponse;
 import cn.com.wosuo.taskrecorder.api.BigkeerService;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
+import cn.com.wosuo.taskrecorder.db.LocCenterPointDao;
 import cn.com.wosuo.taskrecorder.db.PhotoDao;
 import cn.com.wosuo.taskrecorder.db.TaskDao;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
@@ -24,6 +25,7 @@ import cn.com.wosuo.taskrecorder.util.RateLimiter;
 import cn.com.wosuo.taskrecorder.util.Resource;
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
 import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
+import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
@@ -56,6 +58,7 @@ public class TaskRepository {
     private AppDatabase mDatabase;
     private TaskDao mTaskDao;
     private PhotoDao mPhotoDao;
+    private LocCenterPointDao mLocCenterPointDao;
     private AppExecutors mAppExecutors;
     private RateLimiter<Integer> taskListRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
     private RateLimiter<Integer> photoResultRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
@@ -69,6 +72,7 @@ public class TaskRepository {
         mDatabase = database;
         mTaskDao = database.taskDao();
         mPhotoDao = database.photoDao();
+        mLocCenterPointDao = database.locCenterPointDao();
         mBigkeerService = BasicApp.getBigkeerService();
     }
 
@@ -273,6 +277,33 @@ public class TaskRepository {
             }
         }).getAsLiveData();
     }
+
+    @Deprecated
+    public LiveData<Resource<LocCenterPoint>> getLocCenterPointByTaskID(int taskID){
+        return (new NetworkBoundResource<LocCenterPoint, LocCenterPoint>(mAppExecutors){
+            @Override
+            protected void saveCallResult(@NonNull LocCenterPoint item) {
+                mLocCenterPointDao.insert(item);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable LocCenterPoint data) {
+                return data == null || photoResultRateLimit.shouldFetch(taskID);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<LocCenterPoint> loadFromDb() {
+                return mLocCenterPointDao.getLocCenterPointByTaskID(taskID);
+            }
+
+            @Override
+            public LiveData<ApiResponse<LocCenterPoint>> createCall() {
+                return mBigkeerService.getLocCenterPointByTaskID(taskID);
+            }
+        }).getAsLiveData();
+    }
+
 
     public Call<ResponseBody> postPhoto(File photo, int type, long time,
                                         String locationStr, String desciption, int taskID){

@@ -9,6 +9,7 @@ import java.util.List;
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
 import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
 import cn.com.wosuo.taskrecorder.vo.GroupInfoResult;
+import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
@@ -150,4 +151,8 @@ public interface BigkeerService {
                                  @Part(PHOTO_TIME) RequestBody time,
                                  @Part(PHOTO_LOCATION) RequestBody location,
                                  @Part(PHOTO_DESC) RequestBody description);
+
+    @GET("Explore/{taskID}")
+    LiveData<ApiResponse<LocCenterPoint>>
+    getLocCenterPointByTaskID(@Path("taskID") int taskID);
 }

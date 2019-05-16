@@ -52,6 +52,36 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/executor_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0.5dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_start_end"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:layout_weight="1"
+                    android:text="@string/task_execute_label"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/task_executor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_top_bottom"
+                    android:layout_marginEnd="@dimen/list_item_start_end"
+                    android:layout_marginBottom="@dimen/list_item_top_bottom"
+                    android:layout_weight="1"
+                    android:text="@string/none"
+                    android:textAlignment="viewEnd" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -235,37 +265,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/executor_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0.5dp"
-                android:background="@color/white"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/list_item_start_end"
-                    android:layout_marginTop="@dimen/list_item_top_bottom"
-                    android:layout_marginBottom="@dimen/list_item_top_bottom"
-                    android:text="@string/task_execute_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/task_executor"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="viewEnd"
-                    android:layout_marginTop="@dimen/list_item_top_bottom"
-                    android:layout_marginEnd="@dimen/list_item_start_end"
-                    android:layout_marginBottom="@dimen/list_item_top_bottom"
-                    android:text="@string/none" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/task_type_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -356,21 +355,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <com.baidu.mapapi.map.MapView
-                android:id="@+id/loc_mv"
+            <fragment
+                android:id="@+id/local_map_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                android:clickable="true"
-                android:focusable="true" />
+                android:layout_height="240dp"
+                android:layout_margin="5dp"
+                class="cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment" />
 
-            <com.baidu.mapapi.map.MapView
-                android:id="@+id/track_mv"
+            <fragment
+                android:id="@+id/track_map_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                android:clickable="true"
-                android:focusable="true" />
+                android:layout_height="240dp"
+                android:layout_margin="5dp"
+                class="cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

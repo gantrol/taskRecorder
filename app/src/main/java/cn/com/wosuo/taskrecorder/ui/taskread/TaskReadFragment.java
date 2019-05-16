@@ -28,6 +28,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.LogoPosition;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.model.LatLng;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -48,12 +54,13 @@ import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.ui.adapter.PhotoReadAdapter;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskCenterPointActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskTrackActivity;
+import cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment;
 import cn.com.wosuo.taskrecorder.ui.taskphoto.TaskPhotoActivity;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
-import cn.com.wosuo.taskrecorder.vo.PhotoResult;
+import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Call;
@@ -61,6 +68,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
+import static cn.com.wosuo.taskrecorder.api.Urls.GET_EXPLORE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_CREATE;
@@ -102,6 +110,7 @@ public class TaskReadFragment extends Fragment {
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
     BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
     private static final String DIALOG_TASK_TYPE = "DialogType";
+    float mCurrentZoom = 30f;
     private AppExecutors mAppExecutors = new AppExecutors();
     private int taskId;
     private int userType;
@@ -139,6 +148,7 @@ public class TaskReadFragment extends Fragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mToolbarTitleTextView.setText("任务详情");
+//        TODO: 分用户显示页面？
         mFloatingActionMenu.hideMenuButton(true);
 
         mPhotoReadRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -205,6 +215,41 @@ public class TaskReadFragment extends Fragment {
         else {
             mExecutorLinearLayout.setVisibility(View.GONE);
         }
+
+        LatLng GEO_BEIJING = new LatLng(39.945, 116.404);
+//        TODO:无数据状态
+        LatLng GEO_SHANGHAI = new LatLng(31.227, 121.481);
+
+
+        viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
+            LocCenterPoint locCenterPoint = centerPointResource.data;
+//            TODO: 坐标轴转化z
+            if (locCenterPoint != null){
+                LatLng GEO_CENTER = new LatLng(locCenterPoint.getPositionY(), locCenterPoint.getPositionX());
+                MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
+                TextureSupportMapFragment map2 = (TextureSupportMapFragment) (getChildFragmentManager()
+                        .findFragmentById(R.id.local_map_fragment));
+                map2.getBaiduMap().setMapStatus(status2);
+                status2 = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
+                map2.getBaiduMap().animateMapStatus(status2);
+                OverlayOptions option = new MarkerOptions()
+                        .position(GEO_CENTER)
+                        .icon(bd);
+//在地图上添加Marker，并显示
+                map2.getBaiduMap().addOverlay(option);
+            }
+        });
+
+        //北京为地图中心，logo在左上角
+        MapStatusUpdate status1 = MapStatusUpdateFactory.newLatLng(GEO_BEIJING);
+        TextureSupportMapFragment map1 = (TextureSupportMapFragment) (getChildFragmentManager()
+                .findFragmentById(R.id.track_map_fragment));
+        map1.getBaiduMap().setMapStatus(status1);
+        map1.getMapView().setLogoPosition(LogoPosition.logoPostionleftTop);
+
+        //上海为地图中心
+
+
         return v;
     }
 
@@ -358,4 +403,5 @@ public class TaskReadFragment extends Fragment {
             }
         }
     };
+
 }

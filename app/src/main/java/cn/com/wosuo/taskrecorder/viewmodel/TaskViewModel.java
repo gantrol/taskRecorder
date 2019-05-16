@@ -30,6 +30,7 @@ import cn.com.wosuo.taskrecorder.repository.UserRepository;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.Resource;
+import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
 import cn.com.wosuo.taskrecorder.vo.Task;
@@ -177,6 +178,9 @@ public class TaskViewModel extends AndroidViewModel {
         return mTaskRepository.getPhotoResultsByTaskID(taskID);
     }
 
+    public LiveData<Resource<LocCenterPoint>> getLocCenterPointByTaskID(int taskID){
+        return mTaskRepository.getLocCenterPointByTaskID(taskID);
+    }
     public LiveData<Resource<User>> getUser(int id){
         return mUserRepository.getUserByID(id);
     }

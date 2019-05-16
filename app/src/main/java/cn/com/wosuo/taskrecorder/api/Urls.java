@@ -39,5 +39,6 @@ public final class Urls {
     public static final String COMPANY_GET_USERS_BY_GROUP = "UserGroup";
 
     public static final String COMPANY_GET_EXECUTOR = "Assign/";
+    public static final String GET_EXPLORE = "Explore/";
 
 }
