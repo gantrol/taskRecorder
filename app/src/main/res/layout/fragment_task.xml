@@ -358,14 +358,14 @@
             <fragment
                 android:id="@+id/local_map_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="400dp"
                 android:layout_margin="5dp"
                 class="cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment" />
 
             <fragment
                 android:id="@+id/track_map_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="400dp"
                 android:layout_margin="5dp"
                 class="cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment" />
 
