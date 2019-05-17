@@ -1,11 +1,15 @@
 package cn.com.wosuo.taskrecorder.vo;
 
 import androidx.room.Ignore;
+import androidx.room.TypeConverters;
 
 import java.util.List;
 
+import cn.com.wosuo.taskrecorder.db.TrackDataConverter;
+
 public class Track {
     private int coordinate;
+    @TypeConverters({TrackDataConverter.class})
     private List<TrackData> data;
 
     @Ignore

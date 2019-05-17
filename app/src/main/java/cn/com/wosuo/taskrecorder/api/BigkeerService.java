@@ -12,6 +12,7 @@ import cn.com.wosuo.taskrecorder.vo.GroupInfoResult;
 import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
+import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -155,4 +156,9 @@ public interface BigkeerService {
     @GET("Explore/{taskID}")
     LiveData<ApiResponse<LocCenterPoint>>
     getLocCenterPointByTaskID(@Path("taskID") int taskID);
+
+
+    @GET("Track/task/{taskID}")
+    LiveData<ApiResponse<BigkeerResponse<List<Tracks>>>>
+    getTracksByTaskID(@Path("taskID") int taskID);
 }

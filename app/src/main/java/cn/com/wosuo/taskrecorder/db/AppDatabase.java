@@ -20,10 +20,11 @@ import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.TaskFtsEntity;
+import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 
 @Database(entities = {User.class, Task.class, TaskFtsEntity.class,
-        PhotoResult.class, LocCenterPoint.class},
+        PhotoResult.class, LocCenterPoint.class, Tracks.class},
         version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -41,6 +42,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract PhotoDao photoDao();
 
     public abstract LocCenterPointDao locCenterPointDao();
+
+    public abstract TrackDao trackDao();
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 

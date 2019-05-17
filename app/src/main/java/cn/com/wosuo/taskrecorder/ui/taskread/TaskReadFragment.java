@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,13 +63,15 @@ import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.Task;
+import cn.com.wosuo.taskrecorder.vo.Track;
+import cn.com.wosuo.taskrecorder.vo.TrackData;
+import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
-import static cn.com.wosuo.taskrecorder.api.Urls.GET_EXPLORE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_CREATE;
@@ -80,6 +83,8 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_GROUP;
 
 public class TaskReadFragment extends Fragment {
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    private String TAG = "查阅任务";
+
     @OnTextChanged(R.id.task_title)
     void onTextChanged(CharSequence text){
         mTask.setTitle(text.toString());
@@ -147,7 +152,7 @@ public class TaskReadFragment extends Fragment {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mToolbarTitleTextView.setText("任务详情");
+        mToolbarTitleTextView.setText(TAG);
 //        TODO: 分用户显示页面？
         mFloatingActionMenu.hideMenuButton(true);
 
@@ -218,7 +223,7 @@ public class TaskReadFragment extends Fragment {
 
         LatLng GEO_BEIJING = new LatLng(39.945, 116.404);
 //        TODO:无数据状态
-        LatLng GEO_SHANGHAI = new LatLng(31.227, 121.481);
+//        LatLng GEO_SHANGHAI = new LatLng(31.227, 121.481);
 
 
         viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
@@ -237,6 +242,22 @@ public class TaskReadFragment extends Fragment {
                         .icon(bd);
 //在地图上添加Marker，并显示
                 map2.getBaiduMap().addOverlay(option);
+            }
+        });
+
+        viewModel.getTracksByTaskID(taskId).observe(this, trackResource -> {
+            List<Tracks> tracksList = trackResource.data;
+            if (tracksList != null && !tracksList.isEmpty()){
+                for (Tracks tracks: tracksList){
+                    Track track = tracks.getTrack();
+                    if (track != null){
+                        int coordinate = track.getCoordinate();
+                        for (TrackData trackData: track.getData()){
+                            Log.d(TAG, trackData.toString());
+                        }
+                    }
+                }
+//                TODO: 描点连线。。
             }
         });
 

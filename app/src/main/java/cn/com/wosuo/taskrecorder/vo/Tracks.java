@@ -1,20 +1,29 @@
 package cn.com.wosuo.taskrecorder.vo;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-//@Entity(
-//        tableName = "tracks"
-//)
-public class Tracks {
+import cn.com.wosuo.taskrecorder.db.TrackConverter;
 
+
+@Entity(
+        tableName = "track"
+)
+public class Tracks {
+    @PrimaryKey
     private int trackID;
     private int taskID;
     private int userID;
-    @Ignore
-    private List<Track> tracks;
+    @TypeConverters({TrackConverter.class})
+    @SerializedName(alternate = {"tracks"}, value = "track")
+    private Track track;
+
     public int getTrackID() {
         return trackID;
     }
@@ -39,12 +48,12 @@ public class Tracks {
         this.userID = userID;
     }
 
-    public List<Track> getTracks() {
-        return tracks;
+    public Track getTrack() {
+        return track;
     }
 
-    public void setTracks(List<Track> tracks) {
-        this.tracks = tracks;
+    public void setTrack(Track track) {
+        this.track = track;
     }
 
 }

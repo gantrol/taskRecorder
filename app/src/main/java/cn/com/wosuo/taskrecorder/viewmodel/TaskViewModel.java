@@ -35,6 +35,7 @@ import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.repository.TaskRepository;
+import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -180,6 +181,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public LiveData<Resource<LocCenterPoint>> getLocCenterPointByTaskID(int taskID){
         return mTaskRepository.getLocCenterPointByTaskID(taskID);
+    }
+
+    public LiveData<Resource<List<Tracks>>> getTracksByTaskID(int taskID){
+        return mTaskRepository.getTracksByTaskID(taskID);
     }
     public LiveData<Resource<User>> getUser(int id){
         return mUserRepository.getUserByID(id);

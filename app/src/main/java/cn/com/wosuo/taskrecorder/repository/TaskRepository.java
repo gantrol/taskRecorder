@@ -20,6 +20,7 @@ import cn.com.wosuo.taskrecorder.db.AppDatabase;
 import cn.com.wosuo.taskrecorder.db.LocCenterPointDao;
 import cn.com.wosuo.taskrecorder.db.PhotoDao;
 import cn.com.wosuo.taskrecorder.db.TaskDao;
+import cn.com.wosuo.taskrecorder.db.TrackDao;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.RateLimiter;
 import cn.com.wosuo.taskrecorder.util.Resource;
@@ -28,6 +29,8 @@ import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
 import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
+import cn.com.wosuo.taskrecorder.vo.Track;
+import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -59,9 +62,12 @@ public class TaskRepository {
     private TaskDao mTaskDao;
     private PhotoDao mPhotoDao;
     private LocCenterPointDao mLocCenterPointDao;
+    private TrackDao mTrackDao;
     private AppExecutors mAppExecutors;
     private RateLimiter<Integer> taskListRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
     private RateLimiter<Integer> photoResultRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
+    private RateLimiter<Integer> centerLocRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
+    private RateLimiter<Integer> tracksRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
 
     private RateLimiter<LiveData<Task>> taskRateLimit = new RateLimiter<>(30, TimeUnit.SECONDS);
     private final static List<String> sTaskType = FinalMap.getTaskTypeList();
@@ -73,6 +79,7 @@ public class TaskRepository {
         mTaskDao = database.taskDao();
         mPhotoDao = database.photoDao();
         mLocCenterPointDao = database.locCenterPointDao();
+        mTrackDao = database.trackDao();
         mBigkeerService = BasicApp.getBigkeerService();
     }
 
@@ -288,7 +295,7 @@ public class TaskRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable LocCenterPoint data) {
-                return data == null || photoResultRateLimit.shouldFetch(taskID);
+                return data == null || centerLocRateLimit.shouldFetch(taskID);
             }
 
             @NonNull
@@ -301,9 +308,47 @@ public class TaskRepository {
             public LiveData<ApiResponse<LocCenterPoint>> createCall() {
                 return mBigkeerService.getLocCenterPointByTaskID(taskID);
             }
+
+            @Override
+            protected void onFetchFailed() {
+                taskListRateLimit.reset(TASK_LIST);
+            }
         }).getAsLiveData();
     }
 
+    @Deprecated
+    public LiveData<Resource<List<Tracks>>> getTracksByTaskID(int taskID){
+        return (new NetworkBoundResource<List<Tracks>, BigkeerResponse<List<Tracks>>>(mAppExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull BigkeerResponse<List<Tracks>> item) {
+                List<Tracks> tracks = item.getResult();
+                if (!(tracks == null || tracks.isEmpty())) {
+                    mTrackDao.insertAll(tracks);
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Tracks> data) {
+                return data == null || data.isEmpty() || tracksRateLimit.shouldFetch(taskID) ;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Tracks>> loadFromDb() {
+                return mTrackDao.getTracksByTaskID(taskID);
+            }
+
+            @Override
+            public LiveData<ApiResponse<BigkeerResponse<List<Tracks>>>> createCall() {
+                return mBigkeerService.getTracksByTaskID(taskID);
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                taskListRateLimit.reset(TASK_LIST);
+            }
+        }).getAsLiveData();
+    }
 
     public Call<ResponseBody> postPhoto(File photo, int type, long time,
                                         String locationStr, String desciption, int taskID){
