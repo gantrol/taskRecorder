@@ -36,7 +36,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':matisse')
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.google.guava:guava:27.1-jre'
     // Room components

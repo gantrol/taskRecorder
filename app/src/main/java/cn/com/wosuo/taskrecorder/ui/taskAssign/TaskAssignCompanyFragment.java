@@ -27,7 +27,7 @@ import cn.com.wosuo.taskrecorder.viewmodel.UserViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 
-public class TaskAssignCompanyFragment extends Fragment implements ChooseUserAdapter.OnItemClickListener{
+public class TaskAssignCompanyFragment extends Fragment{
 
     private static final String TAG = "选择被指派人";
     private static final String ARG_USER = "user";
@@ -37,7 +37,7 @@ public class TaskAssignCompanyFragment extends Fragment implements ChooseUserAda
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
     private Unbinder unbinder;
     private Task mTask;
-    private final ChooseUserAdapter adapter = new ChooseUserAdapter();
+    ChooseUserAdapter adapter;
 
     public static TaskAssignCompanyFragment newInstance(Task task) {
 
@@ -60,10 +60,12 @@ public class TaskAssignCompanyFragment extends Fragment implements ChooseUserAda
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
         mChooseListView.setLayoutManager(manager);
-        mChooseListView.setOnClickListener(v -> {
-        });
+        mChooseListView.setOnClickListener(v -> { });
+        if (mTask == null)
+            adapter = new ChooseUserAdapter(getContext(), false);
+        else
+            adapter = new ChooseUserAdapter(getContext(), mTask.getTaskID(), false);
         mChooseListView.setAdapter(adapter);
-//        TODO: 继承。
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
@@ -72,7 +74,7 @@ public class TaskAssignCompanyFragment extends Fragment implements ChooseUserAda
         UserViewModel userViewModel =
                 ViewModelProviders.of(this).get(UserViewModel.class);
         userViewModel.getAllUsers().observe(this, usersResource
-                -> adapter.submitList(usersResource.data));
+                -> adapter.setUsers(usersResource.data));
         return view;
     }
 
@@ -83,9 +85,4 @@ public class TaskAssignCompanyFragment extends Fragment implements ChooseUserAda
         unbinder.unbind();
     }
 
-    @Override
-    public void onItemClick(User user) {
-        Snackbar.make(mChooseListView, "Selected item is "+user.getName()+
-                ", Totally  selectem item count is "+1,Snackbar.LENGTH_LONG).show();
-    }
 }

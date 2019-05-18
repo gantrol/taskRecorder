@@ -112,7 +112,7 @@ public final class FinalMap {
         return Lists.newArrayList(WGS84, GCJ02, bd09ll);
     }
 
-    public final static List<BitmapDescriptor> getTextureList(){
+    public static List<BitmapDescriptor> getTextureList(){
         List<BitmapDescriptor> textureList = new ArrayList<>();
         textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-brown.png"));
         textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-indigo.png"));

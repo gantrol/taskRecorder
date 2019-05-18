@@ -29,7 +29,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
     private List<PhotoUpload> sPhotoUpload;
     private LayoutInflater layoutInflater;
     private int taskID;
-//    private List<String> initPaths;
 
     public PhotoAdapter(Context context, List<String> initPaths, int taskID) {
         layoutInflater = LayoutInflater.from(context);
