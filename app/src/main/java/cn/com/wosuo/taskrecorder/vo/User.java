@@ -1,5 +1,8 @@
 package cn.com.wosuo.taskrecorder.vo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -15,7 +18,7 @@ import cn.com.wosuo.taskrecorder.util.FinalMap;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 
 @Entity(tableName = "users")
-public class User implements Serializable {
+public class User implements Serializable, Parcelable {
     @PrimaryKey
     private int uid;
     private String name;
@@ -34,6 +37,73 @@ public class User implements Serializable {
     @Ignore
     @Expose(serialize = false, deserialize = false)
     private boolean isSelected = false;
+
+    @Ignore
+    protected User(Parcel in) {
+        uid = in.readInt();
+        name = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.uid);
+        dest.writeString(this.name);
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    public User() {
+    }
+
+    @Ignore
+    public User(int uid, String name, String mail, int type, int status,
+                User company) {
+        this.uid = uid;
+        this.name = name;
+//        this.initial = PinYinUtils.getInitial(this.name);
+        this.mail = mail;
+        this.type = type;
+        this.status = status;
+        this.company = company;
+    }
+
+    @Ignore
+    public User(int uid, String name, String mail) {
+        this.uid = uid;
+        this.name = name;
+//        this.initial = PinYinUtils.getInitial(this.name);
+        this.mail = mail;
+        this.type = FinalMap.getUserTypeList().indexOf(GROUP_GROUP);
+        this.company = null;
+    }
+
+    public User(User user) {
+        this.uid = user.getUid();
+        this.name = user.getName();
+//        this.initial = PinYinUtils.getInitial(this.name);
+        this.mail = user.getMail();
+        this.type = user.getType();
+        this.status = user.getStatus();
+        this.company_id = user.getCompany_id();
+//        this.company = user.getCompany();
+//        this.localStatus = user.getLocalStatus();
+    }
+
 
     public int getUid() {
         return uid;
@@ -83,43 +153,6 @@ public class User implements Serializable {
         this.company = company;
     }
 
-    public User() {
-    }
-
-    @Ignore
-    public User(int uid, String name, String mail, int type, int status,
-                User company) {
-        this.uid = uid;
-        this.name = name;
-//        this.initial = PinYinUtils.getInitial(this.name);
-        this.mail = mail;
-        this.type = type;
-        this.status = status;
-        this.company = company;
-    }
-
-    @Ignore
-    public User(int uid, String name, String mail) {
-        this.uid = uid;
-        this.name = name;
-//        this.initial = PinYinUtils.getInitial(this.name);
-        this.mail = mail;
-        this.type = FinalMap.getUserTypeList().indexOf(GROUP_GROUP);
-        this.status = status;
-        this.company = null;
-    }
-
-    public User(User user) {
-        this.uid = user.getUid();
-        this.name = user.getName();
-//        this.initial = PinYinUtils.getInitial(this.name);
-        this.mail = user.getMail();
-        this.type = user.getType();
-        this.status = user.getStatus();
-        this.company_id = user.getCompany_id();
-//        this.company = user.getCompany();
-//        this.localStatus = user.getLocalStatus();
-    }
 
     public int getCompany_id() {
         return company_id;
@@ -136,4 +169,5 @@ public class User implements Serializable {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
 }

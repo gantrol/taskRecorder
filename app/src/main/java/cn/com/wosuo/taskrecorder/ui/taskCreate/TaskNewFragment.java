@@ -1,7 +1,10 @@
 package cn.com.wosuo.taskrecorder.ui.taskCreate;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +21,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -37,11 +34,8 @@ import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignActivity;
-import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignCompanyFragment;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
-import cn.com.wosuo.taskrecorder.util.Resource;
-import cn.com.wosuo.taskrecorder.viewmodel.UserViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Call;
@@ -50,6 +44,7 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_OR_CREATE_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_DESCRIPTION;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_TYPE;
@@ -59,7 +54,9 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TITLE;
 
 public class TaskNewFragment extends Fragment {
 
+    private static final String TAG = "新建任务";
     private static final String ARG_Assignee_ID = "task_id";
+    private static final int REQUEST_ASSIGNEE = 0;
     private AppExecutors mAppExecutors = new AppExecutors();
     private Task mTask;
     private Unbinder unbinder;
@@ -73,6 +70,7 @@ public class TaskNewFragment extends Fragment {
     @BindView(R.id.input_title) EditText mTitleEditText;
     @BindView(R.id.input_assignee) EditText mAssigneeEditText;
     @BindView(R.id.assigner_content) TextView mAssignerTextView;
+    @BindView(R.id.assignee_content) TextView mAssigneeTextView;
     @BindView(R.id.task_type_spinner) Spinner mTypeSpinner;
     //    @BindView(R.id.task_status_spinner) Spinner mStatusSpinner;
     @BindView(R.id.input_detail) EditText mDetailEditText;
@@ -89,8 +87,6 @@ public class TaskNewFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 //        TODO:viewmodel
 //         .https://stackoverflow.com/questions/12103953/how-to-pass-result-from-second-fragment-to-first-fragment
-//         .不要手动输入ID……；
-//         .UI dimens
         super.onCreate(savedInstanceState);
     }
 
@@ -106,8 +102,6 @@ public class TaskNewFragment extends Fragment {
         mToolbarTitleTextView.setText("新建任务");
         ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(requireActivity(),android.R.layout.simple_list_item_1, sTaskType);
         mTypeSpinner.setAdapter(typeArrayAdapter);
-//        https://stackoverflow.com/questions/12103953/how-to-pass-result-from-second-fragment-to-first-fragment
-//        https://github.com/bignerdranch/recyclerview-multiselect
         return v;
     }
 
@@ -158,8 +152,8 @@ public class TaskNewFragment extends Fragment {
 
     @OnClick(R.id.choose_assignee_btn)
     void chooseAssignee(){
-        Intent intent = TaskAssignActivity.newIntent(getActivity(), mTask);
-        startActivity(intent);
+        Intent intent = TaskAssignActivity.newIntent(getActivity(), mTask, false);
+        startActivityForResult(intent, REQUEST_ASSIGNEE);
     }
 
     private void onCreateTaskMessage(String message) {
@@ -190,6 +184,26 @@ public class TaskNewFragment extends Fragment {
         //TODO:2 alert window to check again for it
         requireActivity().onBackPressed();
 //        requireActivity().getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ASSIGNEE){
+            if (resultCode == Activity.RESULT_OK){
+                ArrayList<User> aeeList = data.getParcelableArrayListExtra(ASSIGNEE);
+                User assignee = aeeList.get(0);
+                mAppExecutors.mainThread().execute(() -> {
+                        mAssigneeEditText.setText(String.valueOf(assignee.getUid()));
+                        mAssigneeTextView.setText(assignee.getName());
+                });
+
+            } else {
+                mAppExecutors.mainThread().execute(() ->
+                        Toast.makeText(getContext(), TAG + ":" + "操作取消",
+                                Toast.LENGTH_SHORT).show());
+            }
+        }
     }
 
     @Override

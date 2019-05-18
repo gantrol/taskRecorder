@@ -95,8 +95,8 @@ public class ChooseUserAdapter extends RecyclerView.Adapter<ChooseUserAdapter.Us
         }
     }
 
-    public List<User> getSelectedUser(){
-        List<User> sUserSelect = new ArrayList<>();
+    public ArrayList<User> getSelectedUser(){
+        ArrayList<User> sUserSelect = new ArrayList<>();
         for (User user: aimUsers){
             if (user.isSelected()) {
                 sUserSelect.add(user);

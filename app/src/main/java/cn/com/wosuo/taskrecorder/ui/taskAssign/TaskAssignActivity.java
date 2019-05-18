@@ -10,8 +10,10 @@ import cn.com.wosuo.taskrecorder.vo.Task;
 
 public class TaskAssignActivity extends SingleFragmentActivity {
     private static final String EXTRA_TASK = "cn.com.wosuo.taskrecorder.ui.taskAssign.task";
-    public static Intent newIntent(Context packageContext, Task task){
+    private static final String EXTRA_MUTI = "muti";
+    public static Intent newIntent(Context packageContext, Task task, boolean isMutiSelect){
         Intent intent = new Intent(packageContext, TaskAssignActivity.class);
+        intent.putExtra(EXTRA_MUTI, isMutiSelect);
         intent.putExtra(EXTRA_TASK, task);
         return intent;
     }
@@ -19,6 +21,7 @@ public class TaskAssignActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
         Task task = (Task) getIntent().getSerializableExtra(EXTRA_TASK);
-        return TaskAssignCompanyFragment.newInstance(task);
+        boolean isMutiSelect = getIntent().getBooleanExtra(EXTRA_MUTI, false);
+        return TaskAssignCompanyFragment.newInstance(task, isMutiSelect);
     }
 }
