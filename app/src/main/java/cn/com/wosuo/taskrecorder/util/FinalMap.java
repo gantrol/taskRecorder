@@ -95,6 +95,8 @@ public final class FinalMap {
         return ImmutableMap.<Integer, String>builder()
                 .put(0, "请求成功")
                 .put(1, "请求失败")
+                .put(200, "请求成功")
+                .put(400, "参数错误")
                 .put(401, "需要登录")
                 .put(405, "不能这么做")
                 .put(-5, "参数超出界限")

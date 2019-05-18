@@ -6,35 +6,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.vo.Task;
 
-public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     private OnItemClickListener clickListener;
+    private List<Task> aimTasks;
 
-
-    public TaskAdapter() {
-        super(diffUtilCallback);
+    public void setAimTasks(List<Task> taskList) {
+        aimTasks = taskList;
+        notifyDataSetChanged();
     }
-
-    private static DiffUtil.ItemCallback<Task> diffUtilCallback = new DiffUtil.ItemCallback<Task>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull Task oldItem, @NonNull Task newItem) {
-            return oldItem.getTaskID() == newItem.getTaskID();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull Task oldItem, @NonNull Task newItem) {
-            return oldItem.getTitle().equals(newItem.getTitle())
-                    && oldItem.getCreateAt() == newItem.getCreateAt()
-                    && oldItem.getType() == newItem.getType();
-        }
-    };
 
     @NonNull
     @Override
@@ -46,8 +33,12 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskHolder taskHolder, int position) {
-        Task task = getItem(position);
-        taskHolder.bind(task);
+        taskHolder.bind(aimTasks.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return aimTasks == null ? 0 : aimTasks.size();
     }
 
     public void setClickListener(OnItemClickListener clickListener) {
@@ -69,7 +60,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskHolder> {
             itemView.setOnClickListener(view1 -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && clickListener != null)
-                    clickListener.onItemClick(getItem(position));
+                    clickListener.onItemClick(aimTasks.get(position));
             });
         }
 

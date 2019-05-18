@@ -20,8 +20,6 @@ import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.vo.User;
 
 public class ChooseUserAdapter extends RecyclerView.Adapter<ChooseUserAdapter.UserHolder> {
-    private static final int MULTI_SELECTION = 2;
-    private static final int SINGLE_SELECTION = 1;
     private static CheckBox lastChecked = null;
     private int last = -1;
     private List<User> aimUsers;

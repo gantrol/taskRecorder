@@ -47,23 +47,7 @@ public class JsonParser {
         return users;
     }
 
-
     @Deprecated
-    public static LocCenterPoint parseGetCenterPointJson(String responseBody) {
-        LocCenterPoint locCenterPoint = null;
-        Gson gson = getGson();
-
-        if (responseBody != null){
-//            TODO: parse出问题，求助？？？
-            Type centerType = new TypeToken<BigkeerResponse<LocCenterPoint>>() {}.getType();
-            BigkeerResponse<LocCenterPoint> userBigkeerResponse = gson.fromJson(responseBody, centerType);
-            int statusCode = userBigkeerResponse.getCode();
-            if (statusCode == LOGIN_SUCCESS && userBigkeerResponse.getResult() != null) {
-                locCenterPoint = userBigkeerResponse.getResult();
-            }
-        }
-        return locCenterPoint;
-    }
     public static int parseCreateTaskJson(String responseBody){
         int statusCode = -1;
         if (responseBody != null && !responseBody.isEmpty()){

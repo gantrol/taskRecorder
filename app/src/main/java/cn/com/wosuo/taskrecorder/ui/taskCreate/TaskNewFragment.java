@@ -21,6 +21,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,13 +37,15 @@ import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
+import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_OR_CREATE_TASKS;
@@ -58,11 +61,17 @@ public class TaskNewFragment extends Fragment {
     private static final String ARG_Assignee_ID = "task_id";
     private static final int REQUEST_ASSIGNEE = 0;
     private AppExecutors mAppExecutors = new AppExecutors();
+    private User me;
     private Task mTask;
     private Unbinder unbinder;
     private int assigneeID = -1;
     private final static ArrayList<String> sTaskType = FinalMap.getTaskTypeList();
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
+    private TaskViewModel viewModel;
+    String title;
+    String detail;
+    int type;
+
     //    private final static ArrayList<String> sTaskStatus = FinalMap.getTaskStatusList();
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
@@ -86,8 +95,8 @@ public class TaskNewFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 //        TODO:viewmodel
-//         .https://stackoverflow.com/questions/12103953/how-to-pass-result-from-second-fragment-to-first-fragment
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
     }
 
     @Nullable
@@ -98,8 +107,12 @@ public class TaskNewFragment extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
-        if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
+        if (actionBar != null)
+            actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText("新建任务");
+
+        me = viewModel.getMe();
+        mAssignerTextView.setText(me.getName());
         ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(requireActivity(),android.R.layout.simple_list_item_1, sTaskType);
         mTypeSpinner.setAdapter(typeArrayAdapter);
         return v;
@@ -108,51 +121,46 @@ public class TaskNewFragment extends Fragment {
     @OnClick(R.id.create_btn)
     void createTask(){
         mCreateButtom.setEnabled(false);
-        final String title = mTitleEditText.getText().toString();
+        title = mTitleEditText.getText().toString();
         int assignee = assigneeID;
         if (!mAssigneeEditText.getText().toString().isEmpty())
             assignee = Integer.parseInt(mAssigneeEditText.getText().toString());
 
-        final int type = mTypeSpinner.getSelectedItemPosition();
-        final String detail = mDetailEditText.getText().toString();
+        type = mTypeSpinner.getSelectedItemPosition();
+        detail = mDetailEditText.getText().toString();
         if (!validate(title, assignee, type, detail)){
             onCreateTaskMessage(FinalMap.statusCodeLost);
             return;
         }
 
-//        TODO: 2创建并调用progressDialog
-        RequestBody requestBody = new FormBody.Builder()
-                .add(TASK_TITLE, title)
-                .add(TASK_ASSIGNEE, Integer.toString(assigneeID))
-                .add(TASK_TYPE, Integer.toString(assigneeID))
-                .add(TASK_DESCRIPTION, detail)
-                .build();
-
-        HttpUtil.POST(GET_OR_CREATE_TASKS, requestBody, new Callback() {
+        Call<ResponseBody> call = viewModel.createTask(title, assigneeID, type, detail);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                mAppExecutors.mainThread().execute(()
-                        -> onCreateTaskMessage(FinalMap.statusCodeFail)
-                );
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                String reponseData = response.body().string();
-                int statusCode = JsonParser.parseCreateTaskJson(reponseData);
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                int statusCode = response.code();
                 String message = statusCodeMap.get(statusCode);
                 mAppExecutors.mainThread().execute(()
                         -> onCreateTaskMessage(message)
                 );
-//                TODO: 1插入数据库
+                viewModel.resetTaskListRateLimit(me.getUid());
                 requireActivity().finish();
             }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    mAppExecutors.mainThread().execute(()
+                            -> onCreateTaskMessage(FinalMap.statusCodeFail));
+            }
         });
+
+
+
+//        TODO: 2创建并调用progressDialog
     }
 
     @OnClick(R.id.choose_assignee_btn)
     void chooseAssignee(){
-        Intent intent = TaskAssignActivity.newIntent(getActivity(), mTask, false);
+        Intent intent = TaskAssignActivity.newIntent(getActivity(), null, false);
         startActivityForResult(intent, REQUEST_ASSIGNEE);
     }
 

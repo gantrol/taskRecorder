@@ -172,8 +172,8 @@ public class TaskPhotoFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) {
                             String responseData = "";
-                            if (response.body() != null) responseData = response.body().toString();
-                            Log.d(TAG, responseData);
+                            if (response.body() != null)
+                                responseData = response.body().toString();
 //                            TODO: 成功时的刷新？
                         }
 

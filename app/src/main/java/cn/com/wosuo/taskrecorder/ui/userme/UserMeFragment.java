@@ -27,6 +27,7 @@ import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.ui.sign.LoginActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
+import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.viewmodel.UserViewModel;
 import cn.com.wosuo.taskrecorder.vo.User;
 
@@ -36,6 +37,8 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.WITHOUT_NOW;
 public class UserMeFragment extends Fragment {
 
     private Unbinder unbinder;
+    TaskViewModel mTaskViewModel;
+    User me;
     private static final String TAG = "个人资料";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -61,20 +64,21 @@ public class UserMeFragment extends Fragment {
         mToolbarTitleTextView.setText(TAG);
         Picasso.get().load(R.drawable.nav_icon).into(myAvatarImageView);
         mLogoutButton.setOnClickListener(v -> logout());
-        User me = AppPreferencesHelper.getCurrentUser();
-//        UserViewModel userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        mTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+        me = mTaskViewModel.getMe();
+//        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 //        userViewModel.getUseMe().observe(this, userResource -> {
 //            User me = userResource.data;
 //            if (me != null)
                 UserMeFragment.this.updateUI(me);
 //        });
-
         return view;
     }
 
     private void logout() {
         AppPreferencesHelper.clearLoginPref();
         AppPreferencesHelper.clearCookiePref();
+        mTaskViewModel.resetTaskListRateLimit(me.getUid());
         LoginWithActivity();
     }
 

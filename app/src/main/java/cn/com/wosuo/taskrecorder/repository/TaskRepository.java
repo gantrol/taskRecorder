@@ -365,6 +365,10 @@ public class TaskRepository {
         return mBigkeerService.postImage(fpart, taskBody, typeBody, timeBody, locBody, descBody);
     }
 
+    public Call<ResponseBody> createTask(RequestBody requestBody){
+        return mBigkeerService.createTask(requestBody);
+    }
+
     public void postTaskTrack(String trackData, int taskID, Callback callback){
         RequestBody requestBody = new FormBody.Builder()
                 .add(TASK_TRACK_DATA, trackData)
@@ -498,5 +502,9 @@ public class TaskRepository {
         if (task.getAssigner() != null)
             task.setAssigner_id(task.getAssigner().getUid());
         mTaskDao.insert(task);
+    }
+
+    public void resetTaskListRateLimit(int userID) {
+        taskListRateLimit.reset(userID);
     }
 }

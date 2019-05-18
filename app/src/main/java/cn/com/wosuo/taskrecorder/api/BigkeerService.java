@@ -19,6 +19,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -34,6 +35,7 @@ import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_USERS_BY_GROUP;
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_ID_IN_TASK;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_COMPANY_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_MANAGER_TASKS;
+import static cn.com.wosuo.taskrecorder.api.Urls.GET_OR_CREATE_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_DESC;
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_FILE;
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_LOCATION;
@@ -142,6 +144,10 @@ public interface BigkeerService {
     @GET("Photo/task/{taskID}")
     LiveData<ApiResponse<BigkeerResponse<List<PhotoResult>>>>
     getPhotoResultsByTaskID(@Path("taskID") int taskID);
+
+
+    @POST(GET_OR_CREATE_TASKS)
+    Call<ResponseBody> createTask(@Body RequestBody requestBody);
 
     @Multipart
     @POST("Photo")

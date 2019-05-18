@@ -38,15 +38,20 @@ import cn.com.wosuo.taskrecorder.repository.TaskRepository;
 import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
+import static cn.com.wosuo.taskrecorder.api.Urls.TASK_DESCRIPTION;
+import static cn.com.wosuo.taskrecorder.api.Urls.TASK_TYPE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_ASSIGNEE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TITLE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_GROUP;
 
 public class TaskViewModel extends AndroidViewModel {
@@ -138,8 +143,6 @@ public class TaskViewModel extends AndroidViewModel {
     }
 
     public Call<ResponseBody> uploadPhoto(PhotoUpload photoUpload, double longitude, double latitude, int taskID) {
-//        TODO: compress photo. long file.length(); or Bitmap.getByteCount()
-//         .compress
         String photoPath = photoUpload.getPath();
 //        TODO: move to ImageCompress void qualityCompass; https://blog.csdn.net/chenliguan/article/details/54409442
         photoUpload.setTime(DateUtil.getUnixTimestamp());
@@ -175,6 +178,16 @@ public class TaskViewModel extends AndroidViewModel {
         return mTaskRepository.postPhoto(photo, type, time, locationStr, desciption, taskID);
     }
 
+    public Call<ResponseBody> createTask(String title, int assigneeID, int type, String detail){
+        RequestBody requestBody = new FormBody.Builder()
+                .add(TASK_TITLE, title)
+                .add(TASK_ASSIGNEE, Integer.toString(assigneeID))
+                .add(TASK_TYPE, Integer.toString(type))
+                .add(TASK_DESCRIPTION, detail)
+                .build();
+        return mTaskRepository.createTask(requestBody);
+    }
+
     public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID){
         return mTaskRepository.getPhotoResultsByTaskID(taskID);
     }
@@ -186,7 +199,18 @@ public class TaskViewModel extends AndroidViewModel {
     public LiveData<Resource<List<Tracks>>> getTracksByTaskID(int taskID){
         return mTaskRepository.getTracksByTaskID(taskID);
     }
+
     public LiveData<Resource<User>> getUser(int id){
         return mUserRepository.getUserByID(id);
+    }
+
+    @Deprecated
+    public User getMe() {
+//        TODO: it should be appear in UserViewMOdel!!
+        return AppPreferencesHelper.getCurrentUser();
+    }
+
+    public void resetTaskListRateLimit(int userID){
+        mTaskRepository.resetTaskListRateLimit(userID);
     }
 }

@@ -32,7 +32,7 @@ public final class Urls {
 
     public static final String GET_COMPANY_TASKS = "Task/assignee/{assigneeID}";
     public static final String COMPANY_ID_IN_TASK = "assigneeID";
-    public static final String GET_MANAGER_TASKS = "Task/assignee/{assignerID}";
+    public static final String GET_MANAGER_TASKS = "Task/assigner/{assignerID}";
     public static final String MANAGER_ID_IN_TASK = "assignerID";
     public static final String GET_USER_TASKS = "Assign/task/active";
     public static final String USER_GET_USERS_BY_GROUP = "UserGroup/user";

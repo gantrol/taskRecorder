@@ -61,12 +61,12 @@ public class Task implements Serializable {
     }
 
     @Ignore
-    public Task(String title, String description, User assigner,
-                User assignee, int type){
+    public Task(String title, String description, int assigner,
+                int assignee, int type){
         this.title = title;
         this.description = description;
-        this.assignee = assignee;
-        this.assigner = assigner;
+        this.assignee_id = assignee;
+        this.assigner_id = assigner;
         this.type = type;
     }
 
