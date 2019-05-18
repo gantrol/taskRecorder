@@ -1,6 +1,5 @@
 package cn.com.wosuo.taskrecorder.util;
 
-@Deprecated
 public final class FinalStrings {
 //    API: https://land.bigkeer.cn/swagger/index.html#/
     public static final String API_HOST = "land.bigkeer.cn";
@@ -100,5 +99,11 @@ public final class FinalStrings {
 
 //
     public static final String WITHOUT_NOW = "暂无";
+
+    public static class CoordinateType{
+        public static final String WGS84 = "WGS84";
+        public static final String GCJ02 = "GCJ02";
+        public static final String bd09ll = "bd09ll";
+    }
 }
 

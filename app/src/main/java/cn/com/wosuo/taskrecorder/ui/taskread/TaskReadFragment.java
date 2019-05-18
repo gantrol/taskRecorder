@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.LogoPosition;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MarkerOptions;
@@ -61,6 +59,7 @@ import cn.com.wosuo.taskrecorder.ui.taskloc.TaskCenterPointActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskTrackActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment;
 import cn.com.wosuo.taskrecorder.ui.taskphoto.TaskPhotoActivity;
+import cn.com.wosuo.taskrecorder.util.CoordinateTypeUtil;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
@@ -237,7 +236,7 @@ public class TaskReadFragment extends Fragment {
             LocCenterPoint locCenterPoint = centerPointResource.data;
 //            TODO: 坐标轴转化z
             if (locCenterPoint != null){
-                LatLng GEO_CENTER = new LatLng(locCenterPoint.getPositionY(), locCenterPoint.getPositionX());
+                LatLng GEO_CENTER = CoordinateTypeUtil.toBaidull(locCenterPoint);
                 MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
                 TextureSupportMapFragment map2 = (TextureSupportMapFragment) (getChildFragmentManager()
                         .findFragmentById(R.id.local_map_fragment));
@@ -266,32 +265,37 @@ public class TaskReadFragment extends Fragment {
 //                         贴标签？
                         String lineTagString = "巡查路线" + index;
                         int coordinate = track.getCoordinate();
+                        List<LatLng> points = new ArrayList<>();
 
-//                        第一个点, 确定大致定位, 选定大概缩放区域
+
                         List<TrackData> trackDataList = track.getData();
                         Collections.sort(trackDataList, new LocPointComparator());
-                        LatLng GEO_TRACK = new LatLng(trackDataList.get(0).getPointY(),
-                                trackDataList.get(0).getPointX());
+
+                        //  第一个点, 确定大致定位, 选定大概缩放区域
+                        LatLng GEO_TRACK = CoordinateTypeUtil.toBaidull(trackDataList.get(0), coordinate);
                         MapStatusUpdate trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
-                        TextureSupportMapFragment map2 = (TextureSupportMapFragment) (getChildFragmentManager()
+                        TextureSupportMapFragment TrackMap = (TextureSupportMapFragment) (getChildFragmentManager()
                                 .findFragmentById(R.id.track_map_fragment));
-                        BaiduMap baiduMap = map2.getBaiduMap();
+                        BaiduMap baiduMap = TrackMap.getBaiduMap();
                         baiduMap.setMapStatus(trackMapUpadate);
                         trackMapUpadate = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
                         baiduMap.animateMapStatus(trackMapUpadate);
 
-                        List<LatLng> points = new ArrayList<>();
+
                         if (trackDataList.size() >= 2){
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("index", index);
                             //在地图上添加起始点的Marker，并显示
                             OverlayOptions option = new MarkerOptions()
                                     .position(GEO_TRACK)
                                     .icon(stbd);
                             baiduMap.addOverlay(option);
-                            for (TrackData trackData: trackDataList){
-                                GEO_TRACK = new LatLng(trackData.getPointY(), trackData.getPointX());
+                            for (int i = 0; i < trackDataList.size(); i++){
+                                TrackData trackData = trackDataList.get(i);
+                                GEO_TRACK = CoordinateTypeUtil.toBaidull(trackData, coordinate);
                                 points.add(GEO_TRACK);
                                 trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
-                                map2 = (TextureSupportMapFragment) (getChildFragmentManager()
+                                TrackMap = (TextureSupportMapFragment) (getChildFragmentManager()
                                         .findFragmentById(R.id.track_map_fragment));
                                 baiduMap.setMapStatus(trackMapUpadate);
                             }
@@ -316,7 +320,8 @@ public class TaskReadFragment extends Fragment {
                             //设置折线的属性
                             OverlayOptions mOverlayOptions = new PolylineOptions()
                                     .width(20)
-                                    .dottedLine(true)
+                                    .extraInfo(bundle)
+//                                    .dottedLine(true)
                                     .points(points);
 //                                .customTextureList(textureList)
 //                                .textureIndex(indexList);//设置纹理列表
@@ -324,8 +329,8 @@ public class TaskReadFragment extends Fragment {
                             // mPloyline 折线对象
                             Overlay mPolyline = baiduMap.addOverlay(mOverlayOptions);
 //                        TODO: 增加删除的监听器？
-                            points.clear();
                         }
+                        points.clear();
                     }
                 }
             }

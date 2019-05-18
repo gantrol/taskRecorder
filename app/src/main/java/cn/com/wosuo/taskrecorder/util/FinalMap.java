@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.CoordinateType.GCJ02;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.CoordinateType.WGS84;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.CoordinateType.bd09ll;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.INTERVIEWEE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
@@ -104,6 +107,6 @@ public final class FinalMap {
     public static final String statusCodeLost = getStatusCodeMap().get(-1);
 
     public static ArrayList<String> getCoorTypeList(){
-        return Lists.newArrayList("WGS84", "GCJ02", "bd09ll");
+        return Lists.newArrayList(WGS84, GCJ02, bd09ll);
     }
 }
