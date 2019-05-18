@@ -120,6 +120,7 @@ public class TaskReadFragment extends Fragment {
     BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
     BitmapDescriptor stbd = BitmapDescriptorFactory.fromResource(R.drawable.ic_me_history_startpoint);
     BitmapDescriptor enbd = BitmapDescriptorFactory.fromResource(R.drawable.ic_me_history_finishpoint);
+    List<BitmapDescriptor> textureList = FinalMap.getTextureList();
     private static final String DIALOG_TASK_TYPE = "DialogType";
     float mCurrentZoom = 19f;
     private AppExecutors mAppExecutors = new AppExecutors();
@@ -229,7 +230,6 @@ public class TaskReadFragment extends Fragment {
 
         LatLng GEO_BEIJING = new LatLng(39.945, 116.404);
 //        TODO:无数据状态
-//        LatLng GEO_SHANGHAI = new LatLng(31.227, 121.481);
 
 
         viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
@@ -259,14 +259,12 @@ public class TaskReadFragment extends Fragment {
                     Track track = tracks.getTrack();
                     if (track != null){
                         index++;
-//                        TODO:
-//                         坐标系
-//                         路线颜色表？
-//                         贴标签？
-                        String lineTagString = "巡查路线" + index;
+//                        TODO:贴标签？
+//                        String lineTagString = "巡查路线" + index;
                         int coordinate = track.getCoordinate();
                         List<LatLng> points = new ArrayList<>();
-
+                        //添加纹理索引
+                        List<Integer> indexList = new ArrayList<>();
 
                         List<TrackData> trackDataList = track.getData();
                         Collections.sort(trackDataList, new LocPointComparator());
@@ -295,9 +293,8 @@ public class TaskReadFragment extends Fragment {
                                 GEO_TRACK = CoordinateTypeUtil.toBaidull(trackData, coordinate);
                                 points.add(GEO_TRACK);
                                 trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
-                                TrackMap = (TextureSupportMapFragment) (getChildFragmentManager()
-                                        .findFragmentById(R.id.track_map_fragment));
                                 baiduMap.setMapStatus(trackMapUpadate);
+                                indexList.add(index % textureList.size() - 1);
                             }
                             //在地图上添加终止点的Marker，并显示
                             option = new MarkerOptions()
@@ -307,30 +304,21 @@ public class TaskReadFragment extends Fragment {
 
                             //构建折线点坐标
                             // 添加纹理图片
-//                        List<BitmapDescriptor> textureList = new ArrayList<>();
-//                        textureList.add(mRedTexture);
-//                        textureList.add(mBlueTexture);
-//                        textureList.add(mGreenTexture);
-//                        //添加纹理索引
-//                        List<Integer> indexList = new ArrayList<>();
-//                        indexList.add(0);
-//                        indexList.add(1);
-//                        indexList.add(2);
-
                             //设置折线的属性
                             OverlayOptions mOverlayOptions = new PolylineOptions()
-                                    .width(20)
+                                    .width(15)
                                     .extraInfo(bundle)
-//                                    .dottedLine(true)
-                                    .points(points);
-//                                .customTextureList(textureList)
-//                                .textureIndex(indexList);//设置纹理列表
+                                    .dottedLine(true)
+                                    .points(points)
+                                    .customTextureList(textureList)
+                                    .textureIndex(indexList);//设置纹理列表
                             // 在地图上绘制折线
                             // mPloyline 折线对象
                             Overlay mPolyline = baiduMap.addOverlay(mOverlayOptions);
 //                        TODO: 增加删除的监听器？
                         }
                         points.clear();
+                        indexList.clear();
                     }
                 }
             }

@@ -1,5 +1,7 @@
 package cn.com.wosuo.taskrecorder.util;
 
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
@@ -108,5 +110,19 @@ public final class FinalMap {
 
     public static ArrayList<String> getCoorTypeList(){
         return Lists.newArrayList(WGS84, GCJ02, bd09ll);
+    }
+
+    public final static List<BitmapDescriptor> getTextureList(){
+        List<BitmapDescriptor> textureList = new ArrayList<>();
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-brown.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-indigo.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-lightblue.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-lightgreen.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-orange.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-purple.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-red.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-teal.png"));
+        textureList.add(BitmapDescriptorFactory.fromAsset("routeArrow-yellow.png"));
+        return textureList;
     }
 }
