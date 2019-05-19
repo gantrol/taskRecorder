@@ -36,6 +36,7 @@ import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 public class TaskAssignCompanyFragment extends Fragment{
 
@@ -103,7 +104,7 @@ public class TaskAssignCompanyFragment extends Fragment{
             Toast.makeText(getContext(), "请选择用户", Toast.LENGTH_SHORT).show();
             return;
         }
-        intent.putParcelableArrayListExtra(ASSIGNEE, users);
+        intent.putParcelableArrayListExtra(USER_LIST, users);
         requireActivity().setResult(Activity.RESULT_OK, intent);
         requireActivity().finish();
     }

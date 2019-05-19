@@ -1,5 +1,6 @@
 package cn.com.wosuo.taskrecorder.ui.taskread;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,9 +43,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +58,7 @@ import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.ui.adapter.PhotoReadAdapter;
+import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskCenterPointActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskTrackActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment;
@@ -75,6 +79,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
@@ -84,9 +89,11 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_DONE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_PROGRESS;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TEST;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 
 public class TaskReadFragment extends Fragment {
+    private static final int REQUEST_ASSIGNEE = 1;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     private String TAG = "查阅任务";
 
@@ -119,15 +126,14 @@ public class TaskReadFragment extends Fragment {
     @BindView(R.id.fab_admin) FloatingActionButton fabAdmin;
     static final String ARG_Task_ID = "task_id";
     private List<String> sUserType = FinalMap.getUserTypeList();
-    private String[] sTaskStatus = FinalMap.getTaskStatusList();
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
     BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
     BitmapDescriptor stbd = BitmapDescriptorFactory.fromResource(R.drawable.ic_me_history_startpoint);
     BitmapDescriptor enbd = BitmapDescriptorFactory.fromResource(R.drawable.ic_me_history_finishpoint);
     List<BitmapDescriptor> textureList = FinalMap.getTextureList();
-    private static final String DIALOG_TASK_TYPE = "DialogType";
     float mCurrentZoom = 19f;
     private AppExecutors mAppExecutors = new AppExecutors();
+    private List<User> executors;
     private int taskId;
     private int userType;
     private Task mTask;
@@ -308,9 +314,9 @@ public class TaskReadFragment extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     String responseBody = response.body() != null ? response.body().string() : null;
-                    List<User> users = JsonParser.parseGetExecutorJson(responseBody);
+                    executors = JsonParser.parseGetExecutorJson(responseBody);
                     StringBuilder usersSb = new StringBuilder();
-                    for (User user : users) {
+                    for (User user : executors) {
                         usersSb.append(user.getName());
                         usersSb.append(" ");
                     }
@@ -451,12 +457,6 @@ public class TaskReadFragment extends Fragment {
         });
     }
 
-    private void startEditActivity() {
-
-//        TODO: show?
-
-    }
-
     private void onChangeTaskStatusMessage(String message) {
 //        mCreateButtom.setEnabled(true);
         if (getActivity() != null)
@@ -480,16 +480,40 @@ public class TaskReadFragment extends Fragment {
                     startActivity(routeIntent);
                     break;
                 case R.id.fab_info:
-                    startEditActivity();
+//                    TODO: startEditActivity();
                     break;
                 case R.id.fab_status:
                     createStatusDialog();
                     break;
                 case R.id.fab_executor:
-                    createStatusDialog();
+                    Intent intent = TaskAssignActivity.newIntent(getActivity(), mTask, true);
+                    startActivityForResult(intent, REQUEST_ASSIGNEE);
                     break;
             }
         }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ASSIGNEE){
+            if (resultCode == Activity.RESULT_OK){
+                ArrayList<User> exeList = data.getParcelableArrayListExtra(USER_LIST);
+                mAppExecutors.mainThread().execute(() -> {
+                    Set<User> before = new HashSet<>(executors);
+                    Set<User> remove = new HashSet<>(executors);
+                    Set<User> add = new HashSet<>(exeList);
+                    remove.removeAll(add);
+                    add.removeAll(before);
+//                    TODO: remove remove, add add
+                });
+
+            } else {
+                mAppExecutors.mainThread().execute(() ->
+                        Toast.makeText(getContext(), TAG + ":" + "操作取消",
+                                Toast.LENGTH_SHORT).show());
+            }
+        }
+    }
 
 }

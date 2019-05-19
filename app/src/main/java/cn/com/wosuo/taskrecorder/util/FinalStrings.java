@@ -96,6 +96,7 @@ public final class FinalStrings {
     public static final String YOU_SIGNUP_SUCCESS = "注册成功";
     public static final String YOU_TASK_UPDATE_FAIL = "任务更新失败";
     public static final String YOU_TASK_UPDATE_SUCCESS = "任务更新成功";
+    public static final String USER_LIST = "USER_LIST";
 
 //
     public static final String WITHOUT_NOW = "暂无";

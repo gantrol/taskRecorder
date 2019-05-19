@@ -41,6 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 
 public class TaskNewFragment extends Fragment {
@@ -187,7 +188,7 @@ public class TaskNewFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ASSIGNEE){
             if (resultCode == Activity.RESULT_OK){
-                ArrayList<User> aeeList = data.getParcelableArrayListExtra(ASSIGNEE);
+                ArrayList<User> aeeList = data.getParcelableArrayListExtra(USER_LIST);
                 User assignee = aeeList.get(0);
                 mAppExecutors.mainThread().execute(() -> {
                         mAssigneeEditText.setText(String.valueOf(assignee.getUid()));
