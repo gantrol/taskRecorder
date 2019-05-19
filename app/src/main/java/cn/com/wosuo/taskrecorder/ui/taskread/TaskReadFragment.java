@@ -161,8 +161,6 @@ public class TaskReadFragment extends Fragment {
         }
         mToolbarTitleTextView.setText(TAG);
 //        TODO: 分用户显示页面？
-        mFloatingActionMenu.hideMenuButton(true);
-
         mPhotoReadRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final PhotoReadAdapter adapter = new PhotoReadAdapter();
         mPhotoReadRecyclerView.setAdapter(adapter);
@@ -196,10 +194,15 @@ public class TaskReadFragment extends Fragment {
         int myType = AppPreferencesHelper.getCurrentUserLoginState();
         List<String> sUserType= FinalMap.getUserTypeList();
         if(myType == sUserType.indexOf(USER_GROUP)){
-            mFloatingActionMenu.hideMenuButton(false);
+//            mFloatingActionMenu.hideMenuButton(false);
             fabRoute.setOnClickListener(clickListener);
             fabPhoto.setOnClickListener(clickListener);
             fabExplore.setOnClickListener(clickListener);
+        }
+        else {
+            fabRoute.setVisibility(View.GONE);
+            fabPhoto.setVisibility(View.GONE);
+            fabExplore.setVisibility(View.GONE);
         }
         if (myType == sUserType.indexOf(GROUP_GROUP)){
             HttpUtil.GET(COMPANY_GET_EXECUTOR + taskId, new Callback() {
@@ -228,7 +231,7 @@ public class TaskReadFragment extends Fragment {
             mExecutorLinearLayout.setVisibility(View.GONE);
         }
 
-        LatLng GEO_BEIJING = new LatLng(39.945, 116.404);
+//        LatLng GEO_BEIJING = new LatLng(39.945, 116.404);
 //        TODO:无数据状态
 
 
@@ -414,7 +417,8 @@ public class TaskReadFragment extends Fragment {
                 .setSingleChoiceItems(
                         sCanChooseTaskStatus.toArray(new CharSequence[sCanChooseTaskStatus.size()]),
                         item, this::patchTaskStaus)
-                .setNegativeButton("不修改了", (dialog, which) -> dialog.dismiss())
+//                TODO: .setPositiveButton("确认", )
+                .setNegativeButton("不修改", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -473,6 +477,12 @@ public class TaskReadFragment extends Fragment {
                 case R.id.fab_route:
                     Intent routeIntent = TaskTrackActivity.newIntent(requireContext(), taskId);
                     startActivity(routeIntent);
+                    break;
+                case R.id.fab_edited:
+                    startEditActivity();
+                    break;
+                case R.id.fab_status:
+                    createStatusDialog();
                     break;
             }
         }

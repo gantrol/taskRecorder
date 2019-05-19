@@ -8,9 +8,7 @@ import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 
-@Entity(
-        tableName = "tasks"
-)
+@Entity(tableName = "tasks")
 public class Task implements Serializable {
     @PrimaryKey
     private int taskID;

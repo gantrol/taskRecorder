@@ -8,8 +8,6 @@ import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import androidx.annotation.NonNull;
-
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.api.ApiEmptyReponse;
 import cn.com.wosuo.taskrecorder.api.ApiErrorResponse;

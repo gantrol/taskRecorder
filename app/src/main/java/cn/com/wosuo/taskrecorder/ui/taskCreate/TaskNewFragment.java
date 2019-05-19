@@ -3,8 +3,6 @@ package cn.com.wosuo.taskrecorder.ui.taskCreate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -33,26 +30,17 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.R;
-import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
-import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
-import static cn.com.wosuo.taskrecorder.api.Urls.GET_OR_CREATE_TASKS;
-import static cn.com.wosuo.taskrecorder.api.Urls.TASK_DESCRIPTION;
-import static cn.com.wosuo.taskrecorder.api.Urls.TASK_TYPE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_ASSIGNEE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TITLE;
 
 
 public class TaskNewFragment extends Fragment {

@@ -95,7 +95,6 @@ public class TaskListFragment extends Fragment {
     }
 
     private class NewTaskOnClickListener implements View.OnClickListener{
-
         @Override
         public void onClick(View v) {
             Intent intent = TaskNewActivity.newIntent(getActivity());

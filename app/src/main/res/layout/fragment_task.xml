@@ -391,14 +391,6 @@
         app:menu_colorRipple="@color/secondary_shadow">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="上传照片"
-            android:src="@android:drawable/ic_menu_camera"
-            style="@style/MenuButtonsStyle" />
-
-        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_explore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -413,6 +405,31 @@
             android:src="@android:drawable/ic_dialog_map"
             app:fab_label="巡查路线"
             style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="上传照片"
+            android:src="@android:drawable/ic_menu_camera"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_edited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="编辑任务"
+            android:src="@android:drawable/ic_dialog_info"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="修改状态"
+            android:src="@android:drawable/ic_menu_help"
+            style="@style/MenuButtonsStyle" />
+
 
     </com.github.clans.fab.FloatingActionMenu>
 
