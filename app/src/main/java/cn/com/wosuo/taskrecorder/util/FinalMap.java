@@ -80,14 +80,12 @@ public final class FinalMap {
      * @return SparseArray
      */
     public static String[] getTaskStatusList() {
-        String[] sTaskStatus = {TASK_CREATE, TASK_PROGRESS, TASK_TEST, TASK_DONE};
-        return sTaskStatus;
+        return new String[]{TASK_CREATE, TASK_PROGRESS, TASK_TEST, TASK_DONE};
     }
 
     public static String[] getPhotoTypeList() {
-        String[] sPhotoType = {INTERVIEWEE, MEETING, SENSITIVE_OBJECT, SITE_SCENE};
         // 0-3分别代表四种照片：访谈人、座谈会议、敏感对象、地块现场
-        return sPhotoType;
+        return new String[]{INTERVIEWEE, MEETING, SENSITIVE_OBJECT, SITE_SCENE};
     }
 
 

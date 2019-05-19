@@ -62,7 +62,7 @@ public class TaskListFragment extends Fragment {
         taskViewModel.getCurrentUserAllTasks().observe(this,
                 listResource -> {
                     if (listResource != null)
-                        adapter.setAimTasks(listResource.data);
+                        adapter.setAimTasks(listResource.data, getContext());
                 });
         int userType = AppPreferencesHelper.getCurrentUserLoginState();
         List<String> sUserType= FinalMap.getUserTypeList();

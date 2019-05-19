@@ -9,24 +9,19 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <include android:id="@+id/photo_toolbar"
                 layout="@layout/btn_toolbar" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/photo_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior=" @string/appbar_scrolling_view_behavior" />
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_photo_fab"
@@ -35,6 +30,4 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add_fff_24dp"/>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -5,9 +5,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="list_item_top_bottom">12dp</dimen>
     <dimen name="list_item_start_end">24dp</dimen>
+    <dimen name="card_item_between">0.1dp</dimen>
     <dimen name="list_subitem_top">8dp</dimen>
     <dimen name="list_subitem_bottom">15dp</dimen>
     <dimen name="list_subitem_begin">5dp</dimen>
+    <dimen name="list_subitem_margin">16dp</dimen>
     <dimen name="list_margin_between">0.1dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sub_fab_wide">45dp</dimen>

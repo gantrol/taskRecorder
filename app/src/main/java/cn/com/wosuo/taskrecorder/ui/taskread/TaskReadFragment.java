@@ -160,7 +160,6 @@ public class TaskReadFragment extends Fragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mToolbarTitleTextView.setText(TAG);
-//        TODO: 分用户显示页面？
         mPhotoReadRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final PhotoReadAdapter adapter = new PhotoReadAdapter();
         mPhotoReadRecyclerView.setAdapter(adapter);

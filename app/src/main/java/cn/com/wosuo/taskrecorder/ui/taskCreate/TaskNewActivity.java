@@ -11,8 +11,6 @@ import cn.com.wosuo.taskrecorder.SingleFragmentActivity;
 import cn.com.wosuo.taskrecorder.ui.taskread.TaskActivity;
 
 public class TaskNewActivity extends SingleFragmentActivity{
-
-
     public static Intent newIntent(Context packageContext){
         Intent intent = new Intent(packageContext, TaskNewActivity.class);
         return intent;
