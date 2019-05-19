@@ -415,7 +415,7 @@
             style="@style/MenuButtonsStyle" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_edited"
+            android:id="@+id/fab_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_label="编辑任务"
@@ -428,6 +428,22 @@
             android:layout_height="wrap_content"
             app:fab_label="修改状态"
             android:src="@android:drawable/ic_menu_help"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_executor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="执行员工"
+            android:src="@android:drawable/ic_menu_myplaces"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="管理员可以看看"
+            android:src="@android:drawable/ic_menu_view"
             style="@style/MenuButtonsStyle" />
 
 

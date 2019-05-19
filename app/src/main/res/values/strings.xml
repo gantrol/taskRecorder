@@ -36,8 +36,11 @@
     <string name="task_choose_assignee_label">指定公司</string>
     <string name="task_execute_label">执行员工</string>
     <string name="task_type_label">任务类型</string>
-    <string name="change_task_type">更改类型</string>
     <string name="task_status_label">任务状态</string>
+    <string name="change_task_status">更改任务状态</string>
+    <string name="cannot_change_task_status">您无法更改此任务的状态</string>
+    <string name="task_status_cancel">不修改</string>
+    <string name="task_status_commit">确认</string>
     <string name="task_detail_label">任务详情</string>
     <string name="task_create">创 建</string>
     <string name="task_cancel">取 消</string>

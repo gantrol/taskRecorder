@@ -76,6 +76,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_CREATE;
@@ -112,10 +113,13 @@ public class TaskReadFragment extends Fragment {
     @BindView(R.id.fab_explore) FloatingActionButton fabExplore;
     @BindView(R.id.fab_photo) FloatingActionButton fabPhoto;
     @BindView(R.id.fab_route) FloatingActionButton fabRoute;
+    @BindView(R.id.fab_info) FloatingActionButton fabInfo;
+    @BindView(R.id.fab_status) FloatingActionButton fabStatus;
+    @BindView(R.id.fab_executor) FloatingActionButton fabExecutor;
+    @BindView(R.id.fab_admin) FloatingActionButton fabAdmin;
     static final String ARG_Task_ID = "task_id";
     private List<String> sUserType = FinalMap.getUserTypeList();
-    private CharSequence[] sTaskStatus = FinalMap.getTaskStatusList();
-    private ArrayList<String> sCanChooseTaskStatus = new ArrayList<>();
+    private String[] sTaskStatus = FinalMap.getTaskStatusList();
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
     BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
     BitmapDescriptor stbd = BitmapDescriptorFactory.fromResource(R.drawable.ic_me_history_startpoint);
@@ -180,6 +184,98 @@ public class TaskReadFragment extends Fragment {
                         if (photoResource != null)
                             adapter.submitList(photoResource.data);
                     });
+                    // TODO:无数据状态
+                    viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
+                        LocCenterPoint locCenterPoint = centerPointResource.data;
+//            TODO: 坐标轴转化z
+                        if (locCenterPoint != null){
+                            LatLng GEO_CENTER = CoordinateTypeUtil.toBaidull(locCenterPoint);
+                            MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
+                            TextureSupportMapFragment map2 = (TextureSupportMapFragment) (getChildFragmentManager()
+                                    .findFragmentById(R.id.local_map_fragment));
+                            map2.getBaiduMap().setMapStatus(status2);
+                            status2 = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
+                            map2.getBaiduMap().animateMapStatus(status2);
+                            OverlayOptions option = new MarkerOptions()
+                                    .position(GEO_CENTER)
+                                    .icon(bd);
+                            //在地图上添加Marker，并显示
+                            map2.getBaiduMap().addOverlay(option);
+                        }
+                    });
+
+                    viewModel.getTracksByTaskID(taskId).observe(this, trackResource -> {
+                        List<Tracks> tracksList = trackResource.data;
+                        if (tracksList != null && !tracksList.isEmpty()){
+                            int index = 0;
+                            for (Tracks tracks: tracksList){
+                                Track track = tracks.getTrack();
+                                if (track != null){
+                                    index++;
+//                        TODO:贴标签？
+//                        String lineTagString = "巡查路线" + index;
+                                    int coordinate = track.getCoordinate();
+                                    List<LatLng> points = new ArrayList<>();
+                                    //添加纹理索引
+                                    List<Integer> indexList = new ArrayList<>();
+
+                                    List<TrackData> trackDataList = track.getData();
+                                    Collections.sort(trackDataList, new LocPointComparator());
+
+                                    //  第一个点, 确定大致定位, 选定大概缩放区域
+                                    LatLng GEO_TRACK = CoordinateTypeUtil.toBaidull(trackDataList.get(0), coordinate);
+                                    MapStatusUpdate trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
+                                    TextureSupportMapFragment TrackMap = (TextureSupportMapFragment) (getChildFragmentManager()
+                                            .findFragmentById(R.id.track_map_fragment));
+                                    BaiduMap baiduMap = TrackMap.getBaiduMap();
+                                    baiduMap.setMapStatus(trackMapUpadate);
+                                    trackMapUpadate = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
+                                    baiduMap.animateMapStatus(trackMapUpadate);
+
+
+                                    if (trackDataList.size() >= 2){
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("index", index);
+                                        //在地图上添加起始点的Marker，并显示
+                                        OverlayOptions option = new MarkerOptions()
+                                                .position(GEO_TRACK)
+                                                .icon(stbd);
+                                        baiduMap.addOverlay(option);
+                                        for (int i = 0; i < trackDataList.size(); i++){
+                                            TrackData trackData = trackDataList.get(i);
+                                            GEO_TRACK = CoordinateTypeUtil.toBaidull(trackData, coordinate);
+                                            points.add(GEO_TRACK);
+                                            trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
+                                            baiduMap.setMapStatus(trackMapUpadate);
+                                            indexList.add(index % textureList.size() - 1);
+                                        }
+                                        //在地图上添加终止点的Marker，并显示
+                                        option = new MarkerOptions()
+                                                .position(GEO_TRACK)
+                                                .icon(enbd);
+                                        baiduMap.addOverlay(option);
+
+                                        //构建折线点坐标
+                                        // 添加纹理图片
+                                        //设置折线的属性
+                                        OverlayOptions mOverlayOptions = new PolylineOptions()
+                                                .width(15)
+                                                .extraInfo(bundle)
+                                                .dottedLine(true)
+                                                .points(points)
+                                                .customTextureList(textureList)
+                                                .textureIndex(indexList);//设置纹理列表
+                                        // 在地图上绘制折线
+                                        // mPloyline 折线对象
+                                        Overlay mPolyline = baiduMap.addOverlay(mOverlayOptions);
+//                        TODO: 增加删除的监听器？
+                                    }
+                                    points.clear();
+                                    indexList.clear();
+                                }
+                            }
+                        }
+                    });
                 }
                 if (mTask.getAssigner_id() > 0) {
                     viewModel.getUser(mTask.getAssigner_id()).observe(this, aerResource -> {
@@ -193,7 +289,6 @@ public class TaskReadFragment extends Fragment {
         int myType = AppPreferencesHelper.getCurrentUserLoginState();
         List<String> sUserType= FinalMap.getUserTypeList();
         if(myType == sUserType.indexOf(USER_GROUP)){
-//            mFloatingActionMenu.hideMenuButton(false);
             fabRoute.setOnClickListener(clickListener);
             fabPhoto.setOnClickListener(clickListener);
             fabExplore.setOnClickListener(clickListener);
@@ -204,6 +299,7 @@ public class TaskReadFragment extends Fragment {
             fabExplore.setVisibility(View.GONE);
         }
         if (myType == sUserType.indexOf(GROUP_GROUP)){
+            fabExecutor.setOnClickListener(clickListener);
             HttpUtil.GET(COMPANY_GET_EXECUTOR + taskId, new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -227,105 +323,22 @@ public class TaskReadFragment extends Fragment {
             });
         }
         else {
+            fabExecutor.setVisibility(View.GONE);
             mExecutorLinearLayout.setVisibility(View.GONE);
         }
-
-//        LatLng GEO_BEIJING = new LatLng(39.945, 116.404);
-//        TODO:无数据状态
-
-
-        viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
-            LocCenterPoint locCenterPoint = centerPointResource.data;
-//            TODO: 坐标轴转化z
-            if (locCenterPoint != null){
-                LatLng GEO_CENTER = CoordinateTypeUtil.toBaidull(locCenterPoint);
-                MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
-                TextureSupportMapFragment map2 = (TextureSupportMapFragment) (getChildFragmentManager()
-                        .findFragmentById(R.id.local_map_fragment));
-                map2.getBaiduMap().setMapStatus(status2);
-                status2 = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
-                map2.getBaiduMap().animateMapStatus(status2);
-                OverlayOptions option = new MarkerOptions()
-                        .position(GEO_CENTER)
-                        .icon(bd);
-                //在地图上添加Marker，并显示
-                map2.getBaiduMap().addOverlay(option);
-            }
-        });
-
-        viewModel.getTracksByTaskID(taskId).observe(this, trackResource -> {
-            List<Tracks> tracksList = trackResource.data;
-            if (tracksList != null && !tracksList.isEmpty()){
-                int index = 0;
-                for (Tracks tracks: tracksList){
-                    Track track = tracks.getTrack();
-                    if (track != null){
-                        index++;
-//                        TODO:贴标签？
-//                        String lineTagString = "巡查路线" + index;
-                        int coordinate = track.getCoordinate();
-                        List<LatLng> points = new ArrayList<>();
-                        //添加纹理索引
-                        List<Integer> indexList = new ArrayList<>();
-
-                        List<TrackData> trackDataList = track.getData();
-                        Collections.sort(trackDataList, new LocPointComparator());
-
-                        //  第一个点, 确定大致定位, 选定大概缩放区域
-                        LatLng GEO_TRACK = CoordinateTypeUtil.toBaidull(trackDataList.get(0), coordinate);
-                        MapStatusUpdate trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
-                        TextureSupportMapFragment TrackMap = (TextureSupportMapFragment) (getChildFragmentManager()
-                                .findFragmentById(R.id.track_map_fragment));
-                        BaiduMap baiduMap = TrackMap.getBaiduMap();
-                        baiduMap.setMapStatus(trackMapUpadate);
-                        trackMapUpadate = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
-                        baiduMap.animateMapStatus(trackMapUpadate);
-
-
-                        if (trackDataList.size() >= 2){
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("index", index);
-                            //在地图上添加起始点的Marker，并显示
-                            OverlayOptions option = new MarkerOptions()
-                                    .position(GEO_TRACK)
-                                    .icon(stbd);
-                            baiduMap.addOverlay(option);
-                            for (int i = 0; i < trackDataList.size(); i++){
-                                TrackData trackData = trackDataList.get(i);
-                                GEO_TRACK = CoordinateTypeUtil.toBaidull(trackData, coordinate);
-                                points.add(GEO_TRACK);
-                                trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
-                                baiduMap.setMapStatus(trackMapUpadate);
-                                indexList.add(index % textureList.size() - 1);
-                            }
-                            //在地图上添加终止点的Marker，并显示
-                            option = new MarkerOptions()
-                                    .position(GEO_TRACK)
-                                    .icon(enbd);
-                            baiduMap.addOverlay(option);
-
-                            //构建折线点坐标
-                            // 添加纹理图片
-                            //设置折线的属性
-                            OverlayOptions mOverlayOptions = new PolylineOptions()
-                                    .width(15)
-                                    .extraInfo(bundle)
-                                    .dottedLine(true)
-                                    .points(points)
-                                    .customTextureList(textureList)
-                                    .textureIndex(indexList);//设置纹理列表
-                            // 在地图上绘制折线
-                            // mPloyline 折线对象
-                            Overlay mPolyline = baiduMap.addOverlay(mOverlayOptions);
-//                        TODO: 增加删除的监听器？
-                        }
-                        points.clear();
-                        indexList.clear();
-                    }
-                }
-            }
-        });
-
+        if (myType == sUserType.indexOf(GROUP_GROUP) || myType == sUserType.indexOf(MANAGER_GROUP)){
+            fabStatus.setOnClickListener(clickListener);
+        } else {
+            fabStatus.setVisibility(View.GONE);
+        }
+        if (myType == sUserType.indexOf(MANAGER_GROUP)){
+            fabInfo.setOnClickListener(clickListener);
+        } else {
+            fabInfo.setVisibility(View.GONE);
+        }
+        if (myType != sUserType.indexOf(ADMIN_GROUP)){
+            fabAdmin.setVisibility(View.GONE);
+        }
         return v;
     }
 
@@ -347,21 +360,38 @@ public class TaskReadFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //switch (tasktype){
-        //0:指派者可转1
-        //1:指派者可转0、2
-        //2:指派者可转1，创建者可转3
-        //3:创建者可转2
-        //}
-        // Inflate the menu; this adds items to the action bar if it is present.
-        sCanChooseTaskStatus.clear();  //String[] sTaskStatus = {TASK_CREATE, TASK_PROGRESS, TASK_TEST, TASK_DONE};
-        inflater.inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_status);
-        int type = (mTask == null) ? 0 : mTask.getType();
+
+    private void createStatusDialog() {
+        ArrayList<String> sCanChooseTaskStatus = getList();
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(R.string.change_task_status)
+                .setNegativeButton(R.string.task_status_cancel, (dialog, which) -> dialog.dismiss());
+        if (sCanChooseTaskStatus.isEmpty()){
+            builder.setMessage(R.string.cannot_change_task_status);
+        } else {
+            builder.setSingleChoiceItems(sCanChooseTaskStatus.toArray(new CharSequence[0]),
+                    -1, null)
+                    .setPositiveButton(R.string.task_status_commit, (dialog, which) -> {
+//                        https://stackoverflow.com/questions/5660887/how-to-select-a-entry-in-alertdialog-with-single-choice-checkbox-android
+                        int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                        patchTaskStaus(dialog, selectedPosition);
+                    });
+        }
+        builder.show();
+    }
+
+    private ArrayList<String> getList(){
+        //task type
+        // 0:指派者可转1
+        // 1:指派者可转0、2
+        // 2:指派者可转1，创建者可转3
+        // 3:创建者可转2
+        ArrayList<String> sCanChooseTaskStatus = new ArrayList<>();
+        int status = (mTask == null) ? -1 : mTask.getStatus();
+//        sCanChooseTaskStatus.add(sTaskStatus[status]);
         if (userType == sUserType.indexOf(GROUP_GROUP)){
-            switch (type){
+            switch (status){
+                //String[] sTaskStatus = {TASK_CREATE, TASK_PROGRESS, TASK_TEST, TASK_DONE};
                 case 0:
                 case 2:
                     sCanChooseTaskStatus.add(TASK_PROGRESS);
@@ -371,12 +401,11 @@ public class TaskReadFragment extends Fragment {
                     sCanChooseTaskStatus.add(TASK_TEST);
                     break;
                 default:
-                    item.setVisible(false);
                     break;
             }
         }
         else if (userType == sUserType.indexOf(MANAGER_GROUP)){
-            switch (type){
+            switch (status){
                 case 2:
                     sCanChooseTaskStatus.add(TASK_DONE);
                     break;
@@ -384,46 +413,16 @@ public class TaskReadFragment extends Fragment {
                     sCanChooseTaskStatus.add(TASK_TEST);
                     break;
                 default:
-                    item.setVisible(false);
                     break;
             }
         }
-        else {
-            item.setVisible(false);
-        }
-        super.onCreateOptionsMenu(menu,inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.action_edited:
-                startEditActivity();
-                return true;
-            case R.id.action_status:
-                createStatusDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void createStatusDialog() {
-        int item = (mTask == null) ? 0 : mTask.getType();
-        new AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.change_task_type)
-                .setSingleChoiceItems(
-                        sCanChooseTaskStatus.toArray(new CharSequence[sCanChooseTaskStatus.size()]),
-                        item, this::patchTaskStaus)
-//                TODO: .setPositiveButton("确认", )
-                .setNegativeButton("不修改", (dialog, which) -> dialog.dismiss())
-                .show();
+        return sCanChooseTaskStatus;
     }
 
     private void patchTaskStaus(DialogInterface dialog, int which) {
-//        Progress dialog?
-        TaskReadFragment.this.viewModel.setTaskStatus(taskId, which, new Callback() {
+        List<String> taskStatusArray = FinalMap.getTaskStatusArray();
+        int status = taskStatusArray.indexOf(getList().get(which));
+        viewModel.setTaskStatus(taskId, status, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 mAppExecutors.mainThread().execute(()
@@ -439,9 +438,12 @@ public class TaskReadFragment extends Fragment {
                 String responseData = response.body() != null ? response.body().string() : null;
                 int statusCode = JsonParser.
                         parseChangeTaskStatusJson(responseData);
+                if (statusCode == 0 || statusCode == 200){
+                    viewModel.updateTaskStatus(taskId, status);
+//                    mStatusTextView.setText(FinalMap.getTaskStatusList()[status]);
+                }
                 String message = statusCodeMap.get(statusCode);
-                mAppExecutors.mainThread().execute(()
-                        -> {
+                mAppExecutors.mainThread().execute(() -> {
                     dialog.dismiss();
                     onChangeTaskStatusMessage(message);
                 });
@@ -477,10 +479,13 @@ public class TaskReadFragment extends Fragment {
                     Intent routeIntent = TaskTrackActivity.newIntent(requireContext(), taskId);
                     startActivity(routeIntent);
                     break;
-                case R.id.fab_edited:
+                case R.id.fab_info:
                     startEditActivity();
                     break;
                 case R.id.fab_status:
+                    createStatusDialog();
+                    break;
+                case R.id.fab_executor:
                     createStatusDialog();
                     break;
             }

@@ -481,6 +481,10 @@ public class TaskRepository {
         }
     }
 
+    public void updateTaskStatus(int taskID, int status){
+        mTaskDao.updateStatus(taskID, status);
+    }
+
     public LiveData<Task> loadTask(final int taskId) {
         return mDatabase.taskDao().getTask(taskId);
     }

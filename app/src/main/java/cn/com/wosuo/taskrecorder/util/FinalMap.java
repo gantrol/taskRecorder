@@ -83,6 +83,10 @@ public final class FinalMap {
         return new String[]{TASK_CREATE, TASK_PROGRESS, TASK_TEST, TASK_DONE};
     }
 
+    public static ArrayList<String> getTaskStatusArray() {
+        return Lists.newArrayList(TASK_CREATE, TASK_PROGRESS, TASK_TEST, TASK_DONE);
+    }
+
     public static String[] getPhotoTypeList() {
         // 0-3分别代表四种照片：访谈人、座谈会议、敏感对象、地块现场
         return new String[]{INTERVIEWEE, MEETING, SENSITIVE_OBJECT, SITE_SCENE};

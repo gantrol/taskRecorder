@@ -114,7 +114,7 @@ public interface TaskDao {
      * @param mStatus status to be updated
      */
     @Query("UPDATE tasks SET status = :mStatus WHERE taskID = :taskId")
-    void updateStatus(String taskId, boolean mStatus);
+    void updateStatus(int taskId, int mStatus);
 
 
 

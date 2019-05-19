@@ -200,6 +200,10 @@ public class TaskViewModel extends AndroidViewModel {
         return mTaskRepository.getTracksByTaskID(taskID);
     }
 
+    public void updateTaskStatus(int taskID, int status){
+        mTaskRepository.updateTaskStatus(taskID, status);
+    }
+
     public LiveData<Resource<User>> getUser(int id){
         return mUserRepository.getUserByID(id);
     }
