@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -79,7 +76,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
@@ -133,7 +129,8 @@ public class TaskReadFragment extends Fragment {
     List<BitmapDescriptor> textureList = FinalMap.getTextureList();
     float mCurrentZoom = 19f;
     private AppExecutors mAppExecutors = new AppExecutors();
-    private List<User> executors;
+    private List<Integer> exeIDs = new ArrayList<>();
+    private List<User> executors = new ArrayList<>();
     private int taskId;
     private int userType;
     private Task mTask;
@@ -315,16 +312,7 @@ public class TaskReadFragment extends Fragment {
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     String responseBody = response.body() != null ? response.body().string() : null;
                     executors = JsonParser.parseGetExecutorJson(responseBody);
-                    StringBuilder usersSb = new StringBuilder();
-                    for (User user : executors) {
-                        usersSb.append(user.getName());
-                        usersSb.append(" ");
-                    }
-
-                    Handler mHandler = new Handler(Looper.getMainLooper());
-                    mHandler.postDelayed(()
-                            -> Objects.requireNonNull(getActivity()).runOnUiThread(()
-                            -> mExecutorTextView.setText(usersSb)), 100);
+                    updateExecutorUI();
                 }
             });
         }
@@ -499,13 +487,76 @@ public class TaskReadFragment extends Fragment {
         if (requestCode == REQUEST_ASSIGNEE){
             if (resultCode == Activity.RESULT_OK){
                 ArrayList<User> exeList = data.getParcelableArrayListExtra(USER_LIST);
+                Set<Integer> adds = new HashSet<>();
+                for (User user: exeList){
+                    adds.add(user.getUid());
+                }
                 mAppExecutors.mainThread().execute(() -> {
-                    Set<User> before = new HashSet<>(executors);
-                    Set<User> remove = new HashSet<>(executors);
-                    Set<User> add = new HashSet<>(exeList);
-                    remove.removeAll(add);
-                    add.removeAll(before);
-//                    TODO: remove remove, add add
+                    Set<Integer> befores = new HashSet<>(exeIDs);
+                    Set<Integer> removes = new HashSet<>(exeIDs);
+                    removes.removeAll(adds);
+                    adds.removeAll(befores);
+//                    TODO: remove remove, add add,
+                    for (Integer remove : removes){
+                        retrofit2.Call call = viewModel.companyRemoteDeleteExecutor(taskId, remove);
+                        call.enqueue(new retrofit2.Callback() {
+                            @Override
+                            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+                                int statusCode = response.code();
+                                String message = statusCodeMap.get(statusCode);
+                                mAppExecutors.mainThread().execute(
+                                        () -> {
+                                            Toast.makeText(getActivity(), message,
+                                                Toast.LENGTH_SHORT).show();
+                                            for (User user: executors){
+                                                if (user.getUid() == remove){
+                                                    executors.remove(user);
+                                                }
+                                            }
+                                            exeIDs.remove(remove);
+                                            updateExecutorUI();
+                                        });
+                            }
+
+                            @Override
+                            public void onFailure(retrofit2.Call call, Throwable t) {
+                                mAppExecutors.mainThread().execute(()
+                                        -> Toast.makeText(getActivity(), FinalMap.statusCodeFail,
+                                        Toast.LENGTH_SHORT).show());
+                            }
+                        });
+                    }
+
+                    for (Integer add: adds){
+                        viewModel.companyRemoteAddExecutor(taskId, add);
+                        retrofit2.Call call = viewModel.companyRemoteAddExecutor(taskId, add);
+                        call.enqueue(new retrofit2.Callback() {
+                            @Override
+                            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+                                int statusCode = response.code();
+                                String message = statusCodeMap.get(statusCode);
+//                                多次请求成功？
+                                mAppExecutors.mainThread().execute(
+                                        () -> Toast.makeText(getActivity(), message,
+                                                Toast.LENGTH_SHORT).show());
+                                mAppExecutors.diskIO().execute(() -> {
+                                    User addExe = viewModel.getLocalUser(add);
+                                    executors.add(addExe);
+                                    exeIDs.add(add);
+                                    updateExecutorUI();
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(retrofit2.Call call, Throwable t) {
+                                mAppExecutors.mainThread().execute(()
+                                        -> Toast.makeText(getActivity(), FinalMap.statusCodeFail,
+                                        Toast.LENGTH_SHORT).show());
+                            }
+                        });
+                    }
+
+
                 });
 
             } else {
@@ -514,6 +565,17 @@ public class TaskReadFragment extends Fragment {
                                 Toast.LENGTH_SHORT).show());
             }
         }
+    }
+
+    private void updateExecutorUI() {
+        StringBuilder usersSb = new StringBuilder();
+        for (User user : executors) {
+            exeIDs.add(user.getUid());
+            usersSb.append(user.getName());
+            usersSb.append(" ");
+        }
+        mAppExecutors.mainThread().execute(() ->
+                mExecutorTextView.setText(usersSb));
     }
 
 }

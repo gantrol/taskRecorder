@@ -37,6 +37,9 @@ public interface UserDao {
     @Query("SELECT * FROM users where uid = :userId")
     LiveData<User> loadUser (int userId);
 
+    @Query("SELECT * FROM users where uid = :userId")
+    User loadSimpleUser (int userId);
+
     @Query("SELECT * FROM users where type = :type")
     LiveData<List<User>> loadUserByType (int type);
 

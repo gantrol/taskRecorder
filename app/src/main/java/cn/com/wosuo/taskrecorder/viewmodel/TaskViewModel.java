@@ -204,8 +204,19 @@ public class TaskViewModel extends AndroidViewModel {
         mTaskRepository.updateTaskStatus(taskID, status);
     }
 
+    public Call<ResponseBody> companyRemoteAddExecutor(int taskID, int executorID){
+        return mTaskRepository.companyRemoteAddExecutor(taskID, executorID);
+    }
+    public Call<ResponseBody> companyRemoteDeleteExecutor(int taskID, int executorID){
+        return mTaskRepository.companyRemoteDeleteExecutor(taskID, executorID);
+    }
+
     public LiveData<Resource<User>> getUser(int id){
         return mUserRepository.getUserByID(id);
+    }
+
+    public User getLocalUser(int id) {
+        return mUserRepository.getLocalUser(id);
     }
 
     @Deprecated

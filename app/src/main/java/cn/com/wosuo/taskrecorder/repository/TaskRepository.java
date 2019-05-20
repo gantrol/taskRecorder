@@ -48,6 +48,7 @@ import static cn.com.wosuo.taskrecorder.api.Urls.TASK_TRACK;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_TRACK_DATA;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_X;
 import static cn.com.wosuo.taskrecorder.api.Urls.TASK_Y;
+import static cn.com.wosuo.taskrecorder.api.Urls.fieldStrings.USER_ID;
 import static cn.com.wosuo.taskrecorder.ui.UiString.TASK_LIST;
 
 /**
@@ -481,9 +482,29 @@ public class TaskRepository {
         }
     }
 
+//    TODO: 更新操作中的网络与数据库的处理？
     public void updateTaskStatus(int taskID, int status){
         mTaskDao.updateStatus(taskID, status);
     }
+
+    public Call<ResponseBody> companyRemoteAddExecutor(int taskID, int userID){
+        RequestBody requestBody = new FormBody.Builder()
+                .add(USER_ID, String.valueOf(userID))
+                .build();
+        return mBigkeerService.companyAddExecutor(taskID, requestBody);
+    }
+
+    public Call<ResponseBody> companyRemoteDeleteExecutor(int taskID, int userID){
+        return mBigkeerService.companyDeleteExecutor(taskID, userID);
+    }
+
+//    public void companyLocalDeleteExecutor(int taskID, int userID){
+//        mTaskDao.getUserTasks()
+//    }
+//
+//    public Call<ResponseBody> companyDeleteExecutor(int taskID, int userID){
+//        return mBigkeerService.companyDeleteExecutor(taskID, userID);
+//    }
 
     public LiveData<Task> loadTask(final int taskId) {
         return mDatabase.taskDao().getTask(taskId);

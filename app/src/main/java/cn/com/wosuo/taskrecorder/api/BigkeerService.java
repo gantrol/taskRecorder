@@ -47,6 +47,7 @@ import static cn.com.wosuo.taskrecorder.api.Urls.GET_USER_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.MANAGER_ID_IN_TASK;
 
 public interface BigkeerService {
+//    Login, Signup
     @GET("Session")
     Call<ResponseBody> getSession();
 
@@ -60,6 +61,7 @@ public interface BigkeerService {
 
 //    public static final String patchUser = "User";
 
+//    get User or Users
     @GET(Urls.GET_USER_ME)
     LiveData<ApiResponse<BigkeerResponse<User>>> getUserMe();
 
@@ -84,6 +86,7 @@ public interface BigkeerService {
     @GET("User/{uid}")
     LiveData<ApiResponse<BigkeerResponse<User>>> getUserById(@Path("uid") int uid);
 
+//    get task or tasks
     /**
      * adminGetTasks
      * @return all tasks
@@ -126,7 +129,13 @@ public interface BigkeerService {
     Call<ResponseBody> patchTaskResult();
 
     @POST("Assign/{taskID}")  // company
-    Call<ResponseBody> companyAssignUser();
+    Call<ResponseBody> companyAssignExecutor();
+
+    @POST("Assign/{taskID}")
+    Call<ResponseBody> companyAddExecutor(@Path("taskID") int taskID, @Body RequestBody requestBody);
+
+    @DELETE("Assign/{taskID}/{userID}")
+    Call<ResponseBody> companyDeleteExecutor(@Path("taskID") int taskID, @Path("userID") int userID);
 
     @GET("Track/{trackID}")
     Call<ResponseBody> getTrack(@Path("trackID") int trackID);

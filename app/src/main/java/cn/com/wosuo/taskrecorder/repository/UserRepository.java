@@ -193,6 +193,9 @@ public class UserRepository {
         }).getAsLiveData();
     }
 
+    public User getLocalUser(int id){
+        return mUserDao.loadSimpleUser(id);
+    }
 
 
     public LiveData<List<User>> searchUsers(String query) {

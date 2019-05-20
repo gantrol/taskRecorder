@@ -5,6 +5,11 @@ public final class Urls {
     public static final String BASE_URL_minus = "https://land.bigkeer.cn";
     public static final String LOGIN = "Session";
 
+    public static class fieldStrings {
+        public static final String USER_ID = "UserID";
+//        public static final String LOGIN = "Session";
+    }
+
     public static final String GET_USER_ME = "User/me";
 
     public static final String GET_OR_CREATE_TASKS = "Task";

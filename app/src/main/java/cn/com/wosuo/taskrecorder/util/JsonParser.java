@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
@@ -43,7 +44,9 @@ public class JsonParser {
                 users = userBigkeerResponse.getResult();
             }
         }
-
+        if (users == null){
+             users = new ArrayList<>();
+        }
         return users;
     }
 
