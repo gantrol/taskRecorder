@@ -67,7 +67,9 @@
         <activity
             android:name=".ui.taskCreate.TaskNewActivity"
             android:parentActivityName=".MainActivity" />
-
+        <activity
+            android:name=".ui.taskEdit.TaskEditActivity"
+            android:parentActivityName=".ui.taskread.TaskReadActivity" />
         <activity
             android:name=".ui.taskread.TaskReadActivity"
             android:hardwareAccelerated="true"

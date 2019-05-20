@@ -1,4 +1,5 @@
-package cn.com.wosuo.taskrecorder.ui.taskCreate;
+package cn.com.wosuo.taskrecorder.ui.taskEdit;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -40,44 +41,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
-
-public class TaskNewFragment extends Fragment {
-
-    private static final String TAG = "新建任务";
-    private static final String ARG_Assignee_ID = "task_id";
-    private static final int REQUEST_ASSIGNEE = 0;
-    private AppExecutors mAppExecutors = new AppExecutors();
+public class TaskEditFragment extends Fragment {
     private User me;
     private Task mTask;
     private Unbinder unbinder;
-    private int assigneeID = -1;
+    private TaskViewModel viewModel;
+    private static final String TAG = "编辑任务";
+    private static final String ARG_TASK = "TASK";
+    private static final int REQUEST_ASSIGNEE = 0;
+    int assignee_id = -1;
+    private AppExecutors mAppExecutors = new AppExecutors();
     private final static ArrayList<String> sTaskType = FinalMap.getTaskTypeList();
     private final static Map<Integer, String> statusCodeMap = FinalMap.getStatusCodeMap();
-    private TaskViewModel viewModel;
-    String title;
-    String detail;
-    int type;
 
-    //    private final static ArrayList<String> sTaskStatus = FinalMap.getTaskStatusList();
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
-
     @BindView(R.id.input_title) EditText mTitleEditText;
     @BindView(R.id.input_assignee) EditText mAssigneeEditText;
     @BindView(R.id.assigner_content) TextView mAssignerTextView;
     @BindView(R.id.assignee_content) TextView mAssigneeTextView;
     @BindView(R.id.task_type_spinner) Spinner mTypeSpinner;
-    //    @BindView(R.id.task_status_spinner) Spinner mStatusSpinner;
     @BindView(R.id.input_detail) EditText mDetailEditText;
     @BindView(R.id.create_btn) Button mCreateButtom;
     @BindView(R.id.cancel_btn) Button mCancelButtom;
     @BindView(R.id.choose_assignee_btn) Button mChooseAssigneeButtom;
 
-    public static TaskNewFragment newInstance() {
-        TaskNewFragment fragment = new TaskNewFragment();
+    public static TaskEditFragment newInstance(Task task) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_TASK, task);
+        TaskEditFragment fragment = new TaskEditFragment();
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -90,8 +85,9 @@ public class TaskNewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_new_task, container, false);
-        unbinder = ButterKnife.bind(this, v);
+        mTask = (Task) getArguments().getSerializable(ARG_TASK);
+        View view = inflater.inflate(R.layout.fragment_new_task, container, false);
+        unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
@@ -102,25 +98,37 @@ public class TaskNewFragment extends Fragment {
         mAssignerTextView.setText(me.getName());
         ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(requireActivity(),android.R.layout.simple_list_item_1, sTaskType);
         mTypeSpinner.setAdapter(typeArrayAdapter);
-        return v;
+        mCreateButtom.setText("确认修改");
+        mCancelButtom.setText("取消修改");
+        mTitleEditText.setText(mTask.getTitle());
+        mAssigneeEditText.setText(String.valueOf(mTask.getAssignee_id()));
+//        TODO: 好像要改数据库才好办。
+        mAssigneeTextView.setText("未知");
+        mDetailEditText.setText(mTask.getDescription());
+        mTypeSpinner.setSelection(mTask.getType());
+        return view;
     }
 
     @OnClick(R.id.create_btn)
-    void createTask(){
+    void uploadTask(){
+        String title;
+        String detail;
+        int type;
         mCreateButtom.setEnabled(false);
         title = mTitleEditText.getText().toString();
-        int assignee = assigneeID;
         if (!mAssigneeEditText.getText().toString().isEmpty())
-            assignee = Integer.parseInt(mAssigneeEditText.getText().toString());
-
+            assignee_id = Integer.parseInt(mAssigneeEditText.getText().toString());
+//        final int assignee_id = assignee_id;
+//        If you don't want to make it final, you can always just make it a global variable.
+//        https://stackoverflow.com/questions/14425826/variable-is-accessed-within-inner-class-needs-to-be-declared-final
         type = mTypeSpinner.getSelectedItemPosition();
         detail = mDetailEditText.getText().toString();
-        if (!validate(title, assignee, type, detail)){
+        if (!validate(title, assignee_id, type, detail)){
             onCreateTaskMessage(FinalMap.statusCodeLost);
             return;
         }
 
-        Call<ResponseBody> call = viewModel.createTask(title, assignee, type, detail);
+        Call<ResponseBody> call = viewModel.editTask(mTask.getTaskID(),title, assignee_id, type, detail);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -129,20 +137,21 @@ public class TaskNewFragment extends Fragment {
                 mAppExecutors.mainThread().execute(()
                         -> onCreateTaskMessage(message)
                 );
-                viewModel.resetTaskListRateLimit(me.getUid());
-                requireActivity().finish();
+                if (statusCode == 200) {
+                    mAppExecutors.diskIO().execute(() ->
+                            viewModel.updateTaskInfo(
+                                    title, assignee_id, type, detail, mTask.getTaskID()));
+                    viewModel.resetTaskListRateLimit(me.getUid());
+                    requireActivity().finish();
+                }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    mAppExecutors.mainThread().execute(()
-                            -> onCreateTaskMessage(FinalMap.statusCodeFail));
+                mAppExecutors.mainThread().execute(()
+                        -> onCreateTaskMessage(FinalMap.statusCodeFail));
             }
         });
-
-
-
-//        TODO: 2创建并调用progressDialog
     }
 
     @OnClick(R.id.choose_assignee_btn)
@@ -150,6 +159,7 @@ public class TaskNewFragment extends Fragment {
         Intent intent = TaskAssignActivity.newIntent(getActivity(), null, false);
         startActivityForResult(intent, REQUEST_ASSIGNEE);
     }
+
 
     private void onCreateTaskMessage(String message) {
         mCreateButtom.setEnabled(true);
@@ -189,8 +199,8 @@ public class TaskNewFragment extends Fragment {
                 ArrayList<User> aeeList = data.getParcelableArrayListExtra(USER_LIST);
                 User assignee = aeeList.get(0);
                 mAppExecutors.mainThread().execute(() -> {
-                        mAssigneeEditText.setText(String.valueOf(assignee.getUid()));
-                        mAssigneeTextView.setText(assignee.getName());
+                    mAssigneeEditText.setText(String.valueOf(assignee.getUid()));
+                    mAssigneeTextView.setText(assignee.getName());
                 });
 
             } else {
@@ -206,5 +216,5 @@ public class TaskNewFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-}
 
+}

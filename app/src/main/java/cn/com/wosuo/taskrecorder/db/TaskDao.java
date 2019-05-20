@@ -116,6 +116,10 @@ public interface TaskDao {
     @Query("UPDATE tasks SET status = :mStatus WHERE taskID = :taskId")
     void updateStatus(int taskId, int mStatus);
 
+    @Query("UPDATE tasks SET title = :title, assignee_id = :assignee_id, type = :type, " +
+            "description = :detail WHERE taskID = :taskID")
+    void updateTaskInfo(String title, int assignee_id, int type, String detail, int taskID);
+
 //    @Query("UPDATE tasks SET executor = NULL WHERE taskID = :taskID")
 //    void deleteExecutor(int taskID);
 

@@ -15,7 +15,7 @@ public final class Urls {
     public static final String GET_OR_CREATE_TASKS = "Task";
         public static final String TASK_TITLE = "title";
         public static final String TASK_DESCRIPTION = "description";
-        public static final String TASK_TYPE = "assignee";
+        public static final String TASK_TYPE = "taskType";
         public static final String ASSIGNEE = "assignee";
         public static final String RESOURCE = "resource";
         public static final String TASK_STATUS = "status";

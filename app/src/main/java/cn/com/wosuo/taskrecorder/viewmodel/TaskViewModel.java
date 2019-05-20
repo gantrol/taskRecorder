@@ -172,20 +172,29 @@ public class TaskViewModel extends AndroidViewModel {
         long time = photoUpload.getTime();
         String locationStr = photoUpload.getLocationStr();
         String desciption = photoUpload.getDescription();
-//        RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), photo);
-//        MultipartBody.Part photoPart = MultipartBody.Part.
-//                createFormData("file", photo.getName(), fileReqBody);
         return mTaskRepository.postPhoto(photo, type, time, locationStr, desciption, taskID);
     }
 
     public Call<ResponseBody> createTask(String title, int assigneeID, int type, String detail){
-        RequestBody requestBody = new FormBody.Builder()
+        return mTaskRepository.createTask(
+                getTaskInfoBody(title, assigneeID, type, detail)
+        );
+    }
+
+    public Call<ResponseBody> editTask (int taskID, String title, int assigneeID, int type, String detail){
+        return mTaskRepository.editTask(
+                taskID,
+                getTaskInfoBody(title, assigneeID, type, detail)
+                );
+    }
+
+    public RequestBody getTaskInfoBody (String title, int assigneeID, int type, String detail) {
+        return new FormBody.Builder()
                 .add(TASK_TITLE, title)
                 .add(TASK_ASSIGNEE, Integer.toString(assigneeID))
                 .add(TASK_TYPE, Integer.toString(type))
                 .add(TASK_DESCRIPTION, detail)
                 .build();
-        return mTaskRepository.createTask(requestBody);
     }
 
     public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID){
@@ -198,6 +207,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<Tracks>>> getTracksByTaskID(int taskID){
         return mTaskRepository.getTracksByTaskID(taskID);
+    }
+
+    public void updateTaskInfo(String title, int assignee_id, int type, String detail, int taskID){
+        mTaskRepository.updateTaskInfo(title, assignee_id, type, detail, taskID);
     }
 
     public void updateTaskStatus(int taskID, int status){

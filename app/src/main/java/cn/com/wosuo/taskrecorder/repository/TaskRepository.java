@@ -370,6 +370,10 @@ public class TaskRepository {
         return mBigkeerService.createTask(requestBody);
     }
 
+    public Call<ResponseBody> editTask (int taskID, RequestBody requestBody) {
+        return mBigkeerService.managerEditTask(taskID, requestBody);
+    }
+
     public void postTaskTrack(String trackData, int taskID, Callback callback){
         RequestBody requestBody = new FormBody.Builder()
                 .add(TASK_TRACK_DATA, trackData)
@@ -483,6 +487,10 @@ public class TaskRepository {
     }
 
 //    TODO: 更新操作中的网络与数据库的处理？
+    public void updateTaskInfo(String title, int assignee_id, int type, String detail, int taskID){
+        mTaskDao.updateTaskInfo(title, assignee_id, type, detail, taskID);
+    }
+
     public void updateTaskStatus(int taskID, int status){
         mTaskDao.updateStatus(taskID, status);
     }

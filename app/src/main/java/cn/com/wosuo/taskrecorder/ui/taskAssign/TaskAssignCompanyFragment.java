@@ -20,10 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,13 +32,12 @@ import cn.com.wosuo.taskrecorder.viewmodel.UserViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 public class TaskAssignCompanyFragment extends Fragment{
 
     private static final String TAG = "选择被指派人";
-    private static final String ARG_USER = "user";
+    private static final String ARG_TASK = "TASK";
     private static final String ARG_IS_MUTI_CHOICE = "muti";
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.user_choose_list_view) RecyclerView mChooseListView;
@@ -55,7 +51,7 @@ public class TaskAssignCompanyFragment extends Fragment{
     public static TaskAssignCompanyFragment newInstance(Task task, boolean isMutiSelect) {
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER, task);
+        args.putSerializable(ARG_TASK, task);
         args.putBoolean(ARG_IS_MUTI_CHOICE, isMutiSelect);
         TaskAssignCompanyFragment fragment = new TaskAssignCompanyFragment();
         fragment.setArguments(args);
@@ -67,7 +63,7 @@ public class TaskAssignCompanyFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getArguments() != null){
             isMutiSelect = getArguments().getBoolean(ARG_IS_MUTI_CHOICE);
-            mTask = (Task) getArguments().getSerializable(ARG_USER);
+            mTask = (Task) getArguments().getSerializable(ARG_TASK);
         }
 
         View view = inflater.inflate(R.layout.fragment_user_choose, container, false);

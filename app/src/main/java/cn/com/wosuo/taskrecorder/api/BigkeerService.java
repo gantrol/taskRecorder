@@ -42,6 +42,7 @@ import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_LOCATION;
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_SUBID;
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_TASKID;
 import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_TIME;
+import static cn.com.wosuo.taskrecorder.api.Urls.TASK_ID;
 import static cn.com.wosuo.taskrecorder.api.Urls.USER_GET_USERS_BY_GROUP;
 import static cn.com.wosuo.taskrecorder.api.Urls.GET_USER_TASKS;
 import static cn.com.wosuo.taskrecorder.api.Urls.MANAGER_ID_IN_TASK;
@@ -119,8 +120,8 @@ public interface BigkeerService {
     Call<ResponseBody> createTask();
 //    { "code": 0, "message": null, "result": (taskId)}
 
-    @PUT("Task")  // manager
-    Call<ResponseBody> managerEditTask();
+    @PUT("Task/{taskID}")  // manager
+    Call<ResponseBody> managerEditTask(@Path(TASK_ID) int taskID, @Body RequestBody requestBody);
 
     @PATCH("Task/{taskID}/status")  // manager, company
     Call<ResponseBody> patchTaskStatus();

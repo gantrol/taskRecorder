@@ -56,6 +56,7 @@ import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.ui.adapter.PhotoReadAdapter;
 import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignActivity;
+import cn.com.wosuo.taskrecorder.ui.taskEdit.TaskEditActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskCenterPointActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TaskTrackActivity;
 import cn.com.wosuo.taskrecorder.ui.taskloc.TextureSupportMapFragment;
@@ -150,7 +151,6 @@ public class TaskReadFragment extends Fragment {
         userType = AppPreferencesHelper.getCurrentUserLoginState();
         super.onCreate(savedInstanceState);
         taskId = getArguments() != null ? getArguments().getInt(ARG_Task_ID) : 0;
-
     }
 
     @Nullable
@@ -354,7 +354,6 @@ public class TaskReadFragment extends Fragment {
         unbinder.unbind();
     }
 
-
     private void createStatusDialog() {
         ArrayList<String> sCanChooseTaskStatus = getList();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
@@ -468,14 +467,22 @@ public class TaskReadFragment extends Fragment {
                     startActivity(routeIntent);
                     break;
                 case R.id.fab_info:
-//                    TODO: startEditActivity();
+                    if (mTask.getStatus() == FinalMap.getTaskStatusArray().indexOf(TASK_CREATE)){
+                        Intent infoIntent = TaskEditActivity.newIntent(getActivity(), mTask);
+//                        TODO: for result
+                        startActivity(infoIntent);
+                    } else {
+                        Toast.makeText(getContext(), "无法修改，任务状态不为" + TASK_CREATE,
+                                Toast.LENGTH_SHORT).show();
+                    }
+
                     break;
                 case R.id.fab_status:
                     createStatusDialog();
                     break;
                 case R.id.fab_executor:
-                    Intent intent = TaskAssignActivity.newIntent(getActivity(), mTask, true);
-                    startActivityForResult(intent, REQUEST_ASSIGNEE);
+                    Intent exeIntent = TaskAssignActivity.newIntent(getActivity(), mTask, true);
+                    startActivityForResult(exeIntent, REQUEST_ASSIGNEE);
                     break;
             }
         }
@@ -564,6 +571,7 @@ public class TaskReadFragment extends Fragment {
                         Toast.makeText(getContext(), TAG + ":" + "操作取消",
                                 Toast.LENGTH_SHORT).show());
             }
+//            TODO: add edit???
         }
     }
 
@@ -577,5 +585,4 @@ public class TaskReadFragment extends Fragment {
         mAppExecutors.mainThread().execute(() ->
                 mExecutorTextView.setText(usersSb));
     }
-
 }
