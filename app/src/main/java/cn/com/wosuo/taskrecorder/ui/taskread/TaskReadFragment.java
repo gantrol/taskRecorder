@@ -190,7 +190,6 @@ public class TaskReadFragment extends Fragment {
                     // TODO:无数据状态
                     viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
                         LocCenterPoint locCenterPoint = centerPointResource.data;
-//            TODO: 坐标轴转化z
                         if (locCenterPoint != null){
                             LatLng GEO_CENTER = CoordinateTypeUtil.toBaidull(locCenterPoint);
                             MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
@@ -503,7 +502,6 @@ public class TaskReadFragment extends Fragment {
                     Set<Integer> removes = new HashSet<>(exeIDs);
                     removes.removeAll(adds);
                     adds.removeAll(befores);
-//                    TODO: remove remove, add add,
                     for (Integer remove : removes){
                         retrofit2.Call call = viewModel.companyRemoteDeleteExecutor(taskId, remove);
                         call.enqueue(new retrofit2.Callback() {
