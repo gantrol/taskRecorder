@@ -34,7 +34,7 @@ import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.MANAGER_GROUP;
 
 public class TaskListFragment extends Fragment {
     @BindView(R.id.toolbar) Toolbar toolbar;

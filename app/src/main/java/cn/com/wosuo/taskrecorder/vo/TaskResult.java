@@ -7,12 +7,15 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_ID;
+
+
 @Entity(
         tableName = "results",
         foreignKeys = @ForeignKey(
                 entity = Task.class,
-                parentColumns = TableString.taskId,
-                childColumns = TableString.taskId
+                parentColumns = TASK_ID,
+                childColumns = TASK_ID
         )
 )
 public class TaskResult {

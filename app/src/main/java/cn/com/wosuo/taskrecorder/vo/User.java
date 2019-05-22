@@ -3,7 +3,6 @@ package cn.com.wosuo.taskrecorder.vo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -15,7 +14,7 @@ import java.io.Serializable;
 
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.GROUP_GROUP;
 
 @Entity(tableName = "users")
 public class User implements Serializable, Parcelable {

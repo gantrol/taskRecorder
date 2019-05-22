@@ -28,10 +28,7 @@ import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.ui.sign.LoginActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
-import cn.com.wosuo.taskrecorder.viewmodel.UserViewModel;
 import cn.com.wosuo.taskrecorder.vo.User;
-
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.WITHOUT_NOW;
 
 
 public class UserMeFragment extends Fragment {

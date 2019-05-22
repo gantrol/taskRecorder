@@ -38,15 +38,15 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.PhotoField.PHOTO_FILE;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_COOR;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_ID;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_STATUS;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_TRACK;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_TRACK_DATA;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_X;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_Y;
-import static cn.com.wosuo.taskrecorder.api.Urls.UsreField.USER_ID;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.PhotoField.PHOTO_FILE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_COOR;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_ID;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_STATUS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_TRACK;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_TRACK_DATA;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_X;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_Y;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_ID;
 import static cn.com.wosuo.taskrecorder.ui.UiString.TASK_LIST;
 
 /**

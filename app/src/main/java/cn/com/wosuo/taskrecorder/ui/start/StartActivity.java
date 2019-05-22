@@ -20,8 +20,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.SUCCESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.getUserMeAPI;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SUCCESS;
+import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.GET_USER_ME;
 
 public class StartActivity extends AppCompatActivity{
 
@@ -40,7 +40,7 @@ public class StartActivity extends AppCompatActivity{
     }
 
     private void startLogin() {
-        HttpUtil.GET(getUserMeAPI, new Callback() {
+        HttpUtil.GET(GET_USER_ME, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 openLoginActivity();

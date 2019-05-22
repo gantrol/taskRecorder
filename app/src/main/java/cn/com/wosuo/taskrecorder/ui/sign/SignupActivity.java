@@ -27,20 +27,19 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Response;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.FAIL;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.INVALIDREQ;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.MISSINGREQ;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.NICKNAME;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.PASSWORD;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.RMAIL;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.SOON;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.SUCCESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.USERNAME;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.YOU_LOGIN_SUCCESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.YOU_SIGNUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.YOU_SIGNUP_FAILED;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.YOU_SIGNUP_SUCCESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.signupAPI;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.FAIL;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.INVALIDREQ;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.MISSINGREQ;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.LoginSignUpField.NICKNAME;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.LoginSignUpField.PASSWORD;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.LoginSignUpField.EMAIL;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SOON;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SUCCESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.LoginSignUpField.USERNAME;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_SIGNUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_SIGNUP_FAILED;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_SIGNUP_SUCCESS;
+import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.signupAPI;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -108,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBodyBuilder.add(USERNAME, name)
                 .add(PASSWORD, password)
-                .add(RMAIL, email)
+                .add(EMAIL, email)
                 .add(NICKNAME, nickname);
         HttpUtil.POST(signupAPI, formBodyBuilder.build(), new Callback() {
 

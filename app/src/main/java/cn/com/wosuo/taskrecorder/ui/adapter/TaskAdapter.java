@@ -17,10 +17,10 @@ import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.vo.Task;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_CREATE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_DONE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_PROGRESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TEST;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_CREATE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_DONE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_PROGRESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_TEST;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     private OnItemClickListener clickListener;

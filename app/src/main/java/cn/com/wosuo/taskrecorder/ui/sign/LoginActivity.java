@@ -38,13 +38,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.LoginSignUpApi.LOGIN;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.FAIL;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.INVALIDREQ;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.MISSINGREQ;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.SOON;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.SUCCESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.YOU_LOGIN_FAILED;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.YOU_LOGIN_SUCCESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.FAIL;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.INVALIDREQ;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.MISSINGREQ;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SOON;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SUCCESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_LOGIN_FAILED;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_LOGIN_SUCCESS;
 
 public class LoginActivity extends AppCompatActivity {
 

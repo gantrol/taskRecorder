@@ -37,14 +37,14 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_DESCRIPTION;
-import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_TYPE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_ASSIGNEE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TITLE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_DESCRIPTION;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_TYPE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.ADMIN_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.GROUP_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.MANAGER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_ASSIGNEE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_TITLE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_GROUP;
 
 public class TaskViewModel extends AndroidViewModel {
     private TaskRepository mTaskRepository;

@@ -75,14 +75,14 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.COMPANY_GET_EXECUTOR;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_CREATE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_DONE;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_PROGRESS;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.TASK_TEST;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.ADMIN_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.GROUP_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.MANAGER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_CREATE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_DONE;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_PROGRESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_TEST;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 

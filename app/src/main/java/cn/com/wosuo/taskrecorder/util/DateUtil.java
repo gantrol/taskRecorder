@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.UPDATE_LASTLY;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.WITHOUT_NOW;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TextViewField.UPDATE_LASTLY;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.TextViewField.WITHOUT_NOW;
 
 public class DateUtil {
 //    TODO: 4Move to DateConverter？

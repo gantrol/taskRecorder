@@ -23,10 +23,10 @@ import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
 import cn.com.wosuo.taskrecorder.vo.GroupInfoResult;
 import cn.com.wosuo.taskrecorder.vo.User;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LOGIN;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_ME;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_NOTHING;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.GROUP_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_LOGIN;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_ME;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_NOTHING;
 
 /**
  * Repository handling the work with users.

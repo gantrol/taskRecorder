@@ -8,7 +8,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
 import cn.com.wosuo.taskrecorder.vo.BigkeerResponse;
@@ -16,7 +15,7 @@ import cn.com.wosuo.taskrecorder.vo.Track;
 import cn.com.wosuo.taskrecorder.vo.TrackData;
 import cn.com.wosuo.taskrecorder.vo.User;
 
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.LOGIN_SUCCESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.LOGIN_SUCCESS;
 
 public class JsonParser {
     public static final String TAG = "JsonParser";
