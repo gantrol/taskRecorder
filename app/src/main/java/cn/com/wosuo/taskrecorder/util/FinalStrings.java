@@ -2,8 +2,8 @@ package cn.com.wosuo.taskrecorder.util;
 
 public final class FinalStrings {
 //    API: https://land.bigkeer.cn/swagger/index.html#/
-    public static final String API_HOST = "land.bigkeer.cn";
-    public static final String API = "api";
+
+
     public static final String getUserMeAPI = "User/me";
     @Deprecated
     public static final String signupAPI = "User";

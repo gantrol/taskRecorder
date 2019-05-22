@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.io.IOException;
 
@@ -38,7 +37,7 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.LOGIN;
+import static cn.com.wosuo.taskrecorder.api.Urls.LoginSignUpApi.LOGIN;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.FAIL;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.INVALIDREQ;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MISSINGREQ;

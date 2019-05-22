@@ -47,6 +47,18 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
+    public static AppDatabase getInstance(final Context context){
+        if (sInstance == null) {
+            synchronized (AppDatabase.class) {
+                if (sInstance == null) {
+                    sInstance = buildDatabase(context.getApplicationContext());
+                    sInstance.updateDatabaseCreated(context.getApplicationContext());
+                }
+            }
+        }
+        return sInstance;
+    }
+
     @Deprecated
     public static AppDatabase getInstance(final Context context, final AppExecutors executors) {
         if (sInstance == null) {
@@ -78,8 +90,16 @@ public abstract class AppDatabase extends RoomDatabase {
      * creates a new instance of the database.
      * The SQLite database is only created when it's accessed for the first time.
      */
+    @Deprecated
     private static AppDatabase buildDatabase(final Context appContext,
                                              final AppExecutors executors) {
+        return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+//                .addCallback(sRoomDatabaseCallback)
+                .build();
+    }
+
+    private static AppDatabase buildDatabase(final Context appContext) {
         return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME)
                 .fallbackToDestructiveMigration()
 //                .addCallback(sRoomDatabaseCallback)

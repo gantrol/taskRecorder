@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +41,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -77,7 +74,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_EXECUTOR;
+import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.COMPANY_GET_EXECUTOR;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;

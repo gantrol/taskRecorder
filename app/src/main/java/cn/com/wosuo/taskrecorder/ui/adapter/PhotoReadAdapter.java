@@ -1,6 +1,5 @@
 package cn.com.wosuo.taskrecorder.ui.adapter;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,15 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-
-import java.util.List;
 
 import cn.com.wosuo.taskrecorder.R;
-import cn.com.wosuo.taskrecorder.api.Urls;
-import cn.com.wosuo.taskrecorder.db.DateConverter;
 import cn.com.wosuo.taskrecorder.util.CropSquareTransformation;
 import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.ImageTransformation;
 import cn.com.wosuo.taskrecorder.vo.PhotoResult;
+
+import static cn.com.wosuo.taskrecorder.api.Urls.HostString.API_HOST;
 
 public class PhotoReadAdapter extends ListAdapter<PhotoResult, PhotoReadAdapter.PhotoHolder> {
 
@@ -77,10 +73,10 @@ public class PhotoReadAdapter extends ListAdapter<PhotoResult, PhotoReadAdapter.
         }
 
         void bind(PhotoResult photoResult){
-            String imageHttpPath = Urls.BASE_URL_minus + photoResult.getPath();
+            String imageHttpPath = API_HOST + photoResult.getPath();
             Picasso.get().load(imageHttpPath)
                     .placeholder(R.drawable.ic_autorenew_black_24dp)
-//                    .error(android.R.drawable.stat_notify_error)
+                    .error(android.R.drawable.stat_notify_error)
                     .transform(ImageTransformation.getTransformation(mImageView))
                     .transform(new CropSquareTransformation())
                     .into(mImageView);

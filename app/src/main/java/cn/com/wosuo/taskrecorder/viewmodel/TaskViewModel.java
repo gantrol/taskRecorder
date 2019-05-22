@@ -1,27 +1,21 @@
 package cn.com.wosuo.taskrecorder.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import androidx.exifinterface.media.ExifInterface;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MediatorLiveData;
 
 
-import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.SimpleFormatter;
 
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
@@ -39,14 +33,12 @@ import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.TASK_DESCRIPTION;
-import static cn.com.wosuo.taskrecorder.api.Urls.TASK_TYPE;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_DESCRIPTION;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_TYPE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ADMIN_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.GROUP_GROUP;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.MANAGER_GROUP;
@@ -69,9 +61,17 @@ public class TaskViewModel extends AndroidViewModel {
      *
      * @param application 应用
      */
+    @Deprecated
     public TaskViewModel(@NonNull Application application) {
         super(application);
         AppDatabase mDatabase = ((BasicApp)application).getDatabase();
+        mTaskRepository = TaskRepository.getInstance(mDatabase);
+        mUserRepository = UserRepository.getInstance(mDatabase);
+    }
+
+    public TaskViewModel(Application application, Context context) {
+        super(application);
+        AppDatabase mDatabase = ((BasicApp)application).getDatabase(context);
         mTaskRepository = TaskRepository.getInstance(mDatabase);
         mUserRepository = UserRepository.getInstance(mDatabase);
     }

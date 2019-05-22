@@ -40,7 +40,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.ASSIGNEE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 

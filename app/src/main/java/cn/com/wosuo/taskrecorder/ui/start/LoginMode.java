@@ -1,5 +1,6 @@
 package cn.com.wosuo.taskrecorder.ui.start;
 
+@Deprecated
 public enum LoginMode {
     LOGGED_IN_MODE_LOGGED_OUT(-1),
     LOGGED_IN_MODE_ADMIN(0),

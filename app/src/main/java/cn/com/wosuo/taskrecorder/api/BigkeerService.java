@@ -3,7 +3,6 @@ package cn.com.wosuo.taskrecorder.api;
 import androidx.lifecycle.LiveData;
 
 
-import java.io.File;
 import java.util.List;
 
 import cn.com.wosuo.taskrecorder.vo.ArrayResult;
@@ -14,7 +13,6 @@ import cn.com.wosuo.taskrecorder.vo.PhotoResult;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.Tracks;
 import cn.com.wosuo.taskrecorder.vo.User;
-import okhttp3.Callback;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -31,21 +29,24 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_GET_USERS_BY_GROUP;
-import static cn.com.wosuo.taskrecorder.api.Urls.COMPANY_ID_IN_TASK;
-import static cn.com.wosuo.taskrecorder.api.Urls.GET_COMPANY_TASKS;
-import static cn.com.wosuo.taskrecorder.api.Urls.GET_MANAGER_TASKS;
-import static cn.com.wosuo.taskrecorder.api.Urls.GET_OR_CREATE_TASKS;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_DESC;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_FILE;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_LOCATION;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_SUBID;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_TASKID;
-import static cn.com.wosuo.taskrecorder.api.Urls.PHOTO_TIME;
-import static cn.com.wosuo.taskrecorder.api.Urls.TASK_ID;
-import static cn.com.wosuo.taskrecorder.api.Urls.USER_GET_USERS_BY_GROUP;
-import static cn.com.wosuo.taskrecorder.api.Urls.GET_USER_TASKS;
-import static cn.com.wosuo.taskrecorder.api.Urls.MANAGER_ID_IN_TASK;
+import static cn.com.wosuo.taskrecorder.api.Urls.ExploreApi.GET_LOC_EXPLORE;
+import static cn.com.wosuo.taskrecorder.api.Urls.PhotoApi.PHOTO;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.PUT_EDIT_TASK;
+import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.COMPANY_GET_USERS_BY_GROUP;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.COMPANY_ID_IN_TASK;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.GET_COMPANY_TASKS;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.GET_MANAGER_TASKS;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.GET_OR_CREATE_TASKS;
+import static cn.com.wosuo.taskrecorder.api.Urls.PhotoField.PHOTO_DESC;
+import static cn.com.wosuo.taskrecorder.api.Urls.PhotoField.PHOTO_LOCATION;
+import static cn.com.wosuo.taskrecorder.api.Urls.PhotoField.PHOTO_SUBID;
+import static cn.com.wosuo.taskrecorder.api.Urls.PhotoField.PHOTO_TASKID;
+import static cn.com.wosuo.taskrecorder.api.Urls.PhotoField.PHOTO_TIME;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskField.TASK_ID;
+import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.USER;
+import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.USER_GET_USERS_BY_GROUP;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.GET_USER_TASKS;
+import static cn.com.wosuo.taskrecorder.api.Urls.TaskApi.MANAGER_ID_IN_TASK;
 
 public interface BigkeerService {
 //    Login, Signup
@@ -53,7 +54,7 @@ public interface BigkeerService {
     Call<ResponseBody> getSession();
 
     @FormUrlEncoded
-    @POST(Urls.LOGIN)
+    @POST(Urls.LoginSignUpApi.LOGIN)
     LiveData<ApiResponse<BigkeerResponse<User>>>
     login(@Field("user") String username, @Field("password") String password);
 
@@ -63,10 +64,10 @@ public interface BigkeerService {
 //    public static final String patchUser = "User";
 
 //    get User or Users
-    @GET(Urls.GET_USER_ME)
+    @GET(Urls.UserApi.GET_USER_ME)
     LiveData<ApiResponse<BigkeerResponse<User>>> getUserMe();
 
-    @GET("User")
+    @GET(USER)
     LiveData<ApiResponse<BigkeerResponse<ArrayResult<User>>>> getAllUsers();
 
     @GET(COMPANY_GET_USERS_BY_GROUP)
@@ -98,7 +99,7 @@ public interface BigkeerService {
 
     @GET("Task/{taskID}")
     LiveData<ApiResponse<BigkeerResponse<Task>>>
-    getTaskByID(@Path("taskID") int taskID);
+    getTaskByID(@Path(TASK_ID) int taskID);
 
     @GET("Task/all")
     LiveData<ApiResponse<BigkeerResponse<ArrayResult<Task>>>>
@@ -116,11 +117,11 @@ public interface BigkeerService {
     LiveData<ApiResponse<BigkeerResponse<ArrayResult<Task>>>>
     getManagerTasks(@Path(MANAGER_ID_IN_TASK) int managerID);
 
-    @POST("Task")  // manager
+    @POST(GET_OR_CREATE_TASKS)  // manager
     Call<ResponseBody> createTask();
 //    { "code": 0, "message": null, "result": (taskId)}
 
-    @PUT("Task/{taskID}")  // manager
+    @PUT(PUT_EDIT_TASK)  // manager
     Call<ResponseBody> managerEditTask(@Path(TASK_ID) int taskID, @Body RequestBody requestBody);
 
     @PATCH("Task/{taskID}/status")  // manager, company
@@ -133,10 +134,10 @@ public interface BigkeerService {
     Call<ResponseBody> companyAssignExecutor();
 
     @POST("Assign/{taskID}")
-    Call<ResponseBody> companyAddExecutor(@Path("taskID") int taskID, @Body RequestBody requestBody);
+    Call<ResponseBody> companyAddExecutor(@Path(TASK_ID) int taskID, @Body RequestBody requestBody);
 
     @DELETE("Assign/{taskID}/{userID}")
-    Call<ResponseBody> companyDeleteExecutor(@Path("taskID") int taskID, @Path("userID") int userID);
+    Call<ResponseBody> companyDeleteExecutor(@Path(TASK_ID) int taskID, @Path("userID") int userID);
 
     @GET("Track/{trackID}")
     Call<ResponseBody> getTrack(@Path("trackID") int trackID);
@@ -153,14 +154,14 @@ public interface BigkeerService {
 
     @GET("Photo/task/{taskID}")
     LiveData<ApiResponse<BigkeerResponse<List<PhotoResult>>>>
-    getPhotoResultsByTaskID(@Path("taskID") int taskID);
+    getPhotoResultsByTaskID(@Path(TASK_ID) int taskID);
 
 
     @POST(GET_OR_CREATE_TASKS)
     Call<ResponseBody> createTask(@Body RequestBody requestBody);
 
     @Multipart
-    @POST("Photo")
+    @POST(PHOTO)
 //    how to upload a file: https://github.com/square/retrofit/issues/1063
     Call<ResponseBody> postImage(@Part MultipartBody.Part file,
                                  @Part(PHOTO_TASKID) RequestBody taskID,
@@ -169,12 +170,12 @@ public interface BigkeerService {
                                  @Part(PHOTO_LOCATION) RequestBody location,
                                  @Part(PHOTO_DESC) RequestBody description);
 
-    @GET("Explore/{taskID}")
+    @GET(GET_LOC_EXPLORE)
     LiveData<ApiResponse<LocCenterPoint>>
-    getLocCenterPointByTaskID(@Path("taskID") int taskID);
+    getLocCenterPointByTaskID(@Path(TASK_ID) int taskID);
 
 
     @GET("Track/task/{taskID}")
     LiveData<ApiResponse<BigkeerResponse<List<Tracks>>>>
-    getTracksByTaskID(@Path("taskID") int taskID);
+    getTracksByTaskID(@Path(TASK_ID) int taskID);
 }

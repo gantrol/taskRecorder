@@ -34,7 +34,7 @@ import cn.com.wosuo.taskrecorder.util.LiveDataCallAdapterFactory;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.BASE_URL;
+import static cn.com.wosuo.taskrecorder.api.Urls.HostString.BASE_URL;
 
 /**
  * Android Application class. Used for accessing singletons.
@@ -82,12 +82,8 @@ public class BasicApp extends Application {
         return AppDatabase.getInstance(mAppExecutors);
     }
 
-    public TaskDao getTaskDao(){
-        return getDatabase().taskDao();
-    }
-
-    public UserDao getUserDao() {
-        return getDatabase().userDao();
+    public AppDatabase getDatabase(Context context) {
+        return AppDatabase.getInstance(context);
     }
 
     public UserRepository getUserRepository() {

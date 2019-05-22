@@ -9,7 +9,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.BASE_URL;
+import static cn.com.wosuo.taskrecorder.api.Urls.HostString.BASE_URL;
 
 public class HttpUtil {
 

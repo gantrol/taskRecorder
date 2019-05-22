@@ -12,9 +12,9 @@ import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 
-import static cn.com.wosuo.taskrecorder.api.Urls.LOGIN;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.API;
-import static cn.com.wosuo.taskrecorder.util.FinalStrings.API_HOST;
+import static cn.com.wosuo.taskrecorder.api.Urls.HostString.API;
+import static cn.com.wosuo.taskrecorder.api.Urls.HostString.API_HOST;
+import static cn.com.wosuo.taskrecorder.api.Urls.LoginSignUpApi.LOGIN;
 
 public class CookieJarHelper implements CookieJar {
     //  https://tsuharesu.com/dev/handling-cookies-with-okhttp.html
