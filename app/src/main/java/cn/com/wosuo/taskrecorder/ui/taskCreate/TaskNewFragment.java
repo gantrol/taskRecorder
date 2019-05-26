@@ -76,8 +76,7 @@ public class TaskNewFragment extends Fragment {
     @BindView(R.id.choose_assignee_btn) Button mChooseAssigneeButtom;
 
     public static TaskNewFragment newInstance() {
-        TaskNewFragment fragment = new TaskNewFragment();
-        return fragment;
+        return new TaskNewFragment();
     }
 
     @Override

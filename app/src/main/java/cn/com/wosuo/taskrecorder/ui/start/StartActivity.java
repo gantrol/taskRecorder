@@ -25,7 +25,6 @@ import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.GET_USER_ME;
 
 public class StartActivity extends AppCompatActivity{
 
-    private SharedPreferences LoginPref;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class StartActivity extends AppCompatActivity{
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 // 成功，登录成功；失败，输入账号密码。
                 String responseData = response.body().string();
-                int status_code = (int) JsonParser.parseLoginJson(responseData).a;
+                int status_code = JsonParser.parseLoginJson(responseData).a;
                 if (status_code != SUCCESS)
                     openLoginActivity();
                 else

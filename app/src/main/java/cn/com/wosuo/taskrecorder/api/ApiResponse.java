@@ -13,7 +13,7 @@ import retrofit2.Response;
 public abstract class ApiResponse<T> {
     @NonNull
     public ApiErrorResponse<T> create(@NonNull Throwable error){
-        return new ApiErrorResponse<T>(error.getMessage());
+        return new ApiErrorResponse(error.getMessage());
     }
 
     @NonNull
@@ -38,7 +38,7 @@ public abstract class ApiResponse<T> {
                 ioe.printStackTrace();
             }
             String errMsg = (msg == null || msg.isEmpty()) ? response.message() : msg;
-            apiResponse = new ApiErrorResponse<T>(errMsg);
+            apiResponse = new ApiErrorResponse(errMsg);
         }
         return apiResponse;
     }

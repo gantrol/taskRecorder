@@ -76,8 +76,7 @@ public class JsonParser {
         Gson gson = getGson();
 //        TypeToken<List<TrackData>> token = new TypeToken<List<TrackData>>() {};
         Track track = new Track(coordinate, sTrackData);
-        String trackData = gson.toJson(track);
-        return trackData;
+        return gson.toJson(track);
     }
 
     /**

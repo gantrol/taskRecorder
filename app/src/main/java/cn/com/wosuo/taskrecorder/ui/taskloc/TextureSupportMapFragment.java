@@ -68,7 +68,6 @@ public class TextureSupportMapFragment extends Fragment {
     public void onViewStateRestored(Bundle var1) {
         super.onViewStateRestored(var1);
         if (var1 != null) {
-            ;
         }
     }
 

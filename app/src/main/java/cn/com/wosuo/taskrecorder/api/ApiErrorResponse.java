@@ -10,7 +10,7 @@ public class ApiErrorResponse<T> extends ApiResponse<T> {
         return this.errorMessage;
     }
 
-    public <T>ApiErrorResponse(@NonNull String  errorMessage){
+    public ApiErrorResponse(@NonNull String  errorMessage){
         this.errorMessage = errorMessage;
     }
 }

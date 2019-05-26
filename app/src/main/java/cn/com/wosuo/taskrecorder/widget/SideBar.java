@@ -55,7 +55,7 @@ public class SideBar extends View {
 		super.onDraw(canvas);
 		int height = getHeight();
 		int width = getWidth();
-		int singleHeight = (int)(height / b.length);// 获取每一个字母的高度
+		int singleHeight = (height / b.length);// 获取每一个字母的高度
 
 		for (int i = 0; i < b.length; i++) {
 			paint.setColor(Color.rgb(33, 65, 98));

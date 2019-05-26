@@ -68,7 +68,8 @@
                     android:id="@+id/input_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/task_title_label" />
+                    android:hint="@string/task_title_label"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -105,7 +106,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
                     android:gravity="top"
-                    android:hint="@string/task_detail_label" />
+                    android:hint="@string/task_detail_label"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

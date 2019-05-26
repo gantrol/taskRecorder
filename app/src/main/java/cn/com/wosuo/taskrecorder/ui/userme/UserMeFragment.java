@@ -97,7 +97,7 @@ public class UserMeFragment extends Fragment {
         mMyNameTextView.setText(me.getName());
         mMyEmailTextView.setText(me.getMail());
         mMyTypeTextView.setText(FinalMap.getUserTypeList().get(me.getType()));
-        mMyIdTextView.setText(Integer.toString(me.getUid()));
+        mMyIdTextView.setText(String.valueOf(me.getUid()));
     }
 
     private void LoginWithActivity() {
