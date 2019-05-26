@@ -32,7 +32,6 @@ public class SideBar extends View {
 
 	/**
 	 * 为SideBar设置显示字母的TextView
-	 * @param textDialog
 	 */
 	public void setTextView(TextView textDialog) {
 		this.mTextDialog = textDialog;
@@ -118,7 +117,6 @@ public class SideBar extends View {
 
 	/**
 	 * 触摸事件
-	 * @param onTouchingLetterChangedListener
 	 */
 	public void setOnTouchingLetterChangedListener(
 			OnTouchingLetterChangedListener onTouchingLetterChangedListener) {

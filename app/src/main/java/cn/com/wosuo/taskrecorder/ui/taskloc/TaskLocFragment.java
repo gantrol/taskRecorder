@@ -218,18 +218,14 @@ public abstract class TaskLocFragment extends Fragment {
      */
     void initOritationListener() {
         myOrientationListener = new MyOrientationListener(requireActivity().getApplicationContext());
-        myOrientationListener.setOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
-            @Override
-            public void onOrientationChanged(float x)
-            {
-                mXDirection = (int) x;
-                locData = new MyLocationData.Builder()
-                        .accuracy(mCurrentAccracy)
-                        .direction(mXDirection)
-                        .latitude(mCurrentLatitude)
-                        .longitude(mCurrentLongitude).build();
-                mBaiduMap.setMyLocationData(locData);
-            }
+        myOrientationListener.setOnOrientationListener(x -> {
+            mXDirection = (int) x;
+            locData = new MyLocationData.Builder()
+                    .accuracy(mCurrentAccracy)
+                    .direction(mXDirection)
+                    .latitude(mCurrentLatitude)
+                    .longitude(mCurrentLongitude).build();
+            mBaiduMap.setMyLocationData(locData);
         });
     }
 

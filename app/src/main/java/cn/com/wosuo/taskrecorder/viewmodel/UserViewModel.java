@@ -39,7 +39,6 @@ public class UserViewModel extends AndroidViewModel {
     /**
      * All the activities has to reference to ViewModel, not the repository. {@link UserRepository}
      * So we must create methods for ViewModel that match the repository methods
-     * @param User
      */
     public void insert(User User) {
         repository.insert(User);

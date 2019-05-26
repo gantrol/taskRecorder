@@ -11,8 +11,6 @@ public class PinYinUtils {
 	/**
 	 * 获取拼音
 	 *
-	 * @param inputString
-	 * @return
 	 */
 	public static String getPingYin(String inputString) {
 		HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
@@ -21,26 +19,24 @@ public class PinYinUtils {
 		format.setVCharType(HanyuPinyinVCharType.WITH_V);
 
 		char[] input = inputString.trim().toCharArray();
-		String output = "";
+		StringBuilder output = new StringBuilder();
 
 		try {
 			for (char curChar : input) {
 				if (Character.toString(curChar).matches("[\\u4E00-\\u9FA5]+")) {
 					String[] temp = PinyinHelper.toHanyuPinyinStringArray(curChar, format);
-					output += temp[0];
+					output.append(temp[0]);
 				} else
-					output += Character.toString(curChar);
+					output.append(curChar);
 			}
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			e.printStackTrace();
 		}
-		return output;
+		return output.toString();
 	}
 
 	/**
 	 * 获取第一个字的拼音首字母
-	 * @param chinese
-	 * @return
 	 */
 	public static String getInitial(String chinese) {
 		StringBuffer pinYinBF = new StringBuffer();

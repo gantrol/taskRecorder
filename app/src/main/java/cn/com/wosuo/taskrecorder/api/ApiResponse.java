@@ -12,7 +12,7 @@ import retrofit2.Response;
 // A generic class that contains data and status about loading this data.
 public abstract class ApiResponse<T> {
     @NonNull
-    public ApiErrorResponse<T> create(@NonNull Throwable error){
+    public ApiErrorResponse create(@NonNull Throwable error){
         return new ApiErrorResponse(error.getMessage());
     }
 
@@ -38,7 +38,7 @@ public abstract class ApiResponse<T> {
                 ioe.printStackTrace();
             }
             String errMsg = (msg == null || msg.isEmpty()) ? response.message() : msg;
-            apiResponse = new ApiErrorResponse(errMsg);
+            apiResponse = new ApiErrorResponse<>(errMsg);
         }
         return apiResponse;
     }

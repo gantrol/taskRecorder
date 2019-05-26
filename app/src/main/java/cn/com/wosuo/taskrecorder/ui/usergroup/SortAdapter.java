@@ -49,23 +49,15 @@ public class SortAdapter extends RecyclerView.Adapter<SortAdapter.ViewHolder> {
         }
 
         if (mOnItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(holder.itemView, position);
-                }
-            });
+            holder.itemView.setOnClickListener(v ->
+                    mOnItemClickListener.onItemClick(holder.itemView, position));
 
         }
 
         holder.tvName.setText(this.mData.get(position).getName());
 
-        holder.tvName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, mData.get(position).getName(),Toast.LENGTH_SHORT).show();
-            }
-        });
+        holder.tvName.setOnClickListener(view ->
+                Toast.makeText(mContext, mData.get(position).getName(),Toast.LENGTH_SHORT).show());
 
     }
 
@@ -96,7 +88,6 @@ public class SortAdapter extends RecyclerView.Adapter<SortAdapter.ViewHolder> {
 
     /**
      * 提供给Activity刷新数据
-     * @param list
      */
     public void updateList(List<UserSortModel> list){
         this.mData = list;

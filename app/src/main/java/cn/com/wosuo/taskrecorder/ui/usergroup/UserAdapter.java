@@ -62,13 +62,10 @@ public class UserAdapter extends ListAdapter<User, UserAdapter.UserHolder> {
             super(view);
             mUserNameTV = view.findViewById(R.id.username_tv);
             mUserMailTV = view.findViewById(R.id.usermail_tv);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && clickListener != null)
-                        clickListener.onItemClick(getItem(position));
-                }
+            itemView.setOnClickListener(view1 -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && clickListener != null)
+                    clickListener.onItemClick(getItem(position));
             });
         }
 

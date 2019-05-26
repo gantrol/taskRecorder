@@ -91,6 +91,7 @@ public interface TaskDao {
      * Update a task.
      *
      * @param task task to be updated
+     *
      * @return the number of tasks updated. This should always be 1.
      */
     @Update
