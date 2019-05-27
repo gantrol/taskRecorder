@@ -133,7 +133,7 @@ public abstract class TaskLocFragment extends Fragment {
 
 
 
-    private void requestLocation() {
+    void requestLocation() {
         initLocation();
         mLocationClient.start();
     }
@@ -143,6 +143,8 @@ public abstract class TaskLocFragment extends Fragment {
         locationOption.setScanSpan(800);
         locationOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         locationOption.setIsNeedAddress(true);
+        locationOption.setOpenAutoNotifyMode();
+        locationOption.setOpenGps(true);
         locationOption.setIsNeedLocationDescribe(true);
         locationOption.setCoorType(mCurrentCoorType);
         mLocationClient.setLocOption(locationOption);
@@ -267,10 +269,10 @@ public abstract class TaskLocFragment extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        mLocationClient.unRegisterLocationListener(myLocationListener);
         mLocationClient.stop();
         mMapView.onDestroy();
         mBaiduMap.setMyLocationEnabled(false);
         unbinder.unbind();
-
     }
 }

@@ -64,10 +64,10 @@ public class TaskCenterPointFragment extends TaskLocFragment {
     };
 
     void onReceiveLocationListener(BDLocation location) {
+        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+        mBaiduMap.animateMapStatus(update);
         if (isFirstCheck) {
-            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-            mBaiduMap.animateMapStatus(update);
             update = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
             mBaiduMap.animateMapStatus(update);
             isFirstCheck = false;

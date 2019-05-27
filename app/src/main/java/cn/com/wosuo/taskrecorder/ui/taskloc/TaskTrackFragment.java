@@ -1,11 +1,16 @@
 package cn.com.wosuo.taskrecorder.ui.taskloc;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -14,6 +19,7 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
@@ -63,19 +69,17 @@ public class TaskTrackFragment extends TaskLocFragment {
             points.clear();
             last = new LatLng(0, 0);
             isFirstPoint = true;
-
         }
+        isStart = false;
     }
     @BindView(R.id.write_btn) Button start;
+
     @OnClick(R.id.write_btn)
     void writeOnClick(){
-        if (mLocationClient != null && !mLocationClient.isStarted()) {
-            mLocationClient.start();
-            progressBarRl.setVisibility(View.VISIBLE);
-            info.setText("请稍后...");
-            mBaiduMap.clear();
-        }
+        isStart = true;
+        requestLocation();
     }
+
     @BindView(R.id.progressBarRl) RelativeLayout progressBarRl;
     @BindView(R.id.info) TextView info;
     private static final String TAG = "巡查路线";
@@ -87,6 +91,7 @@ public class TaskTrackFragment extends TaskLocFragment {
     Polyline mPolyline;//运动轨迹图层
     LatLng last = new LatLng(0, 0);//上一个定位点
     MapStatus.Builder builder;
+    private boolean isStart = false;
 
     public static TaskTrackFragment newInstance(int taskId) {
         Bundle args = new Bundle();
@@ -94,6 +99,13 @@ public class TaskTrackFragment extends TaskLocFragment {
         TaskTrackFragment fragment = new TaskTrackFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     @Override
@@ -135,8 +147,18 @@ public class TaskTrackFragment extends TaskLocFragment {
     }
 
     @Override
+    void requestLocation(){
+        if (isStart) {
+            super.requestLocation();
+            progressBarRl.setVisibility(View.VISIBLE);
+            info.setText("请稍后...");
+            mBaiduMap.clear();
+        }
+    }
+
+    @Override
     void onReceiveLocationListener(BDLocation location) {
-        if (location == null || mMapView == null) {
+        if (!isStart || location == null || mMapView == null) {
             return;
         }
         info.setText("请稍后...");
@@ -148,11 +170,8 @@ public class TaskTrackFragment extends TaskLocFragment {
             mBaiduMap.animateMapStatus(update);
             isFirstCheck = false;
         }
-
         if (isFirstPoint) {
-            //首次定位
-            //第一个点很重要，决定了轨迹的效果，gps刚开始返回的一些点精度不高，尽量选一个精度相对较高的起始点
-            LatLng ll = getMostAccuracyLocation(location);
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
             if(ll != null){
                 isFirstPoint = false;
                 points.add(ll);//加入集合
@@ -171,8 +190,8 @@ public class TaskTrackFragment extends TaskLocFragment {
         }
         //从第二个点开始
         LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-        //sdk回调gps位置的频率是1秒1个，位置点太近动态画在图上不是很明显，可以设置点之间距离大于为5米才添加到集合中
-        if (DistanceUtil.getDistance(last, ll) < 3) {
+        //sdk回调gps位置的频率是1秒1个，位置点太近动态画在图上不是很明显，可以设置点之间距离大于为2米才添加到集合中
+        if (DistanceUtil.getDistance(last, ll) < 2) {
             return;
         }
         points.add(ll);//如果要运动完成后画整个轨迹，位置点都在这个集合中
@@ -192,49 +211,30 @@ public class TaskTrackFragment extends TaskLocFragment {
         mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
     }
 
-    /**
-     * 首次定位很重要，选一个精度相对较高的起始点
-     * 注意：如果一直显示gps信号弱，说明过滤的标准过高了，
-     你可以将location.getRadius()>25中的过滤半径调大，比如>40，
-     并且将连续5个点之间的距离DistanceUtil.getDistance(last, ll ) > 5也调大一点，比如>10，
-     这里不是固定死的，你可以根据你的需求调整，如果你的轨迹刚开始效果不是很好，你可以将半径调小，两点之间距离也调小，
-     gps的精度半径一般是10-50米
-     */
-    private LatLng getMostAccuracyLocation(BDLocation location){
-
-        if (location.getRadius() > 40) {//gps位置精度大于40米的点直接弃用
-            return null;
-        }
-
-        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-
-        if (DistanceUtil.getDistance(last, ll ) > 20) {
-            last = ll;
-            points.clear();//有任意连续两点位置大于10，重新取点
-            return null;
-        }
-        points.add(ll);
-        last = ll;
-        //有连续的点之间的距离小于10，认为gps已稳定，以最新的点为起始点
-        if(points.size() >= 3){
-            points.clear();
-            return ll;
-        }
-        return null;
-    }
 
     private void locateAndZoom(final BDLocation location, LatLng ll) {
+
         mCurrentLatitude = location.getLatitude();
         mCurrentLongitude = location.getLongitude();
-        locData = new MyLocationData.Builder().accuracy(0)
-                // 此处设置开发者获取到的方向信息，顺时针0-360
-                .direction(mXDirection).latitude(location.getLatitude())
-                .longitude(location.getLongitude()).build();
-        mBaiduMap.setMyLocationData(locData);
-
-        builder = new MapStatus.Builder();
-        builder.target(ll).zoom(mCurrentZoom);
-        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        mCurrentAccracy = location.getRadius();
+        MyLocationData.Builder mLocationBuilder = new MyLocationData.Builder();
+        mLocationBuilder.latitude(mCurrentLatitude)
+                .longitude(mCurrentLongitude)
+                .direction(mXDirection);
+        MyLocationConfiguration myLocationConfiguration = new MyLocationConfiguration(
+                MyLocationConfiguration.LocationMode.FOLLOWING, true, null);
+        MyLocationData myLocationData = mLocationBuilder.build();
+        mBaiduMap.setMyLocationConfiguration(myLocationConfiguration);
+        mBaiduMap.setMyLocationData(myLocationData);
+//        locData = new MyLocationData.Builder().accuracy(0)
+//                // 此处设置开发者获取到的方向信息，顺时针0-360
+//                .direction(mXDirection).latitude(location.getLatitude())
+//                .longitude(location.getLongitude()).build();
+//        mBaiduMap.setMyLocationData(locData);
+//
+//        builder = new MapStatus.Builder();
+//        builder.target(ll).zoom(mCurrentZoom);
+//        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 
     @Override
@@ -246,6 +246,7 @@ public class TaskTrackFragment extends TaskLocFragment {
     public void onDestroy() {
         startBD.recycle();
         finishBD.recycle();
+        mMapView.getMap().clear();
         super.onDestroy();
     }
 }
