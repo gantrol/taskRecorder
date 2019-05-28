@@ -47,7 +47,7 @@
                 android:resource="@xml/file_paths_public" />
         </provider>
         <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"
+
             android:launchMode="singleTop">
 
         </activity>

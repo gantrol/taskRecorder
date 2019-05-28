@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     final Fragment mTaskListFragment = new TaskListFragment();
     final Fragment mUserGroupFragment = new UserGroupFragment();
     final Fragment mUserMeFragment = new UserMeFragment();
-    final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = mTaskListFragment;
+//    final FragmentManager fm = getSupportFragmentManager();
+//    Fragment active = mTaskListFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.main_fragment_container, new TaskListFragment()).commit();
-//        }
-        fm.beginTransaction().add(R.id.main_fragment_container, mUserMeFragment, "3")
-                .hide(mUserMeFragment).commit();
-        fm.beginTransaction().add(R.id.main_fragment_container, mUserGroupFragment, "2")
-                .hide(mUserGroupFragment).commit();
-        fm.beginTransaction().add(R.id.main_fragment_container, mTaskListFragment, "1").commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment_container, mTaskListFragment).commit();
+        }
+//        fm.beginTransaction().add(R.id.main_fragment_container, mUserMeFragment, "3")
+//                .hide(mUserMeFragment).commit();
+//        fm.beginTransaction().add(R.id.main_fragment_container, mUserGroupFragment, "2")
+//                .hide(mUserGroupFragment).commit();
+//        fm.beginTransaction().add(R.id.main_fragment_container, mTaskListFragment, "1").commit();
     }
 
 
@@ -56,23 +56,31 @@ public class MainActivity extends AppCompatActivity {
 //        TODO： 这种切换方式比较快，但横竖屏切换会出问题，
 //         已经禁用，或许这样更好？
 //         1.viewholder, 2. saveStaete;
+            Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.nav_list:
-                    fm.beginTransaction().hide(active).show(mTaskListFragment).commit();
-                    active = mTaskListFragment;
+                    selectedFragment = mTaskListFragment;
+//                    fm.beginTransaction().hide(active).show(mTaskListFragment).commit();
+//                    active = mTaskListFragment;
                     break;
                 case R.id.nav_group:
-                    fm.beginTransaction().hide(active).show(mUserGroupFragment).commit();
-                    active = mUserGroupFragment;
+                    selectedFragment = mUserGroupFragment;
+//                    fm.beginTransaction().hide(active).show(mUserGroupFragment).commit();
+//                    active = mUserGroupFragment;
                     break;
                 case R.id.nav_me:
-                    fm.beginTransaction().hide(active).show(mUserMeFragment).commit();
-                    active = mUserMeFragment;
+                    selectedFragment = mUserMeFragment;
+//                    fm.beginTransaction().hide(active).show(mUserMeFragment).commit();
+//                    active = mUserMeFragment;
                     break;
             }
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.main_fragment_container, selectedFragment).commit();
+            switchFragment(selectedFragment);
             return true;
         };
 
+    private void switchFragment(Fragment selectedFragment){
+        if (selectedFragment != null)
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_fragment_container, selectedFragment).commit();
+    }
 }
