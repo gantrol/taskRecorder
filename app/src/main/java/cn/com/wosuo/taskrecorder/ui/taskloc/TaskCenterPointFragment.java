@@ -2,13 +2,6 @@ package cn.com.wosuo.taskrecorder.ui.taskloc;
 
 import android.os.Bundle;
 
-import com.baidu.location.BDLocation;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
@@ -62,29 +55,6 @@ public class TaskCenterPointFragment extends TaskLocFragment {
             requireActivity().finish();
         }
     };
-
-    void onReceiveLocationListener(BDLocation location) {
-        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-        mBaiduMap.animateMapStatus(update);
-        if (isFirstCheck) {
-            update = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
-            mBaiduMap.animateMapStatus(update);
-            isFirstCheck = false;
-        }
-        mCurrentLatitude = location.getLatitude();
-        mCurrentLongitude = location.getLongitude();
-        mCurrentAccracy = location.getRadius();
-        MyLocationData.Builder mLocationBuilder = new MyLocationData.Builder();
-        mLocationBuilder.latitude(mCurrentLatitude)
-                .longitude(mCurrentLongitude)
-                .direction(mXDirection);
-        MyLocationConfiguration myLocationConfiguration = new MyLocationConfiguration(
-                MyLocationConfiguration.LocationMode.FOLLOWING, true, null);
-        MyLocationData myLocationData = mLocationBuilder.build();
-        mBaiduMap.setMyLocationConfiguration(myLocationConfiguration);
-        mBaiduMap.setMyLocationData(myLocationData);
-    }
 
     @Override
     String setTitle() {

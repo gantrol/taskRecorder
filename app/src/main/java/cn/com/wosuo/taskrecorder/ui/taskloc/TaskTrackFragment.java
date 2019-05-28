@@ -148,8 +148,8 @@ public class TaskTrackFragment extends TaskLocFragment {
 
     @Override
     void requestLocation(){
+        initLocation();
         if (isStart) {
-            super.requestLocation();
             progressBarRl.setVisibility(View.VISIBLE);
             info.setText("请稍后...");
             mBaiduMap.clear();
@@ -158,18 +158,11 @@ public class TaskTrackFragment extends TaskLocFragment {
 
     @Override
     void onReceiveLocationListener(BDLocation location) {
-        if (!isStart || location == null || mMapView == null) {
+        super.onReceiveLocationListener(location);
+        if (!isStart) {
             return;
         }
         info.setText("请稍后...");
-        if (isFirstCheck) {
-            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-            mBaiduMap.animateMapStatus(update);
-            update = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
-            mBaiduMap.animateMapStatus(update);
-            isFirstCheck = false;
-        }
         if (isFirstPoint) {
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
             if(ll != null){

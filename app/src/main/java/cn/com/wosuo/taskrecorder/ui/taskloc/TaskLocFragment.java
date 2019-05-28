@@ -26,8 +26,12 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +142,7 @@ public abstract class TaskLocFragment extends Fragment {
         mLocationClient.start();
     }
 
-    private void initLocation(){
+    void initLocation(){
         LocationClientOption locationOption = new LocationClientOption();
         locationOption.setScanSpan(800);
         locationOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -150,7 +154,28 @@ public abstract class TaskLocFragment extends Fragment {
         mLocationClient.setLocOption(locationOption);
     }
 
-    abstract void onReceiveLocationListener(BDLocation location);
+    void onReceiveLocationListener(BDLocation location){
+        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+        mBaiduMap.animateMapStatus(update);
+        if (isFirstCheck) {
+            update = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
+            mBaiduMap.animateMapStatus(update);
+            isFirstCheck = false;
+        }
+        mCurrentLatitude = location.getLatitude();
+        mCurrentLongitude = location.getLongitude();
+        mCurrentAccracy = location.getRadius();
+        MyLocationData.Builder mLocationBuilder = new MyLocationData.Builder();
+        mLocationBuilder.latitude(mCurrentLatitude)
+                .longitude(mCurrentLongitude)
+                .direction(mXDirection);
+        MyLocationConfiguration myLocationConfiguration = new MyLocationConfiguration(
+                MyLocationConfiguration.LocationMode.FOLLOWING, true, null);
+        MyLocationData myLocationData = mLocationBuilder.build();
+        mBaiduMap.setMyLocationConfiguration(myLocationConfiguration);
+        mBaiduMap.setMyLocationData(myLocationData);
+    }
 
     public void requestPermissions(){
         List<String> permissionList = new ArrayList<>();
