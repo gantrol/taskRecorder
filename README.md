@@ -82,9 +82,12 @@ https://github.com/JakeWharton/butterknife
 https://www.journaldev.com/10439/android-butterknife-example
 https://www.androidhive.info/2017/10/android-working-with-butterknife-viewbinding-library/
 
+#### 依赖注入(di)
+
+https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2
+
 ### TODO
 
-TODO: di of dagger2 https://www.jianshu.com/p/39d1df6c877d
 TODO: 测试<https://developer.android.com/training/testing/>
 TODO: 每天学一些JAVA。。。
     http://interactivepython.org/runestone/static/JavaReview/index.html

@@ -19,17 +19,11 @@ import cn.com.wosuo.taskrecorder.ui.userme.UserMeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-
-//    https://inthecheesefactory.com/blog/fragment-state-saving-best-practices/en
-//    https://stackoverflow.com/questions/4916209/which-design-patterns-are-used-on-android
-
     private static final String TAG = "MainActivity";
     @BindView(R.id.main_bottom_navigation) BottomNavigationView mBottomNavigationView;
     final Fragment mTaskListFragment = new TaskListFragment();
     final Fragment mUserGroupFragment = new UserGroupFragment();
     final Fragment mUserMeFragment = new UserMeFragment();
-//    final FragmentManager fm = getSupportFragmentManager();
-//    Fragment active = mTaskListFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,35 +37,21 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment_container, mTaskListFragment).commit();
         }
-//        fm.beginTransaction().add(R.id.main_fragment_container, mUserMeFragment, "3")
-//                .hide(mUserMeFragment).commit();
-//        fm.beginTransaction().add(R.id.main_fragment_container, mUserGroupFragment, "2")
-//                .hide(mUserGroupFragment).commit();
-//        fm.beginTransaction().add(R.id.main_fragment_container, mTaskListFragment, "1").commit();
     }
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
         = item -> {
-//        TODO： 这种切换方式比较快，但横竖屏切换会出问题，
-//         已经禁用，或许这样更好？
-//         1.viewholder, 2. saveStaete;
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.nav_list:
                     selectedFragment = mTaskListFragment;
-//                    fm.beginTransaction().hide(active).show(mTaskListFragment).commit();
-//                    active = mTaskListFragment;
                     break;
                 case R.id.nav_group:
                     selectedFragment = mUserGroupFragment;
-//                    fm.beginTransaction().hide(active).show(mUserGroupFragment).commit();
-//                    active = mUserGroupFragment;
                     break;
                 case R.id.nav_me:
                     selectedFragment = mUserMeFragment;
-//                    fm.beginTransaction().hide(active).show(mUserMeFragment).commit();
-//                    active = mUserMeFragment;
                     break;
             }
             switchFragment(selectedFragment);
