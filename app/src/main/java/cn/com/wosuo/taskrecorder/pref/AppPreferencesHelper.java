@@ -11,6 +11,7 @@ import cn.com.wosuo.taskrecorder.vo.User;
 
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.LOGIN_PREF;
 
+@Deprecated
 public class AppPreferencesHelper {
 //    TODO: https://gist.github.com/idish/f46a8327da7f293f943a5bda31078c95
 //     https://stackoverflow.com/questions/50649014/livedata-with-shared-preferences

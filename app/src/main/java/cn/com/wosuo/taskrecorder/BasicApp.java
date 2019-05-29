@@ -26,8 +26,13 @@ import com.baidu.mapapi.SDKInitializer;
 import cn.com.wosuo.taskrecorder.api.BigkeerService;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
-import cn.com.wosuo.taskrecorder.db.TaskDao;
-import cn.com.wosuo.taskrecorder.db.UserDao;
+import cn.com.wosuo.taskrecorder.di.components.BigkeerComponent;
+import cn.com.wosuo.taskrecorder.di.components.DaggerBigkeerComponent;
+import cn.com.wosuo.taskrecorder.di.components.DaggerNetComponent;
+import cn.com.wosuo.taskrecorder.di.components.NetComponent;
+import cn.com.wosuo.taskrecorder.di.modules.AppModule;
+import cn.com.wosuo.taskrecorder.di.modules.BigkeerModule;
+import cn.com.wosuo.taskrecorder.di.modules.NetModule;
 import cn.com.wosuo.taskrecorder.repository.TaskRepository;
 import cn.com.wosuo.taskrecorder.repository.UserRepository;
 import cn.com.wosuo.taskrecorder.util.LiveDataCallAdapterFactory;
@@ -42,17 +47,37 @@ import static cn.com.wosuo.taskrecorder.api.Urls.HostString.BASE_URL;
 public class BasicApp extends Application {
 
     private AppExecutors mAppExecutors;
+    private NetComponent mNetComponent;
+
+    private BigkeerComponent mBigkeerComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mAppExecutors = new AppExecutors();
         SDKInitializer.initialize(this);
+        mNetComponent = DaggerNetComponent.builder()
+                .appModule(new AppModule(this))
+                .netModule(new NetModule(BASE_URL))
+                .build();
+        mBigkeerComponent = DaggerBigkeerComponent.builder()
+                .netComponent(mNetComponent)
+                .bigkeerModule(new BigkeerModule())
+                .build();
         BasicApp.context = getApplicationContext();
     }
 
+
     @Deprecated
     private static Context context;
+
+    public NetComponent getNetComponent() {
+        return mNetComponent;
+    }
+
+    public BigkeerComponent getBigkeerComponent() {
+        return mBigkeerComponent;
+    }
 
     public static BigkeerService getBigkeerService(){
         return BigkeerServiceHolder.sInstance;
@@ -80,10 +105,6 @@ public class BasicApp extends Application {
     @Deprecated
     public AppDatabase getDatabase() {
         return AppDatabase.getInstance(mAppExecutors);
-    }
-
-    public AppDatabase getDatabase(Context context) {
-        return AppDatabase.getInstance(context);
     }
 
     public UserRepository getUserRepository() {

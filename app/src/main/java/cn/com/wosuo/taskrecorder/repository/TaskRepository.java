@@ -11,6 +11,9 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.api.ApiResponse;
@@ -52,11 +55,12 @@ import static cn.com.wosuo.taskrecorder.ui.UiString.TASK_LIST;
 /**
  * Repository handling the work with tasks.
  */
+@Singleton
 public class TaskRepository {
 //    TODO: 3RateLimit need to be smart set.
 
     private static TaskRepository sInstance;
-    private BigkeerService mBigkeerService;
+    BigkeerService mBigkeerService;
     private AppDatabase mDatabase;
     private TaskDao mTaskDao;
     private PhotoDao mPhotoDao;
@@ -72,7 +76,19 @@ public class TaskRepository {
     private final static List<String> sTaskType = FinalMap.getTaskTypeList();
 
 
-    private TaskRepository(final AppDatabase database) {
+    @Inject
+    TaskRepository(final AppDatabase database, BigkeerService mBigkeerService) {
+        mAppExecutors = new AppExecutors();
+        mDatabase = database;
+        mTaskDao = database.taskDao();
+        mPhotoDao = database.photoDao();
+        mLocCenterPointDao = database.locCenterPointDao();
+        mTrackDao = database.trackDao();
+        mBigkeerService = mBigkeerService;
+    }
+
+
+    TaskRepository(final AppDatabase database) {
         mAppExecutors = new AppExecutors();
         mDatabase = database;
         mTaskDao = database.taskDao();
@@ -80,6 +96,7 @@ public class TaskRepository {
         mLocCenterPointDao = database.locCenterPointDao();
         mTrackDao = database.trackDao();
         mBigkeerService = BasicApp.getBigkeerService();
+
     }
 
     public static TaskRepository getInstance(final AppDatabase database) {

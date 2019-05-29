@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.db.AppDatabase;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
@@ -61,17 +63,17 @@ public class TaskViewModel extends AndroidViewModel {
      *
      * @param application 应用
      */
-    @Deprecated
-    public TaskViewModel(@NonNull Application application) {
+    @Inject
+    public TaskViewModel(@NonNull Application application, TaskRepository taskRepository) {
         super(application);
         AppDatabase mDatabase = ((BasicApp)application).getDatabase();
-        mTaskRepository = TaskRepository.getInstance(mDatabase);
+        mTaskRepository = taskRepository;
         mUserRepository = UserRepository.getInstance(mDatabase);
     }
 
-    public TaskViewModel(Application application, Context context) {
+    public TaskViewModel(@NonNull Application application) {
         super(application);
-        AppDatabase mDatabase = ((BasicApp)application).getDatabase(context);
+        AppDatabase mDatabase = ((BasicApp)application).getDatabase();
         mTaskRepository = TaskRepository.getInstance(mDatabase);
         mUserRepository = UserRepository.getInstance(mDatabase);
     }
