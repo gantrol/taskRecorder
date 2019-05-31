@@ -43,7 +43,7 @@
     <string name="task_cancel">取 消</string>
 
     <string name="bottom_navigation_task">任务</string>
-    <string name="bottom_navigation_company">公司</string>
+    <string name="bottom_navigation_company">组织</string>
     <string name="bottom_navigation_me">我</string>
     <!--确认-->
     <string name="OK">上传</string>

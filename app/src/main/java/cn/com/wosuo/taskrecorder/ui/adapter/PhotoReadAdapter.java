@@ -73,7 +73,7 @@ public class PhotoReadAdapter extends ListAdapter<PhotoResult, PhotoReadAdapter.
         }
 
         void bind(PhotoResult photoResult){
-            String imageHttpPath = API_HOST + photoResult.getPath();
+            String imageHttpPath = "https://" + API_HOST + photoResult.getPath();
             Picasso.get().load(imageHttpPath)
                     .placeholder(R.drawable.ic_autorenew_black_24dp)
                     .error(android.R.drawable.stat_notify_error)

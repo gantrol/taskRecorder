@@ -279,7 +279,8 @@ public class TaskReadFragment extends Fragment {
                 if (mTask.getAssigner_id() > 0) {
                     viewModel.getUser(mTask.getAssigner_id()).observe(this, aerResource -> {
                         User mAssigner = aerResource.data;
-                        if (mAssigner != null) mAssignerTextView.setText(mAssigner.getName());
+                        if (mAssigner != null)
+                            mAssignerTextView.setText(mAssigner.getName());
                     });
                 }
             }
