@@ -8,8 +8,8 @@
     <string name="auto_login">自动登录</string>
     <string name="have_account">已有账号？点击登录</string>
     <string name="login">登   录</string>
-    <string name="username">姓名</string>
-    <string name="nickname">昵称</string>
+    <string name="username">用户名</string>
+    <string name="nickname">姓名</string>
     <string name="no_account">没有账号？点击注册</string>
     <string name="valid_name">用户名长度要大于三</string>
     <string name="valid_password">密码的长度要在6与15之间</string>

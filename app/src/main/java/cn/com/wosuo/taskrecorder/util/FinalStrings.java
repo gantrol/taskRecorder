@@ -24,7 +24,7 @@ public final class FinalStrings {
         //    Request string
         public static final String USERNAME = "UserName";
         public static final String PASSWORD = "PassWord";
-        public static final String EMAIL = "PassWord";
+        public static final String EMAIL = "Mail";
         public static final String NICKNAME = "NickName";
     }
 

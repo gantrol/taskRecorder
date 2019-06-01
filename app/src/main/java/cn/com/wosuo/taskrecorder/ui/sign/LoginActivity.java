@@ -22,11 +22,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.MainActivity;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
+import cn.com.wosuo.taskrecorder.util.FinalStrings;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.util.Pair;
 import cn.com.wosuo.taskrecorder.viewmodel.UserViewModel;
@@ -177,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.link_signup)
     void startSignup(){
-        Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         startActivityForResult(intent, REQUEST_SIGNUP);
     }
 
@@ -228,10 +230,18 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
                 // By default we just finish the Activity and log them in automatically
-            Toast.makeText(getBaseContext(), PLEASELOGIN, Toast.LENGTH_SHORT).show();
+                String password = data.getStringExtra(FinalStrings.LoginSignUpField.PASSWORD);
+                String email = data.getStringExtra(FinalStrings.LoginSignUpField.EMAIL);
+                AppExecutors mAppExecutors = new AppExecutors();
+                mAppExecutors.mainThread().execute(() -> {
+                    Toast.makeText(getBaseContext(), PLEASELOGIN, Toast.LENGTH_SHORT).show();
+                    _passwordText.setText(password);
+                    _emailText.setText(email);
+                });
             }
         }
     }

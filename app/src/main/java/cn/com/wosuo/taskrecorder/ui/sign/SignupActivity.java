@@ -1,6 +1,7 @@
 package cn.com.wosuo.taskrecorder.ui.sign;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.api.HttpUtil;
+import cn.com.wosuo.taskrecorder.util.FinalStrings;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.util.Pair;
 import cn.com.wosuo.taskrecorder.vo.User;
@@ -127,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
                 switch (status_code) {
                     case SUCCESS:
                         Log.d(TAG, YOU_SIGNUP_SUCCESS);
-                        onSignupSuccess();
+                        onSignupSuccess(password, email);
                         break;
                     case FAIL:
                         onSignupFailed();
@@ -146,15 +148,17 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    public void onSignupSuccess(){
+    public void onSignupSuccess(String password, String email){
         Handler mHandler = new Handler(Looper.getMainLooper());
         mHandler.postDelayed(() ->
                 runOnUiThread(() ->{
-                    setResult(RESULT_OK, null);
-                    finish();
                     _signupButton.setEnabled(true);
                     Toast.makeText(getBaseContext(), YOU_SIGNUP_SUCCESS, Toast.LENGTH_LONG).show();
                 }), 100);
+        Intent intent = new Intent();
+        intent.putExtra(FinalStrings.LoginSignUpField.PASSWORD, password)
+                .putExtra(FinalStrings.LoginSignUpField.EMAIL, email);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
