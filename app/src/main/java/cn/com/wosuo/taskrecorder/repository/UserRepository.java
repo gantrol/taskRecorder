@@ -95,14 +95,50 @@ public class UserRepository {
         }).getAsLiveData();
     }
 
-    public LiveData<Resource<List<User>>> getUsersInCompany(int type, int companyID){
+    public LiveData<Resource<List<User>>> getUsersInCompanyWithGroup (int type, int companyID){
         return (new NetworkBoundResource<List<User>, BigkeerResponse<GroupInfoResult>>(mAppExecutors) {
             @Override
             protected void saveCallResult(@NonNull BigkeerResponse<GroupInfoResult> item) {
                 GroupInfoResult result = item.getResult();
                 int companyID = result.getUid();
                 User company = new User(companyID, result.getName(), result.getMail());
-                company.setCompany_id(company.getUid());
+                mUserDao.insert(company);
+                List<User> users = result.getUsers();
+                if (users != null)
+                    setUsersCompany(users, companyID);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<User> data) {
+                return data == null || data.isEmpty() || userListRateLimit.shouldFetch(USER_ME);
+            }
+
+            @NonNull
+            protected LiveData<List<User>> loadFromDb() {
+                return mUserDao.loadUserByGroupIDWithGroup(companyID);
+            }
+
+            @NonNull
+            public LiveData<ApiResponse<BigkeerResponse<GroupInfoResult>>> createCall() {
+                if (type == sUserType.indexOf(GROUP_GROUP))
+                    return mBigkeerService.companyGetUsersInGroup();
+                else return mBigkeerService.userGetUsersInGroup();
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                userListRateLimit.reset(USER_ME);
+            }
+        }).getAsLiveData();
+    }
+
+    public LiveData<Resource<List<User>>> getUsersInCompany (int type, int companyID){
+        return (new NetworkBoundResource<List<User>, BigkeerResponse<GroupInfoResult>>(mAppExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull BigkeerResponse<GroupInfoResult> item) {
+                GroupInfoResult result = item.getResult();
+                int companyID = result.getUid();
+                User company = new User(companyID, result.getName(), result.getMail());
                 mUserDao.insert(company);
                 List<User> users = result.getUsers();
                 if (users != null)

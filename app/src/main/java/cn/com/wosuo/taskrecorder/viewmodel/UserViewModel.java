@@ -6,14 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.pref.AppPreferencesHelper;
 import cn.com.wosuo.taskrecorder.repository.UserRepository;
 import cn.com.wosuo.taskrecorder.util.Resource;
-import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
 import java.util.List;
 
@@ -58,6 +55,7 @@ public class UserViewModel extends AndroidViewModel {
 
 
 
+
     public LiveData<Resource<List<User>>> getAllUsers() {
         LiveData<Resource<List<User>>> result = new MediatorLiveData<>();  // TODO: 3为UI设立空白页面
         User me = AppPreferencesHelper.getCurrentUser();
@@ -65,14 +63,23 @@ public class UserViewModel extends AndroidViewModel {
             int userType = me.getType();
             if (userType == user && me.getCompany() != null) {
                 User company = me.getCompany();
-                result = repository.getUsersInCompany(me.getType(), company.getUid());
+                result = repository.getUsersInCompanyWithGroup(me.getType(), company.getUid());
             } else if (userType == group) {
-                result = repository.getUsersInCompany(me.getType(), me.getUid());
+                result = repository.getUsersInCompanyWithGroup(me.getType(), me.getUid());
             } else if (userType == manage) {
                 result = repository.getCompanys();
             } else if (userType == admin) {
                 result = repository.getAllUsers();
             }
+        }
+        return result;
+    }
+
+    public LiveData<Resource<List<User>>> getUsersInCompany() {
+        LiveData<Resource<List<User>>> result = new MediatorLiveData<>();  // TODO: 3为UI设立空白页面
+        User me = AppPreferencesHelper.getCurrentUser();
+        if (me != null) {
+            result = repository.getUsersInCompany(me.getType(), me.getUid());
         }
         return result;
     }

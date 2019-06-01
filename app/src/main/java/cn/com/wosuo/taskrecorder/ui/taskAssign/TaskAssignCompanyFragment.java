@@ -87,7 +87,7 @@ public class TaskAssignCompanyFragment extends Fragment{
 
         UserViewModel userViewModel =
                 ViewModelProviders.of(this).get(UserViewModel.class);
-        userViewModel.getAllUsers().observe(this, usersResource
+        userViewModel.getUsersInCompany().observe(this, usersResource
                 -> adapter.setUsers(usersResource.data));
         return view;
     }

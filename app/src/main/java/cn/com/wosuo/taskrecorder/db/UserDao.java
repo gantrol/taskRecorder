@@ -46,6 +46,9 @@ public interface UserDao {
     @Query("SELECT * FROM users where company_id = :id")
     LiveData<List<User>> loadUserByGroupID (int id);
 
+    @Query("SELECT * FROM users where company_id = :id OR uid = :id")
+    LiveData<List<User>> loadUserByGroupIDWithGroup (int id);
+
     @Query("SELECT * FROM users where uid = :userId")
     User loadUserSync(int userId);
 
