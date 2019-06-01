@@ -127,7 +127,11 @@ public class TaskNewFragment extends Fragment {
                 mAppExecutors.mainThread().execute(()
                         -> onCreateTaskMessage(message)
                 );
+//                if (statusCode == 200) {
+//
+//                }
                 viewModel.resetTaskListRateLimit(me.getUid());
+                requireActivity().setResult(Activity.RESULT_OK, new Intent());
                 requireActivity().finish();
             }
 
@@ -175,7 +179,10 @@ public class TaskNewFragment extends Fragment {
     @OnClick(R.id.cancel_btn)
     void cancel(){
         //TODO:2 alert window to check again for it
-        requireActivity().onBackPressed();
+        Intent intent = new Intent();
+        requireActivity().setResult(Activity.RESULT_CANCELED, intent);
+        requireActivity().finish();
+//        requireActivity().onBackPressed();
 //        requireActivity().getFragmentManager().popBackStack();
     }
 

@@ -1,6 +1,8 @@
 package cn.com.wosuo.taskrecorder.ui.tasklist;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +40,7 @@ import cn.com.wosuo.taskrecorder.vo.Task;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.MANAGER_GROUP;
 
 public class TaskListFragment extends Fragment {
+    private static final int REQUEST_NEW_TASK = 1;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.task_recycler_view)RecyclerView mTaskRecyclerView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
@@ -98,7 +102,23 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = TaskNewActivity.newIntent(getActivity());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_NEW_TASK);
+//            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_NEW_TASK){
+            if (resultCode == Activity.RESULT_OK){
+                //TODO: reflesh fragment
+                FragmentTransaction ft = requireFragmentManager().beginTransaction();
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false);
+                }
+                ft.detach(this).attach(this).commit();
+            }
         }
     }
 }
