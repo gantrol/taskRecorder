@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.ui.taskAssign.TaskAssignActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
+import cn.com.wosuo.taskrecorder.util.Resource;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.Task;
 import cn.com.wosuo.taskrecorder.vo.User;
@@ -102,8 +104,10 @@ public class TaskEditFragment extends Fragment {
         mCancelButtom.setText("取消修改");
         mTitleEditText.setText(mTask.getTitle());
         mAssigneeEditText.setText(String.valueOf(mTask.getAssignee_id()));
-//        TODO: 好像要改数据库才好办。
-        mAssigneeTextView.setText("未知");
+        viewModel.getUser(mTask.getAssignee_id()).observe(this, userResource -> {
+            User company = userResource.data;
+            if (company != null) mAssigneeTextView.setText(company.getName());
+        });
         mDetailEditText.setText(mTask.getDescription());
         mTypeSpinner.setSelection(mTask.getType());
         return view;
