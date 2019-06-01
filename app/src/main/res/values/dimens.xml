@@ -4,6 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="list_item_top_bottom">12dp</dimen>
+    <dimen name="list_item_padding">5dp</dimen>
     <dimen name="list_item_start_end">24dp</dimen>
     <dimen name="card_item_between">0.1dp</dimen>
     <dimen name="list_subitem_top">8dp</dimen>
@@ -13,6 +14,7 @@
     <dimen name="list_margin_between">0.1dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="btn_margin">20dp</dimen>
+    <dimen name="cancel_btn_margin">40dp</dimen>
     <dimen name="btn_weight_small">60dp</dimen>
     <dimen name="btn_height_small">30dp</dimen>
     <dimen name="item_horizontal_margin">8dp</dimen>
@@ -22,6 +24,7 @@
     <dimen name="grid_expected_size">120dp</dimen>
     <dimen name="media_grid_size">48dp</dimen>
     <dimen name="media_grid_spacing">4dp</dimen>
+    <dimen name="edittext_item_height">56dp</dimen>
     <dimen name="album_item_height">72dp</dimen>
     <dimen name="image_34_width">120dp</dimen>
     <dimen name="image_34_height">160dp</dimen>

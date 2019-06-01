@@ -44,6 +44,10 @@
         <item name="fab_colorRipple">@color/secondary_shadow</item>
     </style>
 
+    <style name="TextLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">@dimen/normal_text_size</item>
+    </style>
+
 
     <!--<style name="ToolBarStyle.Event" parent="Theme.AppCompat.Light.NoActionBar">-->
         <!--<list_item_user name="titleTextAppearance">@style/TextAppearance.Widget.Event.Toolbar.Title</list_item_user>-->
