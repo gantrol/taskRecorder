@@ -567,8 +567,8 @@ public class TaskReadFragment extends Fragment {
                         Toast.makeText(getContext(), TAG + ":" + "操作取消",
                                 Toast.LENGTH_SHORT).show());
             }
-//            TODO: add edit???
         }
+        //        TODO: reflesh at all current?
     }
 
     private void updateExecutorUI() {

@@ -47,6 +47,7 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SOON;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SUCCESS;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_LOGIN_FAILED;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_LOGIN_SUCCESS;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ToastShowField.YOU_SIGNUP_SUCCESS;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -238,7 +239,8 @@ public class LoginActivity extends AppCompatActivity {
                 String email = data.getStringExtra(FinalStrings.LoginSignUpField.EMAIL);
                 AppExecutors mAppExecutors = new AppExecutors();
                 mAppExecutors.mainThread().execute(() -> {
-                    Toast.makeText(getBaseContext(), PLEASELOGIN, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), YOU_SIGNUP_SUCCESS + "，" + PLEASELOGIN,
+                            Toast.LENGTH_SHORT).show();
                     _passwordText.setText(password);
                     _emailText.setText(email);
                 });

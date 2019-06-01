@@ -149,12 +149,6 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public void onSignupSuccess(String password, String email){
-        Handler mHandler = new Handler(Looper.getMainLooper());
-        mHandler.postDelayed(() ->
-                runOnUiThread(() ->{
-                    _signupButton.setEnabled(true);
-                    Toast.makeText(getBaseContext(), YOU_SIGNUP_SUCCESS, Toast.LENGTH_LONG).show();
-                }), 100);
         Intent intent = new Intent();
         intent.putExtra(FinalStrings.LoginSignUpField.PASSWORD, password)
                 .putExtra(FinalStrings.LoginSignUpField.EMAIL, email);
