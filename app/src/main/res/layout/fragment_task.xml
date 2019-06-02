@@ -385,7 +385,7 @@
         app:menu_labels_hideAnimation="@anim/jump_to_down"
         app:menu_animationDelayPerItem="0"
         app:menu_shadowColor="@color/fab_shadow"
-        app:menu_backgroundColor="#49FFFFFF"
+        app:menu_backgroundColor="#00FFFFFF"
         app:menu_colorNormal="@color/secondary"
         app:menu_colorPressed="@color/secondary"
         app:menu_colorRipple="@color/secondary_shadow">

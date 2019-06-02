@@ -40,6 +40,7 @@ import cn.com.wosuo.taskrecorder.vo.Task;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.MANAGER_GROUP;
 
 public class TaskListFragment extends Fragment {
+    private static final int REQUEST_TASK = 0;
     private static final int REQUEST_NEW_TASK = 1;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.task_recycler_view)RecyclerView mTaskRecyclerView;
@@ -52,12 +53,15 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         ((AppCompatActivity)requireActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText("任务列表");
-
+        toolbar.setNavigationOnClickListener(v -> {
+            requireActivity().setResult(Activity.RESULT_OK);
+            requireActivity().finish();
+        });
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final TaskAdapter adapter = new TaskAdapter();
         adapter.setClickListener(new TaskOnClickListener());
@@ -94,7 +98,7 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onItemClick(Task task) {
             Intent intent = TaskReadActivity.newIntent(getActivity(), task.getTaskID());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_TASK);
         }
     }
 
@@ -103,7 +107,6 @@ public class TaskListFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = TaskNewActivity.newIntent(getActivity());
             startActivityForResult(intent, REQUEST_NEW_TASK);
-//            startActivity(intent);
         }
     }
 
@@ -112,13 +115,18 @@ public class TaskListFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_TASK){
             if (resultCode == Activity.RESULT_OK){
-                //TODO: reflesh fragment
                 FragmentTransaction ft = requireFragmentManager().beginTransaction();
                 if (Build.VERSION.SDK_INT >= 26) {
                     ft.setReorderingAllowed(false);
                 }
                 ft.detach(this).attach(this).commit();
             }
+        } else if (requestCode == REQUEST_TASK) {
+            FragmentTransaction ft = requireFragmentManager().beginTransaction();
+            if (Build.VERSION.SDK_INT >= 26) {
+                ft.setReorderingAllowed(false);
+            }
+            ft.detach(this).attach(this).commit();
         }
     }
 }

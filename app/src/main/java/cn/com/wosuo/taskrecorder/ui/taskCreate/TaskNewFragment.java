@@ -127,9 +127,6 @@ public class TaskNewFragment extends Fragment {
                 mAppExecutors.mainThread().execute(()
                         -> onCreateTaskMessage(message)
                 );
-//                if (statusCode == 200) {
-//
-//                }
                 viewModel.resetTaskListRateLimit(me.getUid());
                 requireActivity().setResult(Activity.RESULT_OK, new Intent());
                 requireActivity().finish();

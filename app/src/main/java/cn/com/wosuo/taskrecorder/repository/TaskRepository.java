@@ -41,6 +41,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
+import static cn.com.wosuo.taskrecorder.ui.UiString.PHOTO_LIST;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.PhotoField.PHOTO_FILE;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_COOR;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.TaskField.TASK_ID;
@@ -296,7 +297,7 @@ public class TaskRepository {
 
             @Override
             protected void onFetchFailed() {
-                taskListRateLimit.reset(TASK_LIST);
+                photoResultRateLimit.reset(taskID);
             }
         }).getAsLiveData();
     }
@@ -421,6 +422,14 @@ public class TaskRepository {
                 .add(TASK_COOR, String.valueOf(coordinate))
                 .build();
         HttpUtil.PUT("Explore/" + taskID, requestBody, callback);
+    }
+
+//    LocCenterPoint
+
+    public void setCenterPointCoordinateLocally(int taskID, double mLongitude,
+                                                double mLatitude, int coordinate){
+        LocCenterPoint locCenterPoint = new LocCenterPoint(taskID, mLongitude, mLatitude, coordinate);
+        mLocCenterPointDao.insert(locCenterPoint);
     }
 
     /**
@@ -555,4 +564,9 @@ public class TaskRepository {
     public void resetTaskListRateLimit(int userID) {
         taskListRateLimit.reset(userID);
     }
+
+    public void resetPhotoListRateLimit(int taskID) {
+        photoResultRateLimit.reset(taskID);
+    }
+
 }

@@ -3,6 +3,7 @@ package cn.com.wosuo.taskrecorder.ui.taskread;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -87,7 +89,10 @@ import static cn.com.wosuo.taskrecorder.util.FinalStrings.USER_LIST;
 
 
 public class TaskReadFragment extends Fragment {
-    private static final int REQUEST_ASSIGNEE = 1;
+    private static final int REQUEST_ASSIGNEE = 0;
+    private static final int REQUEST_LOCATION = 1;
+    private static final int REQUEST_ROUTING = 2;
+    private static final int REQUEST_PHOTO = 3;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     private String TAG = "查阅任务";
 
@@ -129,6 +134,7 @@ public class TaskReadFragment extends Fragment {
     private AppExecutors mAppExecutors = new AppExecutors();
     private List<Integer> exeIDs = new ArrayList<>();
     private List<User> executors = new ArrayList<>();
+    private final PhotoReadAdapter mPhotoReadAdapter = new PhotoReadAdapter();
     private int taskId;
     private int userType;
     private Task mTask;
@@ -165,9 +171,7 @@ public class TaskReadFragment extends Fragment {
         }
         mToolbarTitleTextView.setText(TAG);
         mPhotoReadRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final PhotoReadAdapter adapter = new PhotoReadAdapter();
-        mPhotoReadRecyclerView.setAdapter(adapter);
-
+        mPhotoReadRecyclerView.setAdapter(mPhotoReadAdapter);
         viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         viewModel.getTasksById(taskId).observe(this, taskResource -> {
             mTask = taskResource;
@@ -182,24 +186,26 @@ public class TaskReadFragment extends Fragment {
 //                    1.照片
                     viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
                         if (photoResource != null)
-                            adapter.submitList(photoResource.data);
+                            mPhotoReadAdapter.submitList(photoResource.data);
                     });
                     // TODO:无数据状态
                     viewModel.getLocCenterPointByTaskID(taskId).observe(this, centerPointResource -> {
                         LocCenterPoint locCenterPoint = centerPointResource.data;
-                        if (locCenterPoint != null){
+//                        TODO: && (!locCenterPoint.equals(mZeroLocCenterPoint))
+                        if (locCenterPoint != null ){
                             LatLng GEO_CENTER = CoordinateTypeUtil.toBaidull(locCenterPoint);
                             MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
-                            TextureSupportMapFragment map2 = (TextureSupportMapFragment) (getChildFragmentManager()
+                            TextureSupportMapFragment LocCenterPointFragment =
+                                    (TextureSupportMapFragment) (getChildFragmentManager()
                                     .findFragmentById(R.id.local_map_fragment));
-                            map2.getBaiduMap().setMapStatus(status2);
+                            LocCenterPointFragment.getBaiduMap().setMapStatus(status2);
                             status2 = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
-                            map2.getBaiduMap().animateMapStatus(status2);
+                            LocCenterPointFragment.getBaiduMap().animateMapStatus(status2);
                             OverlayOptions option = new MarkerOptions()
                                     .position(GEO_CENTER)
                                     .icon(bd);
                             //在地图上添加Marker，并显示
-                            map2.getBaiduMap().addOverlay(option);
+                            LocCenterPointFragment.getBaiduMap().addOverlay(option);
                         }
                     });
 
@@ -224,9 +230,10 @@ public class TaskReadFragment extends Fragment {
                                     //  第一个点, 确定大致定位, 选定大概缩放区域
                                     LatLng GEO_TRACK = CoordinateTypeUtil.toBaidull(trackDataList.get(0), coordinate);
                                     MapStatusUpdate trackMapUpadate = MapStatusUpdateFactory.newLatLng(GEO_TRACK);
-                                    TextureSupportMapFragment TrackMap = (TextureSupportMapFragment) (getChildFragmentManager()
+                                    TextureSupportMapFragment TrackMapFragment =
+                                            (TextureSupportMapFragment) (getChildFragmentManager()
                                             .findFragmentById(R.id.track_map_fragment));
-                                    BaiduMap baiduMap = TrackMap.getBaiduMap();
+                                    BaiduMap baiduMap = TrackMapFragment.getBaiduMap();
                                     baiduMap.setMapStatus(trackMapUpadate);
                                     trackMapUpadate = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
                                     baiduMap.animateMapStatus(trackMapUpadate);
@@ -319,7 +326,8 @@ public class TaskReadFragment extends Fragment {
         }
         if (myType == sUserType.indexOf(GROUP_GROUP) || myType == sUserType.indexOf(MANAGER_GROUP)){
             fabStatus.setOnClickListener(clickListener);
-        } else {
+        }
+        else {
             fabStatus.setVisibility(View.GONE);
         }
         if (myType == sUserType.indexOf(MANAGER_GROUP)){
@@ -452,21 +460,20 @@ public class TaskReadFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fab_photo:
-                    Intent photoIntent = TaskPhotoActivity.newIntent(requireContext(), taskId);
-                    startActivity(photoIntent);
+                    Intent photoIntent = TaskPhotoActivity.newIntent(getActivity(), taskId);
+                    startActivityForResult(photoIntent, REQUEST_PHOTO);
                     break;
                 case R.id.fab_explore:
-                    Intent exploreIntent = TaskCenterPointActivity.newIntent(requireContext(), taskId);
-                    startActivity(exploreIntent);
+                    Intent exploreIntent = TaskCenterPointActivity.newIntent(getActivity(), taskId);
+                    startActivityForResult(exploreIntent, REQUEST_LOCATION);
                     break;
                 case R.id.fab_route:
-                    Intent routeIntent = TaskTrackActivity.newIntent(requireContext(), taskId);
-                    startActivity(routeIntent);
+                    Intent routeIntent = TaskTrackActivity.newIntent(getActivity(), taskId);
+                    startActivityForResult(routeIntent, REQUEST_ROUTING);
                     break;
                 case R.id.fab_info:
                     if (mTask.getStatus() == FinalMap.getTaskStatusArray().indexOf(TASK_CREATE)){
                         Intent infoIntent = TaskEditActivity.newIntent(getActivity(), mTask);
-//                        TODO: for result
                         startActivity(infoIntent);
                     } else {
                         Toast.makeText(getContext(), "无法修改，任务状态不为" + TASK_CREATE,
@@ -558,8 +565,6 @@ public class TaskReadFragment extends Fragment {
                             }
                         });
                     }
-
-
                 });
 
             } else {
@@ -567,8 +572,23 @@ public class TaskReadFragment extends Fragment {
                         Toast.makeText(getContext(), TAG + ":" + "操作取消",
                                 Toast.LENGTH_SHORT).show());
             }
+        } else if (requestCode == REQUEST_PHOTO) {
+            if (resultCode == Activity.RESULT_OK) {
+                viewModel.resetPhotoListRateLimit(taskId);
+                viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
+                    if (photoResource != null)
+                        mPhotoReadAdapter.submitList(photoResource.data);
+                });
+            }
         }
-        //        TODO: reflesh at all current?
+        else {
+            // TODO: reflesh at all current?
+            FragmentTransaction ft = requireFragmentManager().beginTransaction();
+            if (Build.VERSION.SDK_INT >= 26) {
+                ft.setReorderingAllowed(false);
+            }
+            ft.detach(this).attach(this).commit();
+        }
     }
 
     private void updateExecutorUI() {

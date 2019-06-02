@@ -1,6 +1,8 @@
 package cn.com.wosuo.taskrecorder.ui.taskphoto;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,18 +42,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
 import cn.com.wosuo.taskrecorder.R;
 import cn.com.wosuo.taskrecorder.ui.adapter.PhotoAdapter;
+import cn.com.wosuo.taskrecorder.ui.sign.LoginActivity;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.Glide4Engine;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.PhotoUpload;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.ResourceField.SOON;
 
 
 public class TaskPhotoFragment extends Fragment {
@@ -63,6 +70,7 @@ public class TaskPhotoFragment extends Fragment {
     }
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_OK_btn) Button mOkButton;
     @BindView(R.id.photo_recycler_view) RecyclerView mPhotoRecyclerView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
     @BindView(R.id.add_photo_fab) FloatingActionButton mFloatingActionButton;
@@ -70,6 +78,7 @@ public class TaskPhotoFragment extends Fragment {
     static final String ARG_Task_ID = "task_id";
     private static final String TAG = "上传照片";
     MyLocationListener myLocationListener = new MyLocationListener();
+    private AppExecutors mAppExecutors = new AppExecutors();
     private static final int REQUEST_IMAGE = 1;
     ArrayList<String> sCoorType = FinalMap.getCoorTypeList();
     String mCurrentCoorType = sCoorType.get(2);
@@ -80,6 +89,7 @@ public class TaskPhotoFragment extends Fragment {
     private LocationClient mLocationClient;
     double mCurrentLatitude;
     double mCurrentLongitude;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -153,39 +163,78 @@ public class TaskPhotoFragment extends Fragment {
 
     @OnClick(R.id.toolbar_OK_btn)
     public void uploadPhotos(){
+
+        progressDialog = new ProgressDialog(this.getContext(),
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(SOON);
+        progressDialog.show();
+
+        mOkButton.setEnabled(false);
         List<PhotoUpload> photoUploads = mAdapter.retrieveData();
         if (photoUploads == null || photoUploads.isEmpty()){
-            Toast.makeText(getContext(), "请点击右下角添加图片", Toast.LENGTH_SHORT).show();
+            onPostPhotoMessage("请点击右下角添加图片");
+            progressDialog.dismiss();
         } else {
-            Toast.makeText(getContext(), "Going on", Toast.LENGTH_SHORT).show();
-
-            for (PhotoUpload photoUpload: photoUploads) {
+            final int indexEnd = photoUploads.size() - 1;
+            for (int i = 0; i < photoUploads.size(); i++) {
+                PhotoUpload photoUpload = photoUploads.get(i);
                 Call call = viewModel.uploadPhoto(photoUpload, mCurrentLatitude, mCurrentLongitude, taskId);
                 if (call != null){
-                    call.enqueue(new Callback() {
-                        @Override
-                        public void onResponse(Call call, Response response) {
-                            String responseData = "";
-                            if (response.body() != null)
-                                responseData = response.body().toString();
-//                            TODO: 成功时的刷新？
-                        }
+                    if (i == indexEnd) {
+                        mAppExecutors.networkIO().execute( () ->
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call call, Response response) {
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            mAppExecutors.mainThread().execute(()
+                                                    -> onPostPhotoMessage("上传成功"));
+                                            viewModel.resetPhotoListRateLimit(taskId);
+                                            progressDialog.dismiss();
+                                            Intent intent = new Intent();
+                                            requireActivity().setResult(RESULT_OK, intent);
+                                            requireActivity().finish();
+                                        }
+                                    }
 
-                        @Override
-                        public void onFailure(Call call, Throwable t) {
-                        }
-                    });
+                                    @Override
+                                    public void onFailure(Call call, Throwable t) {
+                                        mAppExecutors.mainThread().execute(()
+                                                -> onPostPhotoMessage(t.getMessage()));
+                                    }
+                                })
+                        );
+                    } else {
+                        mAppExecutors.networkIO().execute( () ->
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call call, Response response) {
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call call, Throwable t) {
+                                    }
+                                })
+                        );
+                    }
                 } else {
-                    Toast.makeText(getContext(), "处理图片出错",
-                            Toast.LENGTH_SHORT).show();
+                    onPostPhotoMessage("处理图片出错");
                 }
 
             }
         }
+
+    }
+
+    private void onPostPhotoMessage(String message) {
+        mOkButton.setEnabled(true);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.toolbar_cancel_btn)
     public void photoCancel(){
+        Intent intent = new Intent();
+        requireActivity().setResult(Activity.RESULT_CANCELED, intent);
         requireActivity().finish();
     }
 

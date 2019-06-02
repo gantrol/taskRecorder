@@ -1,5 +1,6 @@
 package cn.com.wosuo.taskrecorder.ui.taskloc;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class TaskCenterPointFragment extends TaskLocFragment {
+
+    private double mFinalLongitude;
+    private double mFinalLatitude;
 
     private static final String TAG = "获取定位";
 
@@ -32,8 +36,10 @@ public class TaskCenterPointFragment extends TaskLocFragment {
 
     @Override
     void okOnClick() {
+        mFinalLongitude = mCurrentLongitude;
+        mFinalLatitude = mCurrentLatitude;
         viewModel.setTaskCenterPointCoordinate(
-                taskId, mCurrentLongitude, mCurrentLatitude,
+                taskId, mFinalLongitude, mFinalLatitude,
                 sCoorType.indexOf(mCurrentCoorType),
                 centerPointCallback);
     }
@@ -52,6 +58,10 @@ public class TaskCenterPointFragment extends TaskLocFragment {
             String message = FinalMap.getStatusCodeMap().get(statusCode);
             mAppExecutors.mainThread().execute(()
                     -> onChangeTaskStatusMessage(message));
+            mAppExecutors.diskIO().execute(() ->
+                    viewModel.setTaskCenterPointCoordinateLocally(taskId, mFinalLongitude,
+                            mFinalLatitude, sCoorType.indexOf(mCurrentCoorType)));
+            requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         }
     };

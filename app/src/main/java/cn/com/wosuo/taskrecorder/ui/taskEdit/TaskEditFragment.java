@@ -141,7 +141,7 @@ public class TaskEditFragment extends Fragment {
                 mAppExecutors.mainThread().execute(()
                         -> onCreateTaskMessage(message)
                 );
-                if (statusCode == 200) {
+                if (response.isSuccessful()) {
                     mAppExecutors.diskIO().execute(() ->
                             viewModel.updateTaskInfo(
                                     title, assignee_id, type, detail, mTask.getTaskID()));

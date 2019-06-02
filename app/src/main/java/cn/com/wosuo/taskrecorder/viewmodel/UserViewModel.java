@@ -79,7 +79,12 @@ public class UserViewModel extends AndroidViewModel {
         LiveData<Resource<List<User>>> result = new MediatorLiveData<>();  // TODO: 3为UI设立空白页面
         User me = AppPreferencesHelper.getCurrentUser();
         if (me != null) {
-            result = repository.getUsersInCompany(me.getType(), me.getUid());
+            int userType = me.getType();
+            if (userType == group) {
+                result = repository.getUsersInCompany(me.getType(), me.getUid());
+            } else if (userType == manage) {
+                result = repository.getCompanys();
+            }
         }
         return result;
     }

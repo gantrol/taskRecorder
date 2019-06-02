@@ -135,9 +135,22 @@ public class TaskViewModel extends AndroidViewModel {
         mTaskRepository.patchTaskStatus(taskID, status, callback);
     }
 
+    /**
+     *
+     * @param taskID id of task
+     * @param x mLongitude
+     * @param y mLatitude
+     * @param coordinate 0, 1, 2
+     * @param callback put callback
+     */
     public void setTaskCenterPointCoordinate(
             int taskID, double x, double y, int coordinate, Callback callback){
         mTaskRepository.putCenterPointCoordinate(taskID, x, y, coordinate, callback);
+    }
+
+    public void setTaskCenterPointCoordinateLocally(int taskID, double mLongitude,
+                                                    double mLatitude, int coordinate){
+        mTaskRepository.setCenterPointCoordinateLocally(taskID, mLongitude, mLatitude, coordinate);
     }
 
     public void addTaskTrack(String trackData, int taskID, Callback callback){
@@ -184,10 +197,7 @@ public class TaskViewModel extends AndroidViewModel {
     }
 
     public Call<ResponseBody> editTask (int taskID, String title, int assigneeID, int type, String detail){
-        return mTaskRepository.editTask(
-                taskID,
-                getTaskInfoBody(title, assigneeID, type, detail)
-                );
+        return mTaskRepository.editTask(taskID, getTaskInfoBody(title, assigneeID, type, detail));
     }
 
     public RequestBody getTaskInfoBody (String title, int assigneeID, int type, String detail) {
@@ -236,11 +246,15 @@ public class TaskViewModel extends AndroidViewModel {
 
     @Deprecated
     public User getMe() {
-//        TODO: it should be appear in UserViewMOdel!!
+//        TODO: it should be appear in UserViewModel!!
         return AppPreferencesHelper.getCurrentUser();
     }
 
     public void resetTaskListRateLimit(int userID){
         mTaskRepository.resetTaskListRateLimit(userID);
+    }
+
+    public void resetPhotoListRateLimit(int taskID){
+        mTaskRepository.resetPhotoListRateLimit(taskID);
     }
 }

@@ -119,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: 4更改progressDialog的样式，使之更美观
         progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
-
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(SOON);
         progressDialog.show();

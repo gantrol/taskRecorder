@@ -30,6 +30,9 @@ import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.User;
 
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.MANAGER_GROUP;
+import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.USER_GROUP;
+
 
 public class UserMeFragment extends Fragment {
 
@@ -59,10 +62,19 @@ public class UserMeFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText(TAG);
-        Picasso.get().load(R.drawable.nav_icon).into(myAvatarImageView);
-        mLogoutButton.setOnClickListener(v -> logout());
         mTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         me = mTaskViewModel.getMe();
+        int avatar = R.drawable.nav_icon;  // admin && user's avatar
+        int myType = me.getType();
+        if (myType == FinalMap.getUserTypeList().indexOf(USER_GROUP)){
+            avatar = R.drawable.user_avatar;
+        } else if (myType == FinalMap.getUserTypeList().indexOf(MANAGER_GROUP)){
+            avatar = R.drawable.ic_icon;
+        }
+        Picasso.get().load(avatar).into(myAvatarImageView);
+        mLogoutButton.setOnClickListener(v -> logout());
+
+
 //        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 //        userViewModel.getUseMe().observe(this, userResource -> {
 //            User me = userResource.data;
@@ -92,7 +104,8 @@ public class UserMeFragment extends Fragment {
         if (me.getCompany()== null) {
             mMyGroupTableRow.setVisibility(View.GONE);
         } else {
-            mMyGroupTextView.setText(me.getCompany().getName());
+            String company = me.getCompany().getName();
+            mMyGroupTextView.setText(company);
         }
         mMyNameTextView.setText(me.getName());
         mMyEmailTextView.setText(me.getMail());

@@ -1,6 +1,7 @@
 package cn.com.wosuo.taskrecorder.ui.taskloc;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.wosuo.taskrecorder.AppExecutors;
 import cn.com.wosuo.taskrecorder.BasicApp;
@@ -52,6 +54,11 @@ public abstract class TaskLocFragment extends Fragment {
     @BindView(R.id.toolbar_title) TextView mToolbarTitleTextView;
     @BindView(R.id.toolbar_OK_btn) Button mToolbarOkButton;
     @BindView(R.id.toolbar_cancel_btn) Button mToolbarCancelButton;
+    @OnClick(R.id.toolbar_cancel_btn)
+    void cancelOnClick() {
+        requireActivity().setResult(Activity.RESULT_CANCELED);
+        requireActivity().finish();
+    }
     @BindView(R.id.baiduMapView) MapView mMapView;
     static final String ARG_Task_ID = "task_id";
     public LocationClient mLocationClient = null;
@@ -98,13 +105,13 @@ public abstract class TaskLocFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText(setTitle());
-        mToolbarCancelButton.setOnClickListener(v1 ->
-                requireActivity().finish());
         mToolbarOkButton.setOnClickListener(v1 -> okOnClick());
         mBaiduMap.setOnMapStatusChangeListener(mapStatusListener);
         requestPermissions();
         return v;
     }
+
+
 
     BaiduMap.OnMapStatusChangeListener mapStatusListener =
             new BaiduMap.OnMapStatusChangeListener() {

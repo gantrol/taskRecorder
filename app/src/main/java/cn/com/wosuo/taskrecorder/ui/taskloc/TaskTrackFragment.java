@@ -1,5 +1,6 @@
 package cn.com.wosuo.taskrecorder.ui.taskloc;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,6 +134,7 @@ public class TaskTrackFragment extends TaskLocFragment {
                     String message = FinalMap.getStatusCodeMap().get(statusCode);
                     mAppExecutors.mainThread().execute(()
                             -> onChangeTaskStatusMessage(message));
+                    requireActivity().setResult(Activity.RESULT_OK);
                     requireActivity().finish();
                 }
             });
