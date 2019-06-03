@@ -78,7 +78,7 @@ public abstract class TaskLocFragment extends Fragment {
     String mCurrentCoorType = sCoorType.get(2);
     float mCurrentAccracy;
     int mXDirection = 0;
-    float mCurrentZoom = 40f;
+    float mCurrentZoom = 25f;
     private MyOrientationListener myOrientationListener;
 
     @Override
@@ -106,8 +106,8 @@ public abstract class TaskLocFragment extends Fragment {
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
         mToolbarTitleTextView.setText(setTitle());
         mToolbarOkButton.setOnClickListener(v1 -> okOnClick());
-        mBaiduMap.setOnMapStatusChangeListener(mapStatusListener);
         requestPermissions();
+        mBaiduMap.setOnMapStatusChangeListener(mapStatusListener);
         return v;
     }
 

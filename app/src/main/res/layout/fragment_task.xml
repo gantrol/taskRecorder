@@ -391,11 +391,19 @@
         app:menu_colorRipple="@color/secondary_shadow">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="上传四种照片"
+            android:src="@android:drawable/ic_menu_camera"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_explore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_compass"
-            app:fab_label="获取定位"
+            app:fab_label="场地中心坐标"
             style="@style/MenuButtonsStyle" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -403,15 +411,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_dialog_map"
-            app:fab_label="巡查路线"
-            style="@style/MenuButtonsStyle" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="上传照片"
-            android:src="@android:drawable/ic_menu_camera"
+            app:fab_label="记录巡查路线"
             style="@style/MenuButtonsStyle" />
 
         <com.github.clans.fab.FloatingActionButton

@@ -61,15 +61,17 @@ public class JsonParser {
         return statusCode;
     }
 
-    public static int parseChangeTaskStatusJson(String responseBody){
+    public static Pair<Integer, String> parseChangeTaskStatusJson(String responseBody){
         int statusCode = -1;
+        String message = null;
         if (responseBody != null && !responseBody.isEmpty()){
             Type type = new TypeToken<BigkeerResponse<String>>(){}.getType();
             Gson gson = getGson();
             BigkeerResponse<String> response = gson.fromJson(responseBody, type);
             statusCode = response.getCode();
+            message = response.getMessage();
         }
-        return statusCode;
+        return new Pair<>(statusCode, message);
     }
 
     public static String generateTrackJson(List<TrackData> sTrackData, int coordinate){

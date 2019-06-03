@@ -83,10 +83,10 @@ public final class FinalStrings {
         public static final String TASK_CREATE_AT = "createAt";
         public static final String TASK_UPDATE_AT = "updateAt";
         public static final String TASK_FINISH_AT = "finishAt";
-        public static final String TASK_CREATE = "创建中";
-        public static final String TASK_PROGRESS = "进行中";
-        public static final String TASK_TEST = "测试中";
-        public static final String TASK_DONE = "已完成";
+        public static final String TASK_CREATE = "待公司指派员工";
+        public static final String TASK_PROGRESS = "待员工上传结果";
+        public static final String TASK_TEST = "待审查";
+        public static final String TASK_DONE = "审查通过";
         public static final String TASK_NONE = "取消";
     }
 

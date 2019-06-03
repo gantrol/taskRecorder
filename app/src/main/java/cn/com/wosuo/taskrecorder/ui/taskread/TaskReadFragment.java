@@ -65,6 +65,7 @@ import cn.com.wosuo.taskrecorder.util.DateUtil;
 import cn.com.wosuo.taskrecorder.util.FinalMap;
 import cn.com.wosuo.taskrecorder.util.JsonParser;
 import cn.com.wosuo.taskrecorder.util.LocPointComparator;
+import cn.com.wosuo.taskrecorder.util.Pair;
 import cn.com.wosuo.taskrecorder.viewmodel.TaskViewModel;
 import cn.com.wosuo.taskrecorder.vo.LocCenterPoint;
 import cn.com.wosuo.taskrecorder.vo.Task;
@@ -75,6 +76,7 @@ import cn.com.wosuo.taskrecorder.vo.User;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import static cn.com.wosuo.taskrecorder.api.Urls.UserApi.COMPANY_GET_EXECUTOR;
 import static cn.com.wosuo.taskrecorder.util.FinalStrings.UserField.ADMIN_GROUP;
@@ -140,6 +142,7 @@ public class TaskReadFragment extends Fragment {
     private Task mTask;
     private Unbinder unbinder;
     private TaskViewModel viewModel;
+    TextureSupportMapFragment LocCenterPointFragment;
 
     public static TaskReadFragment newInstance(int taskId) {
         Bundle args = new Bundle();
@@ -184,7 +187,7 @@ public class TaskReadFragment extends Fragment {
                     });
 //                    有assignee的时候，才有结果
 //                    1.照片
-                    viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
+                    viewModel.getPhotoResultsByTaskID(taskId, true).observe(this, photoResource -> {
                         if (photoResource != null)
                             mPhotoReadAdapter.submitList(photoResource.data);
                     });
@@ -195,8 +198,8 @@ public class TaskReadFragment extends Fragment {
                         if (locCenterPoint != null ){
                             LatLng GEO_CENTER = CoordinateTypeUtil.toBaidull(locCenterPoint);
                             MapStatusUpdate status2 = MapStatusUpdateFactory.newLatLng(GEO_CENTER);
-                            TextureSupportMapFragment LocCenterPointFragment =
-                                    (TextureSupportMapFragment) (getChildFragmentManager()
+                            LocCenterPointFragment = (TextureSupportMapFragment)
+                                    (getChildFragmentManager()
                                     .findFragmentById(R.id.local_map_fragment));
                             LocCenterPointFragment.getBaiduMap().setMapStatus(status2);
                             status2 = MapStatusUpdateFactory.zoomTo(mCurrentZoom);
@@ -433,14 +436,18 @@ public class TaskReadFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response)
                     throws IOException {
-                String responseData = response.body() != null ? response.body().string() : null;
-                int statusCode = JsonParser.
+                ResponseBody responseBody = response.body();
+                String responseData = responseBody != null ? responseBody.string() : null;
+                Pair<Integer, String> pair = JsonParser.
                         parseChangeTaskStatusJson(responseData);
-                if (statusCode == 0 || statusCode == 200){
+                int statusCode = pair.a;
+                if (statusCode == 0 || (response.code() >= 200 && response.code() <= 300) ){
                     viewModel.updateTaskStatus(taskId, status);
 //                    mStatusTextView.setText(FinalMap.getTaskStatusList()[status]);
                 }
-                String message = statusCodeMap.get(statusCode);
+                String message = pair.b == null ?
+                        statusCodeMap.get(statusCode):
+                        pair.b;
                 mAppExecutors.mainThread().execute(() -> {
                     dialog.dismiss();
                     onChangeTaskStatusMessage(message);
@@ -476,8 +483,8 @@ public class TaskReadFragment extends Fragment {
                         Intent infoIntent = TaskEditActivity.newIntent(getActivity(), mTask);
                         startActivity(infoIntent);
                     } else {
-                        Toast.makeText(getContext(), "无法修改，任务状态不为" + TASK_CREATE,
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "无法修改，因为当前任务状态不是“" + TASK_CREATE
+                                + "”", Toast.LENGTH_LONG).show();
                     }
 
                     break;
@@ -575,11 +582,15 @@ public class TaskReadFragment extends Fragment {
         } else if (requestCode == REQUEST_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 viewModel.resetPhotoListRateLimit(taskId);
-                viewModel.getPhotoResultsByTaskID(taskId).observe(this, photoResource -> {
+                viewModel.getPhotoResultsByTaskID(taskId, false).observe(this, photoResource -> {
                     if (photoResource != null)
                         mPhotoReadAdapter.submitList(photoResource.data);
                 });
             }
+        } else if (requestCode == REQUEST_LOCATION){
+//            Flush map view
+            if (resultCode == Activity.RESULT_OK)
+                LocCenterPointFragment.getBaiduMap().clear();
         }
         else {
             // TODO: reflesh at all current?

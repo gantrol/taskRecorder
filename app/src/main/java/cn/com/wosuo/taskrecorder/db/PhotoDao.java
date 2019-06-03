@@ -17,4 +17,7 @@ public interface PhotoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<PhotoResult> photoResults);
+
+    @Query("DELETE FROM PhotoResult WHERE taskID = :taskID")
+    void deleteByTaskID(int taskID);
 }

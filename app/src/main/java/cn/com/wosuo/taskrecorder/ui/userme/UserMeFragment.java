@@ -69,7 +69,7 @@ public class UserMeFragment extends Fragment {
         if (myType == FinalMap.getUserTypeList().indexOf(USER_GROUP)){
             avatar = R.drawable.user_avatar;
         } else if (myType == FinalMap.getUserTypeList().indexOf(MANAGER_GROUP)){
-            avatar = R.drawable.ic_icon;
+            avatar = R.drawable.ic_launcher;
         }
         Picasso.get().load(avatar).into(myAvatarImageView);
         mLogoutButton.setOnClickListener(v -> logout());

@@ -209,8 +209,8 @@ public class TaskViewModel extends AndroidViewModel {
                 .build();
     }
 
-    public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID){
-        return mTaskRepository.getPhotoResultsByTaskID(taskID);
+    public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID, boolean isFirst){
+        return mTaskRepository.getPhotoResultsByTaskID(taskID, isFirst);
     }
 
     public LiveData<Resource<LocCenterPoint>> getLocCenterPointByTaskID(int taskID){

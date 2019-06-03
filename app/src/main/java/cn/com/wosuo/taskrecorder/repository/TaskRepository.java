@@ -271,10 +271,12 @@ public class TaskRepository {
 //        ).getAsLiveData();
 //    }
 
-    public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID){
+    public LiveData<Resource<List<PhotoResult>>> getPhotoResultsByTaskID(int taskID, boolean isFirst){
         return (new NetworkBoundResource<List<PhotoResult>, BigkeerResponse<List<PhotoResult>>>(mAppExecutors) {
             @Override
             protected void saveCallResult(@NonNull BigkeerResponse<List<PhotoResult>> item) {
+                if (isFirst)
+                mPhotoDao.deleteByTaskID(taskID);
                 List<PhotoResult> photoResults = item.getResult();
                 mPhotoDao.insertAll(photoResults);
             }

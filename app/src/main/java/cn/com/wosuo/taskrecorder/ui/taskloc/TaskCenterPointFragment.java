@@ -54,7 +54,7 @@ public class TaskCenterPointFragment extends TaskLocFragment {
         @Override
         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
             String responseBody = response.body().string();
-            int statusCode = JsonParser.parseChangeTaskStatusJson(responseBody);
+            int statusCode = JsonParser.parseChangeTaskStatusJson(responseBody).a;
             String message = FinalMap.getStatusCodeMap().get(statusCode);
             mAppExecutors.mainThread().execute(()
                     -> onChangeTaskStatusMessage(message));
