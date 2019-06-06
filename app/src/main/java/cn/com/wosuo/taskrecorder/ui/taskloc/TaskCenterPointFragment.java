@@ -42,6 +42,7 @@ public class TaskCenterPointFragment extends TaskLocFragment {
                 taskId, mFinalLongitude, mFinalLatitude,
                 sCoorType.indexOf(mCurrentCoorType),
                 centerPointCallback);
+        requireActivity().setResult(Activity.RESULT_OK);
     }
 
     private Callback centerPointCallback = new Callback() {
@@ -61,7 +62,6 @@ public class TaskCenterPointFragment extends TaskLocFragment {
             mAppExecutors.diskIO().execute(() ->
                     viewModel.setTaskCenterPointCoordinateLocally(taskId, mFinalLongitude,
                             mFinalLatitude, sCoorType.indexOf(mCurrentCoorType)));
-            requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         }
     };
